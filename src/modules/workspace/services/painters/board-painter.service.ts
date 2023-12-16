@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { ScreenScale, ScreenScroll, ScreenSizes } from "@workspace/interfaces";
 import { Painter } from "@workspace/interfaces";
 
-import { PAINTER_BOARD_STEP } from "@workspace/constants/painter.constants";
+import { PAINTER_BOARD_STEP } from "@workspace/constants";
 
 @Injectable()
 export class BoardPainterService implements Painter {

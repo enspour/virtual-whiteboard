@@ -1,0 +1,18 @@
+<app-sortable-list class="toolkit" (itemsSwap)="handleSwapItems($event)">
+  @for (tool of toolkit; track tool.name; let i = $index) {
+    <app-sortable-item
+      class="toolkit__tool"
+      [index]="i"
+      (click)="handleToolClick(tool.name)"
+    >
+      <app-icon-button
+        [src]="icons[tool.name]"
+        [isActive]="tool.name === selectedTool?.name"
+      />
+
+      @if (i !== 0) {
+        <div class="toolkit__tool-number">{{ i }}</div>
+      }
+    </app-sortable-item>
+  }
+</app-sortable-list>
