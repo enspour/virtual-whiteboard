@@ -34,6 +34,10 @@ export class ToolkitService {
     this.selectedTool$ = this.selectedTool.asObservable();
   }
 
+  get SelectedTool() {
+    return this.selectedTool.getValue();
+  }
+
   public setToolkit(toolkit: Tool[]) {
     this.localStorageService.set(LS_TOOLKIT, toolkit);
     this.toolkit.next(toolkit);

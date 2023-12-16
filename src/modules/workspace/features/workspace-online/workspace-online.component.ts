@@ -13,6 +13,14 @@ import { BoardPainterService } from "@workspace/services/painters/board-painter.
 import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen.service";
 import { LocalScreenStorageService } from "@workspace/services/storages/local-screen-storage.service";
+import { ToolArrowService } from "@workspace/services/toolkit/tool-handlers/tool-arrow.service";
+import { ToolBrushService } from "@workspace/services/toolkit/tool-handlers/tool-brush.service";
+import { ToolEllipseService } from "@workspace/services/toolkit/tool-handlers/tool-ellipse.service";
+import { ToolEraserService } from "@workspace/services/toolkit/tool-handlers/tool-eraser.service";
+import { ToolHandService } from "@workspace/services/toolkit/tool-handlers/tool-hand.service";
+import { ToolRectangleService } from "@workspace/services/toolkit/tool-handlers/tool-rectangle.service";
+import { ToolSelectionService } from "@workspace/services/toolkit/tool-handlers/tool-selection.service";
+import { ToolTextService } from "@workspace/services/toolkit/tool-handlers/tool-text.service";
 import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 import { WorkspaceService } from "@workspace/services/workspace.service";
 
@@ -51,6 +59,15 @@ import { ScreenStorageToken } from "@workspace/tokens";
     BoardPainterService,
 
     ToolkitService,
+
+    ToolHandService,
+    ToolSelectionService,
+    ToolBrushService,
+    ToolRectangleService,
+    ToolEllipseService,
+    ToolTextService,
+    ToolArrowService,
+    ToolEraserService,
   ],
 })
 export class WorkspaceOnlineComponent {
