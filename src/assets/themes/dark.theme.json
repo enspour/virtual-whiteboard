@@ -1,0 +1,6 @@
+{
+  "--theme-primary-bg": "#222222",
+  "--theme-primary-bg--hover": "#333333",
+  "--theme-primary-color": "#ffffff",
+  "--theme-primary-icon": "#ffffff"
+}

@@ -1,0 +1,20 @@
+:host {
+  --hover: var(--theme-primary-bg--hover);
+
+  width: 3.8rem;
+  height: 3.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.8rem;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+:host:hover {
+  background-color: var(--hover);
+}
+
+:host(.active) {
+  background-color: #dddddd;
+}

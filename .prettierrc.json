@@ -1,0 +1,32 @@
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": false,
+
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+
+  "importOrder": [
+    "node:",
+    "^@angular",
+    "^rxjs",
+    "<THIRD_PARTY_MODULES>",
+    "^@shared/shared.module",
+    "components",
+    "layouts",
+    "ui",
+    "services",
+    "utils",
+    "interfaces",
+    "constants",
+    "assets",
+    "styles",
+    "icons",
+    "^@",
+    "^[.]((?!module.scss).)*$",
+    ".module.scss$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
+}
