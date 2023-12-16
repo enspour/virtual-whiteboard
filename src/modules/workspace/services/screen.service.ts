@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
@@ -7,6 +7,7 @@ import {
   ScreenScale,
   ScreenScroll,
   ScreenSizes,
+  ScreenStorage,
   WheelDirection,
 } from "@workspace/interfaces";
 
@@ -16,6 +17,8 @@ import {
   SCREEN_SCALING_MIN,
   SCREEN_SCROLLING_DELTA,
 } from "@workspace/constants";
+
+import { ScreenStorageToken } from "@workspace/tokens";
 
 @Injectable()
 export class ScreenService {
@@ -28,7 +31,9 @@ export class ScreenService {
   private scale: BehaviorSubject<ScreenScale>;
   public scale$: Observable<ScreenScale>;
 
-  constructor() {
+  constructor(
+    @Inject(ScreenStorageToken) private screenStorage: ScreenStorage
+  ) {
     const sizes = {
       width: 0,
       height: 0,
@@ -61,16 +66,26 @@ export class ScreenService {
     return this.sizes.getValue();
   }
 
+  async init() {
+    const scroll = await this.screenStorage.getScroll();
+    const scale = await this.screenStorage.getScale();
+
+    this.scroll.next(scroll);
+    this.scale.next(scale);
+  }
+
   public async setSizes(sizes: ScreenSizes) {
     this.sizes.next(sizes);
   }
 
   public async setScale(scale: ScreenScale) {
     this.scale.next(scale);
+    this.screenStorage.setScale(scale);
   }
 
   public async setScroll(scroll: ScreenScroll) {
     this.scroll.next(scroll);
+    this.screenStorage.setScroll(scroll);
   }
 
   public scrollLeft() {
