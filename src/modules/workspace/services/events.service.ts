@@ -2,6 +2,8 @@ import { Injectable, inject } from "@angular/core";
 
 import { Observable, Subject, fromEvent, takeUntil } from "rxjs";
 
+import { getWheelDirection } from "@workspace/utils";
+
 import { ScreenEvent } from "@workspace/interfaces";
 
 import { DestroyService } from "./destroy.service";
@@ -33,17 +35,20 @@ export class EventsService {
   }
 
   private onScaling(event: WheelEvent) {
-    const type = event.deltaY < 0 ? "scale in" : "scale out";
+    const direction = getWheelDirection(event);
+    const type = direction === "forward" ? "scale in" : "scale out";
     this.screenEvents.next({ type, event });
   }
 
   private onHorizontalScroll(event: WheelEvent) {
-    const type = event.deltaY < 0 ? "scroll left" : "scroll right";
+    const direction = getWheelDirection(event);
+    const type = direction === "forward" ? "scroll left" : "scroll right";
     this.screenEvents.next({ type, event });
   }
 
   private onVerticalScroll(event: WheelEvent) {
-    const type = event.deltaY < 0 ? "scroll up" : "scroll down";
+    const direction = getWheelDirection(event);
+    const type = direction === "forward" ? "scroll up" : "scroll down";
     this.screenEvents.next({ type, event });
   }
 }
