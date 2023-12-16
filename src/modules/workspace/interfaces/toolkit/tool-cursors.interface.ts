@@ -1,4 +1,12 @@
 import { Tool } from "..";
 
-export type ToolCursor = "auto" | "grab" | "text" | "crosshair";
-export type ToolCursors = Record<Tool["name"], ToolCursor>;
+export type ToolCursorType =
+  | "auto"
+  | "grab"
+  | "grabbing"
+  | "text"
+  | "crosshair";
+
+export type ToolCursorName = Tool["name"] | `executed--${Tool["name"]}`;
+
+export type ToolCursors = Record<ToolCursorName, ToolCursorType>;

@@ -18,6 +18,9 @@ export class ToolkitService {
   private selectedTool: BehaviorSubject<Tool>;
   public selectedTool$: Observable<Tool>;
 
+  private executedTool = new BehaviorSubject<Tool | null>(null);
+  public executedTool$ = this.executedTool.asObservable();
+
   constructor(private localStorageService: LocalStorageService) {
     const toolkit = localStorageService.get(LS_TOOLKIT);
 
@@ -36,6 +39,10 @@ export class ToolkitService {
 
   get SelectedTool() {
     return this.selectedTool.getValue();
+  }
+
+  get ExecutedTool() {
+    return this.executedTool.getValue();
   }
 
   public setToolkit(toolkit: Tool[]) {
@@ -61,6 +68,18 @@ export class ToolkitService {
     if (index !== -1) {
       this.localStorageService.set(LS_SELECTED_TOOL, name);
       this.selectedTool.next(toolkit[index]);
+    }
+  }
+
+  public setExecutedTool(name: Tool["name"] | "") {
+    const toolkit = this.toolkit.value;
+
+    const index = toolkit.findIndex((tool) => tool.name === name);
+
+    if (index !== -1) {
+      this.executedTool.next(toolkit[index]);
+    } else {
+      this.executedTool.next(null);
     }
   }
 }

@@ -33,11 +33,26 @@ export const TOOL_ICONS: ToolIcons = {
 
 export const TOOL_CURSOR: ToolCursors = {
   hand: "grab",
+  "executed--hand": "grabbing",
+
   selection: "auto",
+  "executed--selection": "auto",
+
   brush: "crosshair",
+  "executed--brush": "crosshair",
+
   rectangle: "crosshair",
+  "executed--rectangle": "crosshair",
+
   ellipse: "crosshair",
+  "executed--ellipse": "crosshair",
+
   arrow: "crosshair",
+  "executed--arrow": "crosshair",
+
   text: "text",
+  "executed--text": "text",
+
   eraser: "crosshair",
+  "executed--eraser": "crosshair",
 };

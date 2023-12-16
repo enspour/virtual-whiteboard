@@ -93,6 +93,14 @@ export class WorkspaceService {
         ? this.toolkitService.SelectedTool.name
         : event.tool;
 
+    if (event.stage === "start") {
+      this.toolkitService.setExecutedTool(name);
+    }
+
+    if (event.stage === "end") {
+      this.toolkitService.setExecutedTool("");
+    }
+
     this.toolkitEventHandlers[name][event.stage](event.event);
   }
 }
