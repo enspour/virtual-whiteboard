@@ -10,6 +10,8 @@ export const LS_SCREEN_SCALE = "__v1/screen/scale";
 export const LS_TOOLKIT = "__v1/toolkit";
 export const LS_SELECTED_TOOL = "__v1/toolkit/selected";
 
+export const LS_DRAWINGS = "__v1/drawings";
+
 export const LS_DEFAULTS: LocalStoragePairs = {
   [LS_THEME]: "light",
 
@@ -21,4 +23,6 @@ export const LS_DEFAULTS: LocalStoragePairs = {
 
   [LS_TOOLKIT]: TOOLKIT,
   [LS_SELECTED_TOOL]: TOOLKIT[0].name,
+
+  [LS_DRAWINGS]: [],
 };

@@ -8,11 +8,14 @@ import { CanvasComponent } from "@workspace/components/ui/canvas/canvas.componen
 import { ToolkitComponent } from "@workspace/components/ui/toolkit/toolkit.component";
 
 import { DestroyService } from "@workspace/services/destroy.service";
+import { DrawingsService } from "@workspace/services/drawings/drawings.service";
+import { LocalDrawingStorageService } from "@workspace/services/drawings/local-drawing-storage.service";
 import { EventsService } from "@workspace/services/events.service";
 import { BoardPainterService } from "@workspace/services/painters/board-painter.service";
+import { DrawingsPainterService } from "@workspace/services/painters/drawings-painter.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen.service";
-import { LocalScreenStorageService } from "@workspace/services/storages/local-screen-storage.service";
+import { LocalScreenStorageService } from "@workspace/services/screen/local-screen-storage.service";
+import { ScreenService } from "@workspace/services/screen/screen.service";
 import { ToolArrowService } from "@workspace/services/toolkit/tool-handlers/tool-arrow.service";
 import { ToolBrushService } from "@workspace/services/toolkit/tool-handlers/tool-brush.service";
 import { ToolEllipseService } from "@workspace/services/toolkit/tool-handlers/tool-ellipse.service";
@@ -25,6 +28,7 @@ import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 import { WorkspaceService } from "@workspace/services/workspace.service";
 
 import { ScreenStorageToken } from "@workspace/tokens";
+import { DrawingStorageToken } from "@workspace/tokens";
 
 @Component({
   selector: "app-workspace-online",
@@ -55,8 +59,14 @@ import { ScreenStorageToken } from "@workspace/tokens";
       useClass: LocalScreenStorageService,
     },
 
+    {
+      provide: DrawingStorageToken,
+      useClass: LocalDrawingStorageService,
+    },
+
     PainterService,
     BoardPainterService,
+    DrawingsPainterService,
 
     ToolkitService,
 
@@ -68,6 +78,8 @@ import { ScreenStorageToken } from "@workspace/tokens";
     ToolTextService,
     ToolArrowService,
     ToolEraserService,
+
+    DrawingsService,
   ],
 })
 export class WorkspaceOnlineComponent {

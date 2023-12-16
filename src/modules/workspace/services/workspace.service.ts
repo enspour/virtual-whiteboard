@@ -10,8 +10,10 @@ import {
 } from "@workspace/interfaces";
 
 import { DestroyService } from "./destroy.service";
+import { DrawingsService } from "./drawings/drawings.service";
 import { EventsService } from "./events.service";
-import { ScreenService } from "./screen.service";
+import { PainterService } from "./painters/painter.service";
+import { ScreenService } from "./screen/screen.service";
 import { ToolArrowService } from "./toolkit/tool-handlers/tool-arrow.service";
 import { ToolBrushService } from "./toolkit/tool-handlers/tool-brush.service";
 import { ToolEllipseService } from "./toolkit/tool-handlers/tool-ellipse.service";
@@ -57,8 +59,9 @@ export class WorkspaceService {
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
   constructor(
-    private screenService: ScreenService,
     private eventsService: EventsService,
+    private screenService: ScreenService,
+    private painterService: PainterService,
 
     private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
@@ -68,11 +71,14 @@ export class WorkspaceService {
     private toolEllipseService: ToolEllipseService,
     private toolArrowService: ToolArrowService,
     private toolTextService: ToolTextService,
-    private toolEraserService: ToolEraserService
+    private toolEraserService: ToolEraserService,
+
+    private drawingsService: DrawingsService
   ) {}
 
   async init() {
     await this.screenService.init();
+    await this.drawingsService.init();
 
     this.eventsService.screenEvents$
       .pipe(takeUntil(this.destroy$))
@@ -101,6 +107,16 @@ export class WorkspaceService {
       this.toolkitService.setExecutedTool("");
     }
 
-    this.toolkitEventHandlers[name][event.stage](event.event);
+    const drawing = this.toolkitEventHandlers[name][event.stage](event.event);
+
+    if (drawing) {
+      this.drawingsService.append(drawing);
+
+      const scroll = this.screenService.Scroll;
+      const sizes = this.screenService.Sizes;
+      const scale = this.screenService.Scale;
+
+      this.painterService.paint(scroll, sizes, scale);
+    }
   }
 }

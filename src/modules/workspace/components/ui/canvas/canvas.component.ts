@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { ScreenService } from "@workspace/services/screen.service";
+import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { ScreenSizes } from "@workspace/interfaces";
 

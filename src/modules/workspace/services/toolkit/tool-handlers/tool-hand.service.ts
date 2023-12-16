@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 
-import { Subject, takeUntil, throttleTime } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 
 import { Point, ToolHandler } from "@workspace/interfaces";
 
-import { ScreenService } from "../../screen.service";
+import { ScreenService } from "../../screen/screen.service";
 
 @Injectable()
 export class ToolHandService implements ToolHandler {
@@ -17,7 +17,7 @@ export class ToolHandService implements ToolHandler {
 
   constructor(private screenService: ScreenService) {}
 
-  start(): void {
+  start(): null {
     this.isHandling = true;
 
     this.points$ = new Subject();
@@ -25,43 +25,45 @@ export class ToolHandService implements ToolHandler {
 
     this.prevPoint = undefined;
 
-    this.points$
-      .pipe(takeUntil(this.destroy$), throttleTime(10))
-      .subscribe((point) => {
-        if (!this.prevPoint) {
-          this.prevPoint = point;
-        }
-
-        const diff = {
-          x: point.x - this.prevPoint.x,
-          y: point.y - this.prevPoint.y,
-        };
-
-        const scroll = this.screenService.Scroll;
-
-        this.screenService.setScroll({
-          x: scroll.x + diff.x,
-          y: scroll.y + diff.y,
-        });
-
+    this.points$.pipe(takeUntil(this.destroy$)).subscribe((point) => {
+      if (!this.prevPoint) {
         this.prevPoint = point;
+      }
+
+      const diff = {
+        x: point.x - this.prevPoint.x,
+        y: point.y - this.prevPoint.y,
+      };
+
+      const scroll = this.screenService.Scroll;
+
+      this.screenService.setScroll({
+        x: scroll.x + diff.x,
+        y: scroll.y + diff.y,
       });
+
+      this.prevPoint = point;
+    });
+
+    return null;
   }
 
-  end(): void {
+  end(): null {
     if (!this.isHandling) {
-      return;
+      return null;
     }
 
     this.isHandling = false;
 
     this.destroy$.next();
     this.destroy$.complete();
+
+    return null;
   }
 
-  process(e: MouseEvent): void {
+  process(e: MouseEvent): null {
     if (!this.isHandling) {
-      return;
+      return null;
     }
 
     const scale = this.screenService.Scale;
@@ -70,5 +72,7 @@ export class ToolHandService implements ToolHandler {
     const y = e.clientY / scale;
 
     this.points$.next({ x, y });
+
+    return null;
   }
 }

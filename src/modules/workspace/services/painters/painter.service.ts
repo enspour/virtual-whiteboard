@@ -4,17 +4,22 @@ import { ScreenScale, ScreenScroll, ScreenSizes } from "@workspace/interfaces";
 import { Painter } from "@workspace/interfaces";
 
 import { BoardPainterService } from "./board-painter.service";
+import { DrawingsPainterService } from "./drawings-painter.service";
 
 @Injectable()
 export class PainterService implements Painter {
   private context?: CanvasRenderingContext2D;
 
-  constructor(private boardPainterService: BoardPainterService) {}
+  constructor(
+    private boardPainterService: BoardPainterService,
+    private drawingsPainterService: DrawingsPainterService
+  ) {}
 
   setContext(context: CanvasRenderingContext2D) {
     this.context = context;
 
     this.boardPainterService.setContext(context);
+    this.drawingsPainterService.setContext(context);
   }
 
   paint(scroll: ScreenScroll, sizes: ScreenSizes, scale: ScreenScale) {
@@ -27,5 +32,6 @@ export class PainterService implements Painter {
     this.context.clearRect(0, 0, width, height);
 
     this.boardPainterService.paint(scroll, sizes, scale);
+    this.drawingsPainterService.paint(scroll, sizes, scale);
   }
 }

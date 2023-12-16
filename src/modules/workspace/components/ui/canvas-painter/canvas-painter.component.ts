@@ -9,7 +9,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { merge } from "rxjs";
 
 import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen.service";
+import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { CanvasComponent } from "../canvas/canvas.component";
 

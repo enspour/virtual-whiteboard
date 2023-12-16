@@ -4,7 +4,7 @@ import { SharedModule } from "@shared/shared.module";
 
 import { SizesObserverChange } from "@shared/components/utils/sizes-observer/sizes-observer.interface";
 
-import { ScreenService } from "@workspace/services/screen.service";
+import { ScreenService } from "@workspace/services/screen/screen.service";
 
 @Component({
   selector: "app-workspace-layout",

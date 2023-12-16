@@ -1,7 +1,13 @@
 import { Theme } from "../../theme/interfaces/theme.interface";
-import { ScreenScale, ScreenScroll, Tool } from "@workspace/interfaces";
+import {
+  Drawing,
+  ScreenScale,
+  ScreenScroll,
+  Tool,
+} from "@workspace/interfaces";
 
 import {
+  LS_DRAWINGS,
   LS_SCREEN_SCALE,
   LS_SCREEN_SCROLL,
   LS_SELECTED_TOOL,
@@ -17,6 +23,8 @@ export interface LocalStoragePairs {
 
   [LS_TOOLKIT]: Tool[];
   [LS_SELECTED_TOOL]: Tool["name"];
+
+  [LS_DRAWINGS]: Drawing[];
 }
 
 export type LocalStorageKey = keyof LocalStoragePairs;

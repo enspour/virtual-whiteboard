@@ -1,6 +1,6 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, NgZone, inject } from "@angular/core";
 
-import { Observable, Subject, fromEvent, takeUntil } from "rxjs";
+import { Observable, Subject, fromEvent, takeUntil, throttleTime } from "rxjs";
 
 import { getWheelDirection } from "@workspace/utils";
 
@@ -15,7 +15,15 @@ export class EventsService {
 
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
+  constructor(private zone: NgZone) {}
+
   setCanvas(canvas: HTMLCanvasElement) {
+    this.zone.runOutsideAngular(() => {
+      this.attachEvents(canvas);
+    });
+  }
+
+  private attachEvents(canvas: HTMLCanvasElement) {
     fromEvent<WheelEvent>(canvas, "wheel")
       .pipe(takeUntil(this.destroy$))
       .subscribe(this.onWheel.bind(this));
@@ -33,7 +41,7 @@ export class EventsService {
       .subscribe(this.onMouseLeave.bind(this));
 
     fromEvent<MouseEvent>(canvas, "mousemove")
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$), throttleTime(15))
       .subscribe(this.onMouseMove.bind(this));
   }
 
