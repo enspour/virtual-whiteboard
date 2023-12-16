@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 
 import { Drawing, DrawingStorage } from "modules/workspace/interfaces";
 
-import { DrawingStorageToken } from "@workspace/tokens/drawings.tokens";
+import { DrawingStorageToken } from "@workspace/tokens";
 
 @Injectable()
 export class DrawingsService {

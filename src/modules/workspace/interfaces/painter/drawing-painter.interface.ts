@@ -4,7 +4,7 @@ import {
   ScreenSizes,
 } from "../screen/screen.interfaces";
 
-import { Drawing } from "../drawings/drawing.interface";
+import { Drawing } from "../drawing/drawing.interface";
 
 export interface DrawingPainter {
   paint(

@@ -1,4 +1,4 @@
-import { Point } from "../point.interface";
+import { Point } from "../../point.interface";
 import { DrawingBase } from "./drawing-base.interface";
 
 export interface DrawingArrow extends DrawingBase {
