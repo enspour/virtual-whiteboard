@@ -6,6 +6,8 @@ import { getWheelDirection } from "@workspace/utils";
 
 import { ScreenEvent, ToolkitEvent } from "@workspace/interfaces";
 
+import { MOUSE_MOVE_THROTTLE } from "@workspace/constants";
+
 import { DestroyService } from "./destroy.service";
 
 @Injectable()
@@ -41,7 +43,7 @@ export class EventsService {
       .subscribe(this.onMouseLeave.bind(this));
 
     fromEvent<MouseEvent>(canvas, "mousemove")
-      .pipe(takeUntil(this.destroy$), throttleTime(15))
+      .pipe(takeUntil(this.destroy$), throttleTime(MOUSE_MOVE_THROTTLE))
       .subscribe(this.onMouseMove.bind(this));
   }
 

@@ -1,5 +1,5 @@
 <app-sortable-list class="toolkit" (itemsSwap)="handleSwapItems($event)">
-  @for (tool of toolkit; track tool.name; let i = $index) {
+  @for (tool of toolkit$ | async; track tool.name; let i = $index) {
     <app-sortable-item
       class="toolkit__tool"
       [index]="i"
@@ -7,7 +7,7 @@
     >
       <app-icon-button
         [src]="icons[tool.name]"
-        [isActive]="tool.name === selectedTool?.name"
+        [isActive]="tool.name === (selectedTool$ | async)?.name"
       />
 
       @if (i !== 0) {

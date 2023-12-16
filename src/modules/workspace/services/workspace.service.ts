@@ -12,7 +12,6 @@ import {
 import { DestroyService } from "./destroy.service";
 import { DrawingsService } from "./drawings/drawings.service";
 import { EventsService } from "./events.service";
-import { PainterService } from "./painters/painter.service";
 import { ScreenService } from "./screen/screen.service";
 import { ToolArrowService } from "./toolkit/tool-handlers/tool-arrow.service";
 import { ToolBrushService } from "./toolkit/tool-handlers/tool-brush.service";
@@ -61,7 +60,6 @@ export class WorkspaceService {
   constructor(
     private eventsService: EventsService,
     private screenService: ScreenService,
-    private painterService: PainterService,
 
     private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
@@ -107,16 +105,6 @@ export class WorkspaceService {
       this.toolkitService.setExecutedTool("");
     }
 
-    const drawing = this.toolkitEventHandlers[name][event.stage](event.event);
-
-    if (drawing) {
-      this.drawingsService.append(drawing);
-
-      const scroll = this.screenService.Scroll;
-      const sizes = this.screenService.Sizes;
-      const scale = this.screenService.Scale;
-
-      this.painterService.paint(scroll, sizes, scale);
-    }
+    this.toolkitEventHandlers[name][event.stage](event.event);
   }
 }

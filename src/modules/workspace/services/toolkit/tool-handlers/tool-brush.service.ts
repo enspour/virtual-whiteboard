@@ -4,12 +4,13 @@ import { Subject, takeUntil } from "rxjs";
 
 import { nanoid } from "nanoid";
 
+import { DrawingsService } from "@workspace/services/drawings/drawings.service";
+import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { handleAddedDrawingPoint } from "@workspace/utils";
 
 import {
-  Drawing,
   DrawingBrush,
   Point,
   ToolBrush,
@@ -31,10 +32,12 @@ export class ToolBrushService implements ToolHandler {
 
   constructor(
     private screenService: ScreenService,
-    private toolkitService: ToolkitService
+    private toolkitService: ToolkitService,
+    private painterService: PainterService,
+    private drawingsService: DrawingsService
   ) {}
 
-  start(e: MouseEvent): Drawing | null {
+  start(e: MouseEvent): void {
     this.isHandling = true;
 
     this.tool = this.toolkitService.ExecutedTool! as ToolBrush;
@@ -43,7 +46,6 @@ export class ToolBrushService implements ToolHandler {
     this.destroy$ = new Subject();
 
     const scroll = this.screenService.Scroll;
-    const sizes = this.screenService.Sizes;
     const scale = this.screenService.Scale;
 
     const x = e.clientX / scale;
@@ -68,6 +70,8 @@ export class ToolBrushService implements ToolHandler {
 
     this.points$.pipe(takeUntil(this.destroy$)).subscribe((point) => {
       const scroll = this.screenService.Scroll;
+      const sizes = this.screenService.Sizes;
+      const scale = this.screenService.Scale;
 
       this.drawing.points.push({
         x: point.x - scroll.x,
@@ -75,27 +79,26 @@ export class ToolBrushService implements ToolHandler {
       });
 
       handleAddedDrawingPoint(this.drawing, point, scroll);
-    });
 
-    return this.drawing;
+      this.drawingsService.append(this.drawing);
+      this.painterService.paint(scroll, sizes, scale);
+    });
   }
 
-  end(): Drawing | null {
+  end(): void {
     if (!this.isHandling) {
-      return null;
+      return;
     }
 
     this.isHandling = false;
 
     this.destroy$.next();
     this.destroy$.complete();
-
-    return this.drawing;
   }
 
-  process(e: MouseEvent): Drawing | null {
+  process(e: MouseEvent): void {
     if (!this.isHandling) {
-      return null;
+      return;
     }
 
     const scale = this.screenService.Scale;
@@ -104,7 +107,5 @@ export class ToolBrushService implements ToolHandler {
     const y = e.clientY / scale;
 
     this.points$.next({ x, y });
-
-    return this.drawing;
   }
 }

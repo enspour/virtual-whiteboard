@@ -1,12 +1,5 @@
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
-
-import { Subject, takeUntil } from "rxjs";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 import { SharedModule } from "@shared/shared.module";
 
@@ -26,30 +19,13 @@ import { TOOL_ICONS } from "@workspace/constants";
   imports: [CommonModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToolkitComponent implements OnInit, OnDestroy {
+export class ToolkitComponent {
   public icons = TOOL_ICONS;
 
-  public toolkit?: Tool[];
-  public selectedTool?: Tool;
-
-  private destroy$ = new Subject<void>();
+  public toolkit$ = this.toolkitService.toolkit$;
+  public selectedTool$ = this.toolkitService.selectedTool$;
 
   constructor(private toolkitService: ToolkitService) {}
-
-  ngOnInit(): void {
-    this.toolkitService.toolkit$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((toolkit) => (this.toolkit = toolkit));
-
-    this.toolkitService.selectedTool$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((selectedTool) => (this.selectedTool = selectedTool));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   handleToolClick(name: Tool["name"]) {
     this.toolkitService.setSelectedTool(name);

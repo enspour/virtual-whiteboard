@@ -17,7 +17,7 @@ export class ToolHandService implements ToolHandler {
 
   constructor(private screenService: ScreenService) {}
 
-  start(): null {
+  start(): void {
     this.isHandling = true;
 
     this.points$ = new Subject();
@@ -44,26 +44,22 @@ export class ToolHandService implements ToolHandler {
 
       this.prevPoint = point;
     });
-
-    return null;
   }
 
-  end(): null {
+  end(): void {
     if (!this.isHandling) {
-      return null;
+      return;
     }
 
     this.isHandling = false;
 
     this.destroy$.next();
     this.destroy$.complete();
-
-    return null;
   }
 
-  process(e: MouseEvent): null {
+  process(e: MouseEvent): void {
     if (!this.isHandling) {
-      return null;
+      return;
     }
 
     const scale = this.screenService.Scale;
@@ -72,7 +68,5 @@ export class ToolHandService implements ToolHandler {
     const y = e.clientY / scale;
 
     this.points$.next({ x, y });
-
-    return null;
   }
 }

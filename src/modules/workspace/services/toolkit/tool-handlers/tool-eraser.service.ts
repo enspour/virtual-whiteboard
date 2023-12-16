@@ -8,26 +8,21 @@ export class ToolEraserService implements ToolHandler {
 
   constructor() {}
 
-  start(e: MouseEvent): null {
+  start(e: MouseEvent): void {
     this.isHandling = true;
-    return null;
   }
 
-  end(e: MouseEvent): null {
+  end(e: MouseEvent): void {
     if (!this.isHandling) {
-      return null;
+      return;
     }
 
     this.isHandling = false;
-
-    return null;
   }
 
-  process(e: MouseEvent): null {
+  process(e: MouseEvent): void {
     if (!this.isHandling) {
-      return null;
+      return;
     }
-
-    return null;
   }
 }

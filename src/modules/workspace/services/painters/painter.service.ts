@@ -10,6 +10,8 @@ import { DrawingsPainterService } from "./drawings-painter.service";
 export class PainterService implements Painter {
   private context?: CanvasRenderingContext2D;
 
+  private requestAnimationFrameId: number = 0;
+
   constructor(
     private boardPainterService: BoardPainterService,
     private drawingsPainterService: DrawingsPainterService
@@ -23,6 +25,14 @@ export class PainterService implements Painter {
   }
 
   paint(scroll: ScreenScroll, sizes: ScreenSizes, scale: ScreenScale) {
+    cancelAnimationFrame(this.requestAnimationFrameId);
+
+    this.requestAnimationFrameId = requestAnimationFrame(() => {
+      this._paint(scroll, sizes, scale);
+    });
+  }
+
+  private _paint(scroll: ScreenScroll, sizes: ScreenSizes, scale: ScreenScale) {
     if (!this.context) {
       return;
     }
