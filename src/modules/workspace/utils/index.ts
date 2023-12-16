@@ -1,2 +1,2 @@
-export * from "./get-wheel-direction.util";
+export * from "./wheel.util";
 export * from "./drawing.util";
