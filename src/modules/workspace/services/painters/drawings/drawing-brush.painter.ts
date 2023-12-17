@@ -27,7 +27,7 @@ export class DrawingBrushPainter implements DrawingPainter {
     this.context.lineJoin = "round";
 
     if (inTrash) {
-      this.context.strokeStyle = "#cccccc";
+      this.context.strokeStyle = drawing.strokeColor + "4d";
     } else {
       this.context.strokeStyle = drawing.strokeColor;
     }

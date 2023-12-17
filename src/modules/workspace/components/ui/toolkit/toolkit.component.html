@@ -1,4 +1,8 @@
-<app-sortable-list class="toolkit" (itemsSwap)="handleSwapItems($event)">
+<app-sortable-list
+  class="toolkit"
+  [class.toolkit--disabled]="disabled"
+  (itemsSwap)="handleSwapItems($event)"
+>
   @for (tool of toolkit$ | async; track tool.name; let i = $index) {
     <app-sortable-item
       class="toolkit__tool"

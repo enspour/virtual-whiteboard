@@ -8,7 +8,7 @@ import {
 
 import { SvgIconComponent } from "angular-svg-icon";
 
-import { ThemePalette, ThemePaletteToken } from "@theme";
+import { ThemePalette, ThemePaletteToken, ThemeService } from "@theme";
 
 @Component({
   selector: "app-icon",
@@ -22,8 +22,13 @@ export class IconComponent {
   @Input({ required: true }) src!: string;
 
   public fill: string;
+  public stroke: string;
 
-  constructor(@Inject(ThemePaletteToken) palette: ThemePalette) {
-    this.fill = `var(--theme-${palette}-icon)`;
+  constructor(
+    @Inject(ThemePaletteToken) palette: ThemePalette,
+    private themeService: ThemeService
+  ) {
+    this.fill = this.themeService.Properties[`--theme-${palette}-icon`];
+    this.stroke = this.themeService.Properties[`--theme-${palette}-icon`];
   }
 }

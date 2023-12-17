@@ -2,5 +2,8 @@
   "--theme-primary-bg": "#ffffff",
   "--theme-primary-bg--hover": "#eeeeee",
   "--theme-primary-color": "#222222",
-  "--theme-primary-icon": "#222222"
+  "--theme-primary-icon": "#222222",
+
+  "--theme-primary-board-bg": "#ffffff",
+  "--theme-primary-board-color": "#cccccc"
 }

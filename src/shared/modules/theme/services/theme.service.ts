@@ -12,23 +12,28 @@ import { LS_THEME } from "@shared/modules/local-storage";
 
 @Injectable()
 export class ThemeService {
-  private theme: Theme;
+  private theme!: Theme;
+  private properties!: Record<string, string>;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private localStorageService: LocalStorageService
   ) {
-    this.theme = this.localStorageService.get(LS_THEME);
-    this.setTheme(this.theme);
+    const theme = this.localStorageService.get(LS_THEME);
+    this.setTheme(theme);
   }
 
   public get Theme() {
     return this.theme;
   }
 
+  public get Properties() {
+    return this.properties;
+  }
+
   public setTheme(theme: Theme) {
-    const properties = this.getProperties(theme);
-    this.setProperties(properties);
+    this.properties = this.getProperties(theme);
+    this.setProperties(this.properties);
 
     this.localStorageService.set(LS_THEME, theme);
     this.theme = theme;

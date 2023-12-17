@@ -4,13 +4,18 @@ import { Painter } from "@workspace/interfaces";
 
 import { PAINTER_BOARD_STEP } from "@workspace/constants";
 
+import { ThemeService } from "@theme";
+
 import { ScreenService } from "../screen/screen.service";
 
 @Injectable()
 export class BoardPainterService implements Painter {
   private context?: CanvasRenderingContext2D;
 
-  constructor(private screenService: ScreenService) {}
+  constructor(
+    private themeService: ThemeService,
+    private screenService: ScreenService
+  ) {}
 
   setContext(context: CanvasRenderingContext2D) {
     this.context = context;
@@ -31,8 +36,15 @@ export class BoardPainterService implements Painter {
 
     this.context.beginPath();
 
+    const bg = this.themeService.Properties["--theme-primary-board-bg"];
+
+    this.context.fillStyle = bg;
+    this.context.fillRect(0, 0, width, height);
+
+    const color = this.themeService.Properties["--theme-primary-board-color"];
+
     this.context.lineWidth = 1 * scale;
-    this.context.strokeStyle = "#eee";
+    this.context.strokeStyle = color;
 
     const startX = Math.floor(scroll.x % step);
     const startY = Math.floor(scroll.y % step);

@@ -1,5 +1,5 @@
 :host {
-  --hover: var(--theme-primary-bg--hover);
+  --bg--hover: var(--theme-primary-bg--hover);
 
   width: 3.8rem;
   height: 3.8rem;
@@ -12,9 +12,9 @@
 }
 
 :host:hover {
-  background-color: var(--hover);
+  background-color: var(--bg--hover);
 }
 
 :host(.active) {
-  background-color: #dddddd;
+  background-color: var(--bg--hover);
 }
