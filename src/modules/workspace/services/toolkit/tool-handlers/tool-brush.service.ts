@@ -48,18 +48,18 @@ export class ToolBrushService implements ToolHandler {
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
-    const x = e.clientX / scale;
-    const y = e.clientY / scale;
+    const x = e.clientX / scale - scroll.x;
+    const y = e.clientY / scale - scroll.y;
 
     this.drawing = {
       id: nanoid(),
       type: "brush",
       angel: 0,
       coordinates: {
-        startX: x - scroll.x,
-        endX: x - scroll.x,
-        startY: y - scroll.y,
-        endY: y - scroll.y,
+        startX: x,
+        endX: x,
+        startY: y,
+        endY: y,
       },
       width: 0,
       height: 0,
@@ -68,21 +68,11 @@ export class ToolBrushService implements ToolHandler {
       strokeWidth: this.tool.strokeWidth,
     };
 
-    this.points$.pipe(takeUntil(this.destroy$)).subscribe((point) => {
-      const scroll = this.screenService.Scroll;
-      const sizes = this.screenService.Sizes;
-      const scale = this.screenService.Scale;
+    this.points$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((point) => this.handlePoint(point));
 
-      this.drawing.points.push({
-        x: point.x - scroll.x,
-        y: point.y - scroll.y,
-      });
-
-      handleAddedDrawingPoint(this.drawing, point, scroll);
-
-      this.drawingsService.append(this.drawing);
-      this.painterService.paint(scroll, sizes, scale);
-    });
+    this.nextPoint(e);
   }
 
   end(): void {
@@ -101,11 +91,28 @@ export class ToolBrushService implements ToolHandler {
       return;
     }
 
+    this.nextPoint(e);
+  }
+
+  private nextPoint(e: MouseEvent) {
     const scale = this.screenService.Scale;
+    const scroll = this.screenService.Scroll;
 
-    const x = e.clientX / scale;
-    const y = e.clientY / scale;
+    const x = e.clientX / scale - scroll.x;
+    const y = e.clientY / scale - scroll.y;
 
-    this.points$.next({ x, y });
+    const point = { x, y };
+
+    this.points$.next(point);
+  }
+
+  private handlePoint(point: Point) {
+    this.drawing.points.push(point);
+
+    handleAddedDrawingPoint(this.drawing, point);
+
+    this.drawingsService.append(this.drawing);
+
+    this.painterService.paint();
   }
 }

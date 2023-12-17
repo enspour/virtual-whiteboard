@@ -1,12 +1,7 @@
-import { Drawing, Point, ScreenScroll } from "@workspace/interfaces";
+import { Drawing, Point } from "@workspace/interfaces";
 
-export const handleAddedDrawingPoint = (
-  drawing: Drawing,
-  point: Point,
-  scroll: ScreenScroll
-) => {
-  const x = point.x - scroll.x;
-  const y = point.y - scroll.y;
+export const handleAddedDrawingPoint = (drawing: Drawing, point: Point) => {
+  const { x, y } = point;
 
   const { coordinates } = drawing;
 

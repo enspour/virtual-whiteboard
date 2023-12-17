@@ -17,12 +17,20 @@ export class DrawingBrushPainter implements DrawingPainter {
     drawing: DrawingBrush,
     scroll: ScreenScroll,
     sizes: ScreenSizes,
-    scale: ScreenScale
+    scale: ScreenScale,
+    inTrash: boolean
   ) {
     this.context.beginPath();
 
     this.context.lineWidth = drawing.strokeWidth * scale;
-    this.context.strokeStyle = drawing.strokeColor;
+    this.context.lineCap = "round";
+    this.context.lineJoin = "round";
+
+    if (inTrash) {
+      this.context.strokeStyle = "#cccccc";
+    } else {
+      this.context.strokeStyle = drawing.strokeColor;
+    }
 
     const points = drawing.points;
 

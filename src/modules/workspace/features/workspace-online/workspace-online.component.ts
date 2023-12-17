@@ -9,6 +9,7 @@ import { ToolkitComponent } from "@workspace/components/ui/toolkit/toolkit.compo
 
 import { DestroyService } from "@workspace/services/destroy.service";
 import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
+import { DrawingsTrashService } from "@workspace/services/drawings/drawings-trash.service";
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
 import { LocalDrawingStorageService } from "@workspace/services/drawings/local-drawing-storage.service";
 import { EventsService } from "@workspace/services/events.service";
@@ -82,6 +83,7 @@ import { DrawingStorageToken } from "@workspace/tokens";
 
     DrawingsService,
     DrawingsOnScreenService,
+    DrawingsTrashService,
   ],
 })
 export class WorkspaceOnlineComponent {

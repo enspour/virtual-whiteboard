@@ -33,11 +33,7 @@ export class CanvasPainterComponent implements OnInit {
     )
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
-        const scroll = this.screenService.Scroll;
-        const sizes = this.screenService.Sizes;
-        const scale = this.screenService.Scale;
-
-        this.painterService.paint(scroll, sizes, scale);
+        this.painterService.paint();
       });
   }
 

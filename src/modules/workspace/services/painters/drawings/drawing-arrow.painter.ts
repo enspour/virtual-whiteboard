@@ -1,4 +1,10 @@
-import { DrawingArrow, DrawingPainter } from "@workspace/interfaces";
+import {
+  DrawingArrow,
+  DrawingPainter,
+  ScreenScale,
+  ScreenScroll,
+  ScreenSizes,
+} from "@workspace/interfaces";
 
 export class DrawingArrowPainter implements DrawingPainter {
   private context: CanvasRenderingContext2D;
@@ -7,5 +13,11 @@ export class DrawingArrowPainter implements DrawingPainter {
     this.context = context;
   }
 
-  public paint(drawing: DrawingArrow) {}
+  public paint(
+    drawing: DrawingArrow,
+    scroll: ScreenScroll,
+    sizes: ScreenSizes,
+    scale: ScreenScale,
+    inTrash: boolean
+  ) {}
 }

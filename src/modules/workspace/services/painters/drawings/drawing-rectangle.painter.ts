@@ -1,4 +1,10 @@
-import { DrawingPainter, DrawingRectangle } from "@workspace/interfaces";
+import {
+  DrawingPainter,
+  DrawingRectangle,
+  ScreenScale,
+  ScreenScroll,
+  ScreenSizes,
+} from "@workspace/interfaces";
 
 export class DrawingRectanglePainter implements DrawingPainter {
   private context: CanvasRenderingContext2D;
@@ -7,5 +13,11 @@ export class DrawingRectanglePainter implements DrawingPainter {
     this.context = context;
   }
 
-  public paint(drawing: DrawingRectangle) {}
+  public paint(
+    drawing: DrawingRectangle,
+    scroll: ScreenScroll,
+    sizes: ScreenSizes,
+    scale: ScreenScale,
+    inTrash: boolean
+  ) {}
 }

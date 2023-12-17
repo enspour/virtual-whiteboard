@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 
-import { ScreenScale, ScreenScroll, ScreenSizes } from "@workspace/interfaces";
 import { Painter } from "@workspace/interfaces";
 
+import { ScreenService } from "../screen/screen.service";
 import { BoardPainterService } from "./board-painter.service";
 import { DrawingsPainterService } from "./drawings-painter.service";
 
@@ -13,6 +13,7 @@ export class PainterService implements Painter {
   private requestAnimationFrameId: number = 0;
 
   constructor(
+    private screenService: ScreenService,
     private boardPainterService: BoardPainterService,
     private drawingsPainterService: DrawingsPainterService
   ) {}
@@ -24,24 +25,26 @@ export class PainterService implements Painter {
     this.drawingsPainterService.setContext(context);
   }
 
-  paint(scroll: ScreenScroll, sizes: ScreenSizes, scale: ScreenScale) {
+  paint() {
     cancelAnimationFrame(this.requestAnimationFrameId);
 
     this.requestAnimationFrameId = requestAnimationFrame(() => {
-      this._paint(scroll, sizes, scale);
+      this._paint();
     });
   }
 
-  private _paint(scroll: ScreenScroll, sizes: ScreenSizes, scale: ScreenScale) {
+  private _paint() {
     if (!this.context) {
       return;
     }
+
+    const sizes = this.screenService.Sizes;
 
     const { width, height } = sizes;
 
     this.context.clearRect(0, 0, width, height);
 
-    this.boardPainterService.paint(scroll, sizes, scale);
-    this.drawingsPainterService.paint(scroll, sizes, scale);
+    this.boardPainterService.paint();
+    this.drawingsPainterService.paint();
   }
 }

@@ -24,46 +24,48 @@ export class DrawingsService {
   }
 
   public async append(...drawings: Drawing[]) {
+    let _drawings = [...this.drawings.value];
+
     for (const drawing of drawings) {
       const { id } = drawing;
 
-      const index = this.drawings.value.findIndex(
-        (drawing) => drawing.id === id
-      );
+      const index = _drawings.findIndex((drawing) => drawing.id === id);
 
       if (index === -1) {
-        this.drawings.next([...this.drawings.value, drawing]);
+        _drawings.push(drawing);
       } else {
-        this.drawings.next([
-          ...this.drawings.value.slice(0, index),
+        _drawings = [
+          ..._drawings.slice(0, index),
           drawing,
-          ...this.drawings.value.slice(index + 1),
-        ]);
+          ..._drawings.slice(index + 1),
+        ];
       }
     }
 
+    this.drawings.next(_drawings);
     await this.drawingStorage.set(this.drawings.value);
   }
 
   public async remove(...ids: string[]) {
     let count = 0;
 
-    for (const id of ids) {
-      const drawings = this.drawings.value;
+    let _drawings = [...this.drawings.value];
 
-      const index = drawings.findIndex((drawing) => drawing.id === id);
+    for (const id of ids) {
+      const index = _drawings.findIndex((drawing) => drawing.id === id);
 
       if (index !== -1) {
-        this.drawings.next([
-          ...drawings.slice(0, index),
-          ...drawings.slice(index + 1),
-        ]);
+        _drawings = [
+          ..._drawings.slice(0, index),
+          ..._drawings.slice(index + 1),
+        ];
 
         count += 1;
       }
     }
 
     if (count) {
+      this.drawings.next(_drawings);
       await this.drawingStorage.set(this.drawings.value);
     }
   }

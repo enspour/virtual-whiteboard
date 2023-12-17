@@ -1,22 +1,29 @@
 import { Injectable } from "@angular/core";
 
-import { ScreenScale, ScreenScroll, ScreenSizes } from "@workspace/interfaces";
 import { Painter } from "@workspace/interfaces";
 
 import { PAINTER_BOARD_STEP } from "@workspace/constants";
+
+import { ScreenService } from "../screen/screen.service";
 
 @Injectable()
 export class BoardPainterService implements Painter {
   private context?: CanvasRenderingContext2D;
 
+  constructor(private screenService: ScreenService) {}
+
   setContext(context: CanvasRenderingContext2D) {
     this.context = context;
   }
 
-  paint(scroll: ScreenScroll, sizes: ScreenSizes, scale: ScreenScale) {
+  paint() {
     if (!this.context) {
       return;
     }
+
+    const scroll = this.screenService.Scroll;
+    const sizes = this.screenService.Sizes;
+    const scale = this.screenService.Scale;
 
     const { width, height } = sizes;
 

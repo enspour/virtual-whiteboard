@@ -11,6 +11,7 @@ export interface DrawingPainter {
     drawing: Drawing,
     scroll: ScreenScroll,
     sizes: ScreenSizes,
-    scale: ScreenScale
+    scale: ScreenScale,
+    inTrash: boolean
   ): void;
 }

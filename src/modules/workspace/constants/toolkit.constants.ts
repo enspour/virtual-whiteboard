@@ -6,7 +6,7 @@ export const TOOLKIT: Tool[] = [
   {
     name: "brush",
     strokeColor: "#000000",
-    strokeWidth: 4,
+    strokeWidth: 12,
   },
   {
     name: "rectangle",
