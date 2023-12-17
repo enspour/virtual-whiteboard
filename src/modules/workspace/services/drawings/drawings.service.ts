@@ -45,17 +45,25 @@ export class DrawingsService {
     await this.drawingStorage.set(this.drawings.value);
   }
 
-  public async remove(id: Drawing["id"]) {
-    const drawings = this.drawings.value;
+  public async remove(...ids: string[]) {
+    let count = 0;
 
-    const index = drawings.findIndex((drawing) => drawing.id === id);
+    for (const id of ids) {
+      const drawings = this.drawings.value;
 
-    if (index !== -1) {
-      this.drawings.next([
-        ...drawings.slice(0, index),
-        ...drawings.slice(index + 1),
-      ]);
+      const index = drawings.findIndex((drawing) => drawing.id === id);
 
+      if (index !== -1) {
+        this.drawings.next([
+          ...drawings.slice(0, index),
+          ...drawings.slice(index + 1),
+        ]);
+
+        count += 1;
+      }
+    }
+
+    if (count) {
       await this.drawingStorage.set(this.drawings.value);
     }
   }
