@@ -1,0 +1,9 @@
+<button (click)="toggle()">
+  <ng-content select="popup-toggle" />
+</button>
+
+<ng-template #template>
+  <div #content [style.display]="'contents'">
+    <ng-content select="popup-content" />
+  </div>
+</ng-template>

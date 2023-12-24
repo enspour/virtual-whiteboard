@@ -71,8 +71,6 @@ export class ToolBrushService implements ToolHandler {
     this.points$
       .pipe(takeUntil(this.destroy$))
       .subscribe((point) => this.handlePoint(point));
-
-    this.nextPoint(e);
   }
 
   end(): void {

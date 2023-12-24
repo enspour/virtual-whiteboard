@@ -1,0 +1,9 @@
+@for (portal of portals(); track $index) {
+  <div
+    [style.position]="'absolute'"
+    [style.left]="portal.x + 'px'"
+    [style.top]="portal.y + 'px'"
+  >
+    <ng-container [ngTemplateOutlet]="portal.templateRef"></ng-container>
+  </div>
+}
