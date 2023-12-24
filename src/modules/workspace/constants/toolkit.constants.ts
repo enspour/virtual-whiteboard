@@ -6,16 +6,20 @@ export const TOOLKIT: Tool[] = [
   {
     name: "brush",
     strokeColor: "#000000",
-    strokeWidth: 12,
+    strokeWidth: 6,
   },
   {
     name: "rectangle",
-    roundness: 0,
+    roundness: 16,
+    strokeColor: "#000000",
+    strokeWidth: 6,
   },
   {
     name: "ellipse",
+    strokeColor: "#000000",
+    strokeWidth: 6,
   },
-  { name: "arrow" },
+  { name: "arrow", strokeColor: "#000000", strokeWidth: 6 },
   { name: "text" },
   { name: "eraser" },
 ];

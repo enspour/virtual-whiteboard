@@ -37,13 +37,13 @@ export class DrawingBrushPainter implements DrawingPainter {
     for (let i = 0; i < points.length; i++) {
       const point = points[i];
 
-      const x = point.x + scroll.x;
-      const y = point.y + scroll.y;
+      const x = (point.x + scroll.x) * scale;
+      const y = (point.y + scroll.y) * scale;
 
       if (i === 0) {
-        this.context.moveTo(x * scale, y * scale);
+        this.context.moveTo(x, y);
       } else {
-        this.context.lineTo(x * scale, y * scale);
+        this.context.lineTo(x, y);
       }
     }
 
