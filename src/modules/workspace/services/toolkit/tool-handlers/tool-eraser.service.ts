@@ -181,11 +181,6 @@ export class ToolEraserService implements ToolHandler {
       y: drawing.coordinates.startY + radiusY,
     };
 
-    console.log(
-      Math.pow(point.x - center.x, 2) / Math.pow(radiusX, 2) +
-        Math.pow(point.y - center.y, 2) / Math.pow(radiusY, 2)
-    );
-
     const p =
       Math.pow(point.x - center.x, 2) / Math.pow(radiusX, 2) +
       Math.pow(point.y - center.y, 2) / Math.pow(radiusY, 2);

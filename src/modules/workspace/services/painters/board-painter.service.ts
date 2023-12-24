@@ -32,8 +32,6 @@ export class BoardPainterService implements Painter {
 
     const { width, height } = sizes;
 
-    const step = PAINTER_BOARD_STEP * scale;
-
     this.context.beginPath();
 
     const bg = this.themeService.Properties["--theme-primary-board-bg"];
@@ -46,8 +44,13 @@ export class BoardPainterService implements Painter {
     this.context.lineWidth = 1 * scale;
     this.context.strokeStyle = color;
 
-    const startX = Math.floor(scroll.x % step);
-    const startY = Math.floor(scroll.y % step);
+    const step = PAINTER_BOARD_STEP * scale;
+
+    const scrollX = scroll.x * scale;
+    const scrollY = scroll.y * scale;
+
+    const startX = Math.floor(scrollX % step);
+    const startY = Math.floor(scrollY % step);
 
     for (let x = startX; x < width; x += step) {
       this.context.moveTo(x, 0);
