@@ -1,8 +1,12 @@
 import { ScreenScale, ScreenScroll } from "./screen.interfaces";
 
+export interface ScreenStorageData {
+  scroll: ScreenScroll;
+  scale: ScreenScale;
+}
+
 export interface ScreenStorage {
-  getScroll(): Promise<ScreenScroll>;
-  getScale(): Promise<ScreenScale>;
+  restore(): Promise<ScreenStorageData>;
 
   setScroll(scroll: ScreenScroll): Promise<void>;
   setScale(scale: ScreenScale): Promise<void>;

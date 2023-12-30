@@ -10,6 +10,10 @@ export class DrawingsTrashService {
 
   constructor(private drawingsService: DrawingsService) {}
 
+  get Trash() {
+    return [...this.trash];
+  }
+
   public append(...drawings: Drawing[]) {
     for (const drawing of drawings) {
       this.trash.add(drawing);

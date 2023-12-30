@@ -1,6 +1,10 @@
 import { Drawing } from "./drawing.interface";
 
+export interface DrawingStorageData {
+  drawings: Drawing[];
+}
+
 export interface DrawingStorage {
-  getAll(): Promise<Drawing[]>;
-  set(drawings: Drawing[]): Promise<void>;
+  restore(): Promise<DrawingStorageData>;
+  setDrawings(drawings: Drawing[]): Promise<void>;
 }

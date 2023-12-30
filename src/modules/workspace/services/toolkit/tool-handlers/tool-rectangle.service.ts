@@ -1,10 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
 import { nanoid } from "nanoid";
 
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
+import { CreateDrawingCommand } from "@workspace/services/history/commands/create-drawing.command";
+import { HistoryService } from "@workspace/services/history/history.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 
@@ -32,10 +34,13 @@ export class ToolRectangleService implements ToolHandler {
   private firstY = 0;
 
   constructor(
+    private injector: Injector,
+
     private screenService: ScreenService,
     private toolkitService: ToolkitService,
     private painterService: PainterService,
-    private drawingsService: DrawingsService
+    private drawingsService: DrawingsService,
+    private historyService: HistoryService
   ) {}
 
   start(e: MouseEvent): void {
@@ -83,6 +88,11 @@ export class ToolRectangleService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    if (this.drawing.width || this.drawing.height) {
+      const command = new CreateDrawingCommand(this.drawing, this.injector);
+      this.historyService.add(command);
+    }
 
     this.destroy$.next();
     this.destroy$.complete();

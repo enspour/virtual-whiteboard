@@ -26,3 +26,5 @@ export * from "./drawing/drawings/drawing-brush.interface";
 export * from "./drawing/drawings/drawing-ellipse.interface";
 export * from "./drawing/drawings/drawing-rectangle.interface";
 export * from "./drawing/drawing.interface";
+export * from "./history/history-command.interface";
+export * from "./history/history-storage.interface";

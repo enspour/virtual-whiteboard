@@ -18,8 +18,8 @@ export class DrawingsService {
     this.drawings$ = this.drawings.asObservable();
   }
 
-  public async init() {
-    const drawings = await this.drawingStorage.getAll();
+  public async restore() {
+    const { drawings } = await this.drawingStorage.restore();
     this.drawings.next(drawings);
   }
 
@@ -43,7 +43,7 @@ export class DrawingsService {
     }
 
     this.drawings.next(_drawings);
-    await this.drawingStorage.set(this.drawings.value);
+    await this.drawingStorage.setDrawings(this.drawings.value);
   }
 
   public async remove(...ids: string[]) {
@@ -66,7 +66,7 @@ export class DrawingsService {
 
     if (count) {
       this.drawings.next(_drawings);
-      await this.drawingStorage.set(this.drawings.value);
+      await this.drawingStorage.setDrawings(this.drawings.value);
     }
   }
 }

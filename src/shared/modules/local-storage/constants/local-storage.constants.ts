@@ -12,6 +12,9 @@ export const LS_SELECTED_TOOL = "__v1/toolkit/selected";
 
 export const LS_DRAWINGS = "__v1/drawings";
 
+export const LS_HISTORY_COMMANDS = "__v1/history/commands";
+export const LS_HISTORY_POSITION = "__v1/history/position";
+
 export const LS_DEFAULTS: LocalStoragePairs = {
   [LS_THEME]: "light",
 
@@ -25,4 +28,7 @@ export const LS_DEFAULTS: LocalStoragePairs = {
   [LS_SELECTED_TOOL]: TOOLKIT[0].name,
 
   [LS_DRAWINGS]: [],
+
+  [LS_HISTORY_COMMANDS]: [],
+  [LS_HISTORY_POSITION]: 0,
 };

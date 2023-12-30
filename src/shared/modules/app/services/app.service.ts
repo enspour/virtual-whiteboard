@@ -12,6 +12,12 @@ export class AppService {
   private mousedown = new Subject<MouseEvent>();
   public mousedown$ = this.mousedown.asObservable();
 
+  private undo = new Subject<Event>();
+  public undo$ = this.undo.asObservable();
+
+  private redo = new Subject<Event>();
+  public redo$ = this.redo.asObservable();
+
   constructor() {
     const sizes = {
       width: 0,
@@ -26,11 +32,19 @@ export class AppService {
     return this.sizes.value;
   }
 
-  public async setSizes(sizes: AppSizes) {
+  public setSizes(sizes: AppSizes) {
     this.sizes.next(sizes);
   }
 
   public emitMouseDown(event: MouseEvent) {
     this.mousedown.next(event);
+  }
+
+  public emitUndo(event: Event) {
+    this.undo.next(event);
+  }
+
+  public emitRedo(event: Event) {
+    this.redo.next(event);
   }
 }

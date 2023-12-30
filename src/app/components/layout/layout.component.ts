@@ -26,6 +26,17 @@ export class LayoutComponent {
     this.appService.emitMouseDown(event);
   }
 
+  @HostListener("window:keydown", ["$event"])
+  keydown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.shiftKey && event.code === "KeyZ") {
+      return this.appService.emitRedo(event);
+    }
+
+    if (event.ctrlKey && event.code === "KeyZ") {
+      return this.appService.emitUndo(event);
+    }
+  }
+
   onSizesChange(sizes: AppSizes) {
     this.appService.setSizes(sizes);
   }

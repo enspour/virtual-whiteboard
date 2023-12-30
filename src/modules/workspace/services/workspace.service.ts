@@ -12,6 +12,7 @@ import {
 import { DestroyService } from "./destroy.service";
 import { DrawingsService } from "./drawings/drawings.service";
 import { EventsService } from "./events.service";
+import { HistoryService } from "./history/history.service";
 import { ScreenService } from "./screen/screen.service";
 import { ToolArrowService } from "./toolkit/tool-handlers/tool-arrow.service";
 import { ToolBrushService } from "./toolkit/tool-handlers/tool-brush.service";
@@ -60,6 +61,7 @@ export class WorkspaceService {
   constructor(
     private eventsService: EventsService,
     private screenService: ScreenService,
+    private historyService: HistoryService,
 
     private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
@@ -75,8 +77,9 @@ export class WorkspaceService {
   ) {}
 
   async init() {
-    await this.screenService.init();
-    await this.drawingsService.init();
+    await this.screenService.restore();
+    await this.historyService.restore();
+    await this.drawingsService.restore();
 
     this.eventsService.screenEvents$
       .pipe(takeUntil(this.destroy$))

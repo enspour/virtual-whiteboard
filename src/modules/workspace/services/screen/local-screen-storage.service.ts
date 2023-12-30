@@ -1,7 +1,11 @@
 import { Injectable } from "@angular/core";
 
-import { ScreenScale, ScreenScroll } from "@workspace/interfaces";
-import { ScreenStorage } from "@workspace/interfaces";
+import {
+  ScreenScale,
+  ScreenScroll,
+  ScreenStorage,
+  ScreenStorageData,
+} from "@workspace/interfaces";
 
 import {
   LS_SCREEN_SCALE,
@@ -13,12 +17,14 @@ import {
 export class LocalScreenStorageService implements ScreenStorage {
   constructor(private localStorageService: LocalStorageService) {}
 
-  public async getScroll() {
-    return this.localStorageService.get(LS_SCREEN_SCROLL);
-  }
+  public async restore(): Promise<ScreenStorageData> {
+    const scroll = this.localStorageService.get(LS_SCREEN_SCROLL);
+    const scale = this.localStorageService.get(LS_SCREEN_SCALE);
 
-  public async getScale() {
-    return this.localStorageService.get(LS_SCREEN_SCALE);
+    return {
+      scroll,
+      scale,
+    };
   }
 
   public async setScroll(scroll: ScreenScroll) {

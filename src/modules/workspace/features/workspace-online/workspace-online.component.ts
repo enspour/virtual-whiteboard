@@ -16,6 +16,9 @@ import { DrawingsTrashService } from "@workspace/services/drawings/drawings-tras
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
 import { LocalDrawingStorageService } from "@workspace/services/drawings/local-drawing-storage.service";
 import { EventsService } from "@workspace/services/events.service";
+import { HistoryRestoreService } from "@workspace/services/history/history-restore.service";
+import { HistoryService } from "@workspace/services/history/history.service";
+import { LocalHistoryStorageService } from "@workspace/services/history/local-history-storage.service";
 import { BoardPainterService } from "@workspace/services/painters/board-painter.service";
 import { DrawingsPainterService } from "@workspace/services/painters/drawings-painter.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
@@ -32,7 +35,7 @@ import { ToolTextService } from "@workspace/services/toolkit/tool-handlers/tool-
 import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 import { WorkspaceService } from "@workspace/services/workspace.service";
 
-import { ScreenStorageToken } from "@workspace/tokens";
+import { HistoryStorageToken, ScreenStorageToken } from "@workspace/tokens";
 import { DrawingStorageToken } from "@workspace/tokens";
 
 @Component({
@@ -64,9 +67,17 @@ import { DrawingStorageToken } from "@workspace/tokens";
     ScreenService,
     EventsService,
 
+    HistoryService,
+    HistoryRestoreService,
+
     {
       provide: ScreenStorageToken,
       useClass: LocalScreenStorageService,
+    },
+
+    {
+      provide: HistoryStorageToken,
+      useClass: LocalHistoryStorageService,
     },
 
     {

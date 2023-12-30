@@ -1,6 +1,7 @@
 import { Theme } from "../../theme/interfaces/theme.interface";
 import {
   Drawing,
+  HistoryStorageData,
   ScreenScale,
   ScreenScroll,
   Tool,
@@ -8,6 +9,8 @@ import {
 
 import {
   LS_DRAWINGS,
+  LS_HISTORY_COMMANDS,
+  LS_HISTORY_POSITION,
   LS_SCREEN_SCALE,
   LS_SCREEN_SCROLL,
   LS_SELECTED_TOOL,
@@ -25,6 +28,9 @@ export interface LocalStoragePairs {
   [LS_SELECTED_TOOL]: Tool["name"];
 
   [LS_DRAWINGS]: Drawing[];
+
+  [LS_HISTORY_COMMANDS]: HistoryStorageData["commands"];
+  [LS_HISTORY_POSITION]: HistoryStorageData["position"];
 }
 
 export type LocalStorageKey = keyof LocalStoragePairs;

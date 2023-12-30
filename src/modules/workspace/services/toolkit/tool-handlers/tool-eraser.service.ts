@@ -1,9 +1,11 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
 import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
 import { DrawingsTrashService } from "@workspace/services/drawings/drawings-trash.service";
+import { RemoveDrawingsCommand } from "@workspace/services/history/commands/remove-drawings.command";
+import { HistoryService } from "@workspace/services/history/history.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 
@@ -26,10 +28,13 @@ export class ToolEraserService implements ToolHandler {
   private destroy$!: Subject<void>;
 
   constructor(
+    private injector: Injector,
+
     private screenService: ScreenService,
     private painterService: PainterService,
     private drawingsTrashService: DrawingsTrashService,
-    private drawingsOnScreenServices: DrawingsOnScreenService
+    private drawingsOnScreenServices: DrawingsOnScreenService,
+    private historyService: HistoryService
   ) {}
 
   start(e: MouseEvent): void {
@@ -52,10 +57,17 @@ export class ToolEraserService implements ToolHandler {
 
     this.isHandling = false;
 
-    this.destroy$.next();
-    this.destroy$.complete();
+    const drawings = this.drawingsTrashService.Trash;
+
+    if (drawings.length) {
+      const command = new RemoveDrawingsCommand(drawings, this.injector);
+      this.historyService.add(command);
+    }
 
     this.drawingsTrashService.clear().then(() => this.painterService.paint());
+
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   process(e: MouseEvent): void {

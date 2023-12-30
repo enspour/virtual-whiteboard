@@ -1,4 +1,13 @@
 <div class="history">
-  <app-icon-button src="assets/icons/undo.svg" />
-  <app-icon-button src="assets/icons/redo.svg" />
+  <app-icon-button
+    src="assets/icons/undo.svg"
+    appTooltip="Undo (Ctrl + Z)"
+    (buttonClick)="onUndo()"
+  />
+
+  <app-icon-button
+    src="assets/icons/redo.svg"
+    appTooltip="Redo (Ctrl + Shift + Z)"
+    (buttonClick)="onRedo()"
+  />
 </div>

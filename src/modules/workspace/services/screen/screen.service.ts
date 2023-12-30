@@ -66,9 +66,8 @@ export class ScreenService {
     return this.sizes.getValue();
   }
 
-  async init() {
-    const scroll = await this.screenStorage.getScroll();
-    const scale = await this.screenStorage.getScale();
+  async restore() {
+    const { scroll, scale } = await this.screenStorage.restore();
 
     this.scroll.next(scroll);
     this.scale.next(scale);
