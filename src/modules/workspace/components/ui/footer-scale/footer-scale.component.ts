@@ -72,7 +72,7 @@ export class FooterScaleComponent implements OnInit {
     this.screenService.scaleOut(center);
   }
 
-  public onDefault() {
-    this.screenService.setScale(1);
+  public onScaleToDefault() {
+    this.screenService.scaleTo(1);
   }
 }

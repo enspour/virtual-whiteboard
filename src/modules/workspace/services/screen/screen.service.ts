@@ -8,7 +8,6 @@ import {
   ScreenScroll,
   ScreenSizes,
   ScreenStorage,
-  WheelDirection,
 } from "@workspace/interfaces";
 
 import {
@@ -128,28 +127,45 @@ export class ScreenService {
   }
 
   public scaleIn(mousePosition: Point) {
-    return this.scaling("forward", mousePosition);
+    const direction = 1;
+    const scale = this.Scale;
+
+    const nextScale = scale + direction * SCREEN_SCALING_DELTA;
+
+    return this.scaling(nextScale, direction, mousePosition);
   }
 
   public scaleOut(mousePosition: Point) {
-    return this.scaling("back", mousePosition);
+    const direction = -1;
+    const scale = this.Scale;
+
+    const nextScale = scale + direction * SCREEN_SCALING_DELTA;
+
+    return this.scaling(nextScale, direction, mousePosition);
   }
 
-  private scaling(wheelDirection: WheelDirection, mousePosition: Point) {
-    const scroll = this.Scroll;
+  public scaleTo(nextScale: number) {
     const sizes = this.Sizes;
     const scale = this.Scale;
 
-    const direction = (() => {
-      switch (wheelDirection) {
-        case "forward":
-          return 1;
-        case "back":
-          return -1;
-      }
-    })();
+    const mousePosition = {
+      x: sizes.width / 2,
+      y: sizes.height / 2,
+    };
 
-    let nextScale = scale + direction * SCREEN_SCALING_DELTA;
+    if (scale > nextScale) {
+      const direction = -1;
+      return this.scaling(nextScale, direction, mousePosition);
+    } else {
+      const direction = 1;
+      return this.scaling(nextScale, direction, mousePosition);
+    }
+  }
+
+  private scaling(nextScale: number, direction: 1 | -1, mousePosition: Point) {
+    const scroll = this.Scroll;
+    const sizes = this.Sizes;
+    const scale = this.Scale;
 
     if (SCREEN_SCALING_MIN > nextScale) {
       nextScale = SCREEN_SCALING_MIN;

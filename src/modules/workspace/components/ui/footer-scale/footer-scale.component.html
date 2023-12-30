@@ -5,7 +5,11 @@
     (buttonClick)="onScaleOut()"
   />
 
-  <button class="scale__value" appTooltip="Reset Scale" (click)="onDefault()">
+  <button
+    class="scale__value"
+    appTooltip="Reset Scale"
+    (click)="onScaleToDefault()"
+  >
     {{ scale * 100 | number: "1.0-0" }}%
   </button>
 
