@@ -1,9 +1,17 @@
 @for (portal of portals(); track $index) {
-  <div
-    [style.position]="'absolute'"
-    [style.left]="portal.x + 'px'"
-    [style.top]="portal.y + 'px'"
-  >
-    <ng-container [ngTemplateOutlet]="portal.templateRef"></ng-container>
-  </div>
+  @if (portal.type === "component") {
+    <ng-container
+      [ngComponentOutlet]="portal.componentType"
+      [ngComponentOutletInputs]="portal.componentInputs"
+      [ngComponentOutletInjector]="portal.componentInjector"
+      [ngComponentOutletContent]="portal.componentContent"
+    />
+  }
+
+  @if (portal.type === "template") {
+    <ng-container
+      [ngTemplateOutlet]="portal.templateRef"
+      [ngTemplateOutletContext]="portal.templateContext"
+    />
+  }
 }

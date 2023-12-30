@@ -1,0 +1,25 @@
+:host {
+  --bg: var(--theme-primary-bg);
+}
+
+.scale {
+  position: absolute;
+  left: 2rem;
+  bottom: 2rem;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  gap: 0.6rem;
+  background-color: var(--bg);
+  border-radius: 1.2rem;
+  box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.05);
+  user-select: none;
+}
+
+.scale__value {
+  width: 6rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

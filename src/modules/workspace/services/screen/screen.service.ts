@@ -150,10 +150,14 @@ export class ScreenService {
       }
     })();
 
-    const nextScale = scale + direction * SCREEN_SCALING_DELTA;
+    let nextScale = scale + direction * SCREEN_SCALING_DELTA;
 
-    if (SCREEN_SCALING_MIN > nextScale || nextScale > SCREEN_SCALING_MAX) {
-      return;
+    if (SCREEN_SCALING_MIN > nextScale) {
+      nextScale = SCREEN_SCALING_MIN;
+    }
+
+    if (SCREEN_SCALING_MAX < nextScale) {
+      nextScale = SCREEN_SCALING_MAX;
     }
 
     const width = (sizes.width * scale) / nextScale;

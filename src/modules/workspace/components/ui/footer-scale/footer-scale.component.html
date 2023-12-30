@@ -1,0 +1,17 @@
+<div class="scale">
+  <app-icon-button
+    src="assets/icons/minus.svg"
+    appTooltip="Scale Out"
+    (buttonClick)="onScaleOut()"
+  />
+
+  <button class="scale__value" appTooltip="Reset Scale" (click)="onDefault()">
+    {{ scale * 100 | number: "1.0-0" }}%
+  </button>
+
+  <app-icon-button
+    src="assets/icons/plus.svg"
+    appTooltip="Scale In"
+    (buttonClick)="onScaleIn()"
+  />
+</div>

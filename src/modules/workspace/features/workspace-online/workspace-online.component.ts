@@ -5,6 +5,9 @@ import { CanvasCursorComponent } from "@workspace/components/ui/canvas-cursor/ca
 import { CanvasEventsComponent } from "@workspace/components/ui/canvas-events/canvas-events.component";
 import { CanvasPainterComponent } from "@workspace/components/ui/canvas-painter/canvas-painter.component";
 import { CanvasComponent } from "@workspace/components/ui/canvas/canvas.component";
+import { FooterHistoryComponent } from "@workspace/components/ui/footer-history/footer-history.component";
+import { FooterScaleComponent } from "@workspace/components/ui/footer-scale/footer-scale.component";
+import { HeaderActionBarComponent } from "@workspace/components/ui/header-action-bar/header-action-bar.component";
 import { ToolkitComponent } from "@workspace/components/ui/toolkit/toolkit.component";
 
 import { DestroyService } from "@workspace/services/destroy.service";
@@ -47,6 +50,11 @@ import { DrawingStorageToken } from "@workspace/tokens";
     CanvasCursorComponent,
 
     ToolkitComponent,
+
+    HeaderActionBarComponent,
+
+    FooterScaleComponent,
+    FooterHistoryComponent,
   ],
   providers: [
     DestroyService,

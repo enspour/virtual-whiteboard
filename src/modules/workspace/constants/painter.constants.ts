@@ -1,1 +1,1 @@
-export const PAINTER_BOARD_STEP = 20;
+export const PAINTER_BOARD_STEP = 80;

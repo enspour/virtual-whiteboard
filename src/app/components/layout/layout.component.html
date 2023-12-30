@@ -1,1 +1,5 @@
-<ng-content />
+<app-sizes-observer (sizesChange)="onSizesChange($event)">
+  <main class="main">
+    <ng-content />
+  </main>
+</app-sizes-observer>

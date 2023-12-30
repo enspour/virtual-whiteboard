@@ -5,5 +5,8 @@
   "--theme-primary-icon": "#222222",
 
   "--theme-primary-board-bg": "#ffffff",
-  "--theme-primary-board-color": "#cccccc"
+  "--theme-primary-board-color": "#cccccc",
+
+  "--theme-primary-tooltip-bg": "#eeeeee",
+  "--theme-primary-tooltip-color": "#ffffff"
 }
