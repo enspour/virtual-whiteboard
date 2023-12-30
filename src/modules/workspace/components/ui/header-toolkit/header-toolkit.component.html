@@ -11,6 +11,7 @@
     >
       <app-icon-button
         [src]="icons[tool.name]"
+        [appTooltip]="tips[tool.name]"
         [isActive]="tool.name === (selectedTool$ | async)?.name"
       />
 

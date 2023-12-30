@@ -8,6 +8,7 @@ export * from "./painter/drawing-painter.interface";
 export * from "./toolkit/toolkit-event.interface";
 export * from "./toolkit/tool-cursors.interface";
 export * from "./toolkit/tool-icons.interface";
+export * from "./toolkit/tool-tips.interface";
 export * from "./toolkit/tool-handlers.interface";
 export * from "./toolkit/tool.interface";
 export * from "./toolkit/tools/tool-base.interface";

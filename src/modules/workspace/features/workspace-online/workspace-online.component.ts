@@ -8,7 +8,7 @@ import { CanvasComponent } from "@workspace/components/ui/canvas/canvas.componen
 import { FooterHistoryComponent } from "@workspace/components/ui/footer-history/footer-history.component";
 import { FooterScaleComponent } from "@workspace/components/ui/footer-scale/footer-scale.component";
 import { HeaderActionBarComponent } from "@workspace/components/ui/header-action-bar/header-action-bar.component";
-import { ToolkitComponent } from "@workspace/components/ui/toolkit/toolkit.component";
+import { HeaderToolkitComponent } from "@workspace/components/ui/header-toolkit/header-toolkit.component";
 
 import { DestroyService } from "@workspace/services/destroy.service";
 import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
@@ -52,7 +52,7 @@ import { DrawingStorageToken } from "@workspace/tokens";
     CanvasEventsComponent,
     CanvasCursorComponent,
 
-    ToolkitComponent,
+    HeaderToolkitComponent,
 
     HeaderActionBarComponent,
 

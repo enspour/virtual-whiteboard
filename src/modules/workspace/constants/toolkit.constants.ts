@@ -1,4 +1,4 @@
-import { Tool, ToolCursors, ToolIcons } from "@workspace/interfaces";
+import { Tool, ToolCursors, ToolIcons, ToolTips } from "@workspace/interfaces";
 
 export const TOOLKIT: Tool[] = [
   { name: "hand" },
@@ -59,4 +59,15 @@ export const TOOL_CURSOR: ToolCursors = {
 
   eraser: "crosshair",
   "executed--eraser": "crosshair",
+};
+
+export const TOOL_TIP: ToolTips = {
+  hand: "Hand",
+  selection: "Selection",
+  brush: "Brush",
+  rectangle: "Rectangle",
+  ellipse: "Circle",
+  arrow: "Arrow",
+  text: "Text",
+  eraser: "Eraser",
 };

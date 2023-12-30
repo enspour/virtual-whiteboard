@@ -20,20 +20,21 @@ import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 
 import { Tool } from "modules/workspace/interfaces";
 
-import { TOOL_ICONS } from "@workspace/constants";
+import { TOOL_ICONS, TOOL_TIP } from "@workspace/constants";
 
 import { ThemePalette, ThemePaletteToken } from "@theme";
 
 @Component({
-  selector: "app-toolkit",
-  templateUrl: "./toolkit.component.html",
-  styleUrl: "./toolkit.component.scss",
+  selector: "app-header-toolkit",
+  templateUrl: "./header-toolkit.component.html",
+  styleUrl: "./header-toolkit.component.scss",
   standalone: true,
   imports: [CommonModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToolkitComponent implements OnInit {
+export class HeaderToolkitComponent implements OnInit {
   public icons = TOOL_ICONS;
+  public tips = TOOL_TIP;
 
   public toolkit$ = this.toolkitService.toolkit$;
   public selectedTool$ = this.toolkitService.selectedTool$;
