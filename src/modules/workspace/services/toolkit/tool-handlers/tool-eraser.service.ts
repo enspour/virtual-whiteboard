@@ -13,6 +13,7 @@ import { distance } from "@workspace/utils";
 
 import {
   Drawing,
+  DrawingArrow,
   DrawingBrush,
   DrawingEllipse,
   DrawingRectangle,
@@ -113,18 +114,23 @@ export class ToolEraserService implements ToolHandler {
     ) {
       switch (drawing.type) {
         case "brush":
-          return this.isPointOnBrushDrawing(point, drawing);
+          return this.isPointOnDrawingWithPoints(point, drawing);
         case "rectangle":
           return this.isPointOnRectangleDrawing(point, drawing);
         case "ellipse":
           return this.isPointOnEllipseDrawing(point, drawing);
+        case "arrow":
+          return this.isPointOnDrawingWithPoints(point, drawing);
       }
     }
 
     return false;
   }
 
-  private isPointOnBrushDrawing(point: Point, drawing: DrawingBrush): boolean {
+  private isPointOnDrawingWithPoints(
+    point: Point,
+    drawing: DrawingBrush | DrawingArrow
+  ): boolean {
     const { points } = drawing;
 
     for (let i = 0; i < points.length - 1; i++) {

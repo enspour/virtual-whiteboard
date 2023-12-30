@@ -30,8 +30,8 @@ export class ToolRectangleService implements ToolHandler {
 
   private drawing!: DrawingRectangle;
 
-  private firstX = 0;
-  private firstY = 0;
+  private initialX = 0;
+  private initialY = 0;
 
   constructor(
     private injector: Injector,
@@ -57,8 +57,8 @@ export class ToolRectangleService implements ToolHandler {
     const x = e.clientX / scale - scroll.x;
     const y = e.clientY / scale - scroll.y;
 
-    this.firstX = x;
-    this.firstY = y;
+    this.initialX = x;
+    this.initialY = y;
 
     this.drawing = {
       id: nanoid(),
@@ -121,20 +121,20 @@ export class ToolRectangleService implements ToolHandler {
   private handlePoint(point: Point) {
     const { coordinates } = this.drawing;
 
-    if (this.firstX < point.x) {
-      coordinates.startX = this.firstX;
+    if (this.initialX < point.x) {
+      coordinates.startX = this.initialX;
       coordinates.endX = point.x;
     } else {
       coordinates.startX = point.x;
-      coordinates.endX = this.firstX;
+      coordinates.endX = this.initialX;
     }
 
-    if (this.firstY < point.y) {
-      coordinates.startY = this.firstY;
+    if (this.initialY < point.y) {
+      coordinates.startY = this.initialY;
       coordinates.endY = point.y;
     } else {
       coordinates.startY = point.y;
-      coordinates.endY = this.firstY;
+      coordinates.endY = this.initialY;
     }
 
     this.drawing.width = coordinates.endX - coordinates.startX;
