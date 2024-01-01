@@ -9,6 +9,4 @@ export interface DrawingBase {
   };
   width: number;
   height: number;
-  strokeColor: string;
-  strokeWidth: number;
 }

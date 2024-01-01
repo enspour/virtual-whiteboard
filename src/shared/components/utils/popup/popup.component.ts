@@ -7,6 +7,8 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
+import { nanoid } from "nanoid";
+
 import {
   Portal,
   PortalsController,
@@ -55,6 +57,7 @@ export class PopupComponent {
     this.isOpen = true;
 
     this.portal = {
+      id: nanoid(6),
       type: "template",
       templateRef: this.templateRef,
     };

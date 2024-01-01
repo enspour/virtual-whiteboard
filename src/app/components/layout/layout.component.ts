@@ -28,6 +28,10 @@ export class LayoutComponent {
 
   @HostListener("window:keydown", ["$event"])
   keydown(event: KeyboardEvent) {
+    if (event.code === "Escape") {
+      return this.appService.emitEscape(event);
+    }
+
     if (event.ctrlKey && event.shiftKey && event.code === "KeyZ") {
       return this.appService.emitRedo(event);
     }

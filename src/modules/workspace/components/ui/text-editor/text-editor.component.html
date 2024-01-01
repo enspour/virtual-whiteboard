@@ -1,0 +1,12 @@
+<div
+  #editor
+  class="text-editor"
+  contenteditable="true"
+  tabindex="0"
+  [style.top]="position.y + 'px'"
+  [style.left]="position.x + 'px'"
+  [style.color]="settings.textColor"
+  [style.font-size]="settings.textSize + 'px'"
+  [style.line-height]="settings.lineHeight + 'px'"
+  (input)="onInput($event)"
+></div>

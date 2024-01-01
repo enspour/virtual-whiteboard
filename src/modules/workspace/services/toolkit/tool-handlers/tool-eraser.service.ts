@@ -121,6 +121,8 @@ export class ToolEraserService implements ToolHandler {
           return this.isPointOnEllipseDrawing(point, drawing);
         case "arrow":
           return this.isPointOnDrawingWithPoints(point, drawing);
+        case "text":
+          return true;
       }
     }
 

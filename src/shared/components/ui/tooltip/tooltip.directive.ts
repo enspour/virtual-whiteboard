@@ -7,6 +7,8 @@ import {
   Input,
 } from "@angular/core";
 
+import { nanoid } from "nanoid";
+
 import {
   Portal,
   PortalsController,
@@ -37,6 +39,7 @@ export class TooltipDirective {
     const rect = this.elementRef.nativeElement.getBoundingClientRect();
 
     this.portal = {
+      id: nanoid(6),
       type: "component",
       componentType: TooltipComponent,
       componentInputs: { tooltip: this.appTooltip, rect },

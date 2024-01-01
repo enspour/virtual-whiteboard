@@ -18,6 +18,9 @@ export class AppService {
   private redo = new Subject<Event>();
   public redo$ = this.redo.asObservable();
 
+  private escape = new Subject<Event>();
+  public escape$ = this.escape.asObservable();
+
   constructor() {
     const sizes = {
       width: 0,
@@ -46,5 +49,9 @@ export class AppService {
 
   public emitRedo(event: Event) {
     this.redo.next(event);
+  }
+
+  public emitEscape(event: Event) {
+    this.escape.next(event);
   }
 }

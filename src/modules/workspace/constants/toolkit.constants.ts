@@ -5,22 +5,28 @@ export const TOOLKIT: Tool[] = [
   { name: "selection" },
   {
     name: "brush",
-    strokeColor: "#000000",
+    strokeColor: "#ffffff",
     strokeWidth: 6,
   },
   {
     name: "rectangle",
     roundness: 16,
-    strokeColor: "#000000",
+    strokeColor: "#ffffff",
     strokeWidth: 6,
   },
   {
     name: "ellipse",
-    strokeColor: "#000000",
+    strokeColor: "#ffffff",
     strokeWidth: 6,
   },
-  { name: "arrow", strokeColor: "#000000", strokeWidth: 6 },
-  { name: "text" },
+  { name: "arrow", strokeColor: "#ffffff", strokeWidth: 6 },
+  {
+    name: "text",
+    textColor: "#ffffff",
+    textSize: 20,
+    textFamily: "Roboto",
+    lineHeight: 20,
+  },
   { name: "eraser" },
 ];
 
@@ -66,7 +72,7 @@ export const TOOL_TIP: ToolTips = {
   selection: "Selection",
   brush: "Brush",
   rectangle: "Rectangle",
-  ellipse: "Circle",
+  ellipse: "Ellipse",
   arrow: "Arrow",
   text: "Text",
   eraser: "Eraser",

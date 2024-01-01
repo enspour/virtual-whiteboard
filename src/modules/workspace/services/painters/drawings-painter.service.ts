@@ -10,6 +10,7 @@ import { DrawingArrowPainter } from "./drawings/drawing-arrow.painter";
 import { DrawingBrushPainter } from "./drawings/drawing-brush.painter";
 import { DrawingEllipsePainter } from "./drawings/drawing-ellipse.painter";
 import { DrawingRectanglePainter } from "./drawings/drawing-rectangle.painter";
+import { DrawingTextPainter } from "./drawings/drawing-text.painter";
 
 @Injectable()
 export class DrawingsPainterService implements Painter {
@@ -31,6 +32,7 @@ export class DrawingsPainterService implements Painter {
       arrow: new DrawingArrowPainter(context),
       ellipse: new DrawingEllipsePainter(context),
       rectangle: new DrawingRectanglePainter(context),
+      text: new DrawingTextPainter(context),
     };
   }
 

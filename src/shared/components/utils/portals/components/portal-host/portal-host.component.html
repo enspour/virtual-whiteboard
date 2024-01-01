@@ -1,4 +1,4 @@
-@for (portal of portals(); track $index) {
+@for (portal of portals(); track portal.id) {
   @if (portal.type === "component") {
     <ng-container
       [ngComponentOutlet]="portal.componentType"
