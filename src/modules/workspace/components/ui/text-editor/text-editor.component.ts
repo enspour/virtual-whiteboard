@@ -2,14 +2,20 @@ import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
+  OnDestroy,
+  OnInit,
   ViewChild,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
+import { Subject, takeUntil } from "rxjs";
+
 import { AppService } from "@shared/modules/app/services/app.service";
+import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { Point } from "@workspace/interfaces";
 
@@ -23,7 +29,7 @@ import { TextEditorChannel, TextEditorSettings } from "./text-editor.interface";
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
 })
-export class TextEditorComponent implements AfterViewInit {
+export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("editor") editorRef!: ElementRef<HTMLDivElement>;
 
   @Input({ required: true }) position!: Point;
@@ -32,7 +38,15 @@ export class TextEditorComponent implements AfterViewInit {
 
   @Input() text: string = "";
 
-  constructor(private appService: AppService) {
+  public scale!: number;
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private appService: AppService,
+    private screenService: ScreenService
+  ) {
     this.appService.escape$
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.close());
@@ -40,6 +54,20 @@ export class TextEditorComponent implements AfterViewInit {
     this.appService.mousedown$
       .pipe(takeUntilDestroyed())
       .subscribe((event) => this.onAppClick(event));
+  }
+
+  ngOnInit(): void {
+    this.screenService.scale$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((scale) => {
+        this.scale = scale;
+        this.cdRef.detectChanges();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngAfterViewInit(): void {

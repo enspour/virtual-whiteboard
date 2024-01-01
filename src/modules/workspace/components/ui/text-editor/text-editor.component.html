@@ -6,7 +6,7 @@
   [style.top]="position.y + 'px'"
   [style.left]="position.x + 'px'"
   [style.color]="settings.textColor"
-  [style.font-size]="settings.textSize + 'px'"
-  [style.line-height]="settings.lineHeight + 'px'"
+  [style.font-size]="settings.textSize * scale + 'px'"
+  [style.line-height]="settings.lineHeight * scale + 'px'"
   (input)="onInput($event)"
 ></div>

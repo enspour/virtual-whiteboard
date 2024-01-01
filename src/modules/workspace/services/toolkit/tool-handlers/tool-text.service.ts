@@ -44,8 +44,6 @@ export class ToolTextService implements ToolHandler {
     const clientX = e.clientX;
     const clientY = e.clientY;
 
-    const scale = this.screenService.Scale;
-
     const channel$: TextEditorChannel = new ReplaySubject();
 
     const portal: Portal = {
@@ -60,8 +58,6 @@ export class ToolTextService implements ToolHandler {
         },
         settings: {
           ...this.tool,
-          textSize: this.tool.textSize * scale,
-          lineHeight: this.tool.lineHeight * scale,
         },
         channel$,
       },
