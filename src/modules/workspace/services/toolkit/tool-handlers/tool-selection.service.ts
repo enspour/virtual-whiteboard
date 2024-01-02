@@ -6,9 +6,9 @@ import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 import { SelectionService } from "@workspace/services/selection/selection.service";
 
-import { isPointOnDrawing } from "@workspace/utils";
+import { isPointOnDrawing, isPointOnDrawingsSelection } from "@workspace/utils";
 
-import { Drawing, ToolHandler } from "@workspace/interfaces";
+import { ToolHandler } from "@workspace/interfaces";
 
 import { ToolSelectionMoveService } from "./tool-selection-move.service";
 import { ToolSelectionSelectService } from "./tool-selection-select.service";
@@ -42,12 +42,14 @@ export class ToolSelectionService implements ToolHandler {
     this.initialY = e.clientY / scale - scroll.y;
 
     const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+    const coordinates = this.drawingsOnSelectionService.Coordinates;
 
-    if (drawings.length === 1) {
-      const drawing = drawings[0];
-      this.setHandlerByDrawing(drawing);
+    const point = { x: this.initialX, y: this.initialY };
+
+    if (isPointOnDrawingsSelection(point, drawings, coordinates)) {
+      this.handler = this.toolSelectionMoveService;
     } else {
-      this.setHandlerByCoordinates();
+      this.handler = this.toolSelectionSelectService;
     }
 
     this.handler.start(e);
@@ -98,55 +100,5 @@ export class ToolSelectionService implements ToolHandler {
     }
 
     this.painterService.paint();
-  }
-
-  private setHandlerByDrawing(drawing: Drawing) {
-    switch (drawing.type) {
-      case "brush":
-      case "rectangle":
-      case "ellipse":
-      case "text": {
-        const { coordinates } = drawing;
-
-        if (
-          coordinates.startX <= this.initialX &&
-          coordinates.startY <= this.initialY &&
-          coordinates.endX >= this.initialX &&
-          coordinates.endY >= this.initialY
-        ) {
-          this.handler = this.toolSelectionMoveService;
-        } else {
-          this.handler = this.toolSelectionSelectService;
-        }
-
-        break;
-      }
-      case "arrow": {
-        const point = { x: this.initialX, y: this.initialY };
-
-        if (isPointOnDrawing(point, drawing)) {
-          this.handler = this.toolSelectionMoveService;
-        } else {
-          this.handler = this.toolSelectionSelectService;
-        }
-
-        break;
-      }
-    }
-  }
-
-  private setHandlerByCoordinates() {
-    const coordinates = this.drawingsOnSelectionService.Coordinates;
-
-    if (
-      coordinates.startX <= this.initialX &&
-      coordinates.startY <= this.initialY &&
-      coordinates.endX >= this.initialX &&
-      coordinates.endY >= this.initialY
-    ) {
-      this.handler = this.toolSelectionMoveService;
-    } else {
-      this.handler = this.toolSelectionSelectService;
-    }
   }
 }

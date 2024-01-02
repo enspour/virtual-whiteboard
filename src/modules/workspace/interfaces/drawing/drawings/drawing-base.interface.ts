@@ -1,12 +1,9 @@
+import { Coordinates } from "@workspace/interfaces/coordinates.interface";
+
 export interface DrawingBase {
   id: string;
   angel: number;
-  coordinates: {
-    startX: number;
-    endX: number;
-    startY: number;
-    endY: number;
-  };
+  coordinates: Coordinates;
   width: number;
   height: number;
 }

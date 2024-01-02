@@ -5,7 +5,8 @@ export type ToolCursorType =
   | "grab"
   | "grabbing"
   | "text"
-  | "crosshair";
+  | "crosshair"
+  | "move";
 
 export type ToolCursorName = Tool["name"] | `executed--${Tool["name"]}`;
 

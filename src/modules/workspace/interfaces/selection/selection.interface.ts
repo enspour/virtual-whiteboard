@@ -1,9 +1,6 @@
-export interface SelectionCoordinates {
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
-}
+import { Coordinates } from "../coordinates.interface";
+
+export type SelectionCoordinates = Coordinates;
 
 export interface SelectionSizes {
   width: number;

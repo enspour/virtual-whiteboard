@@ -1,4 +1,5 @@
 export * from "./point.interface";
+export * from "./coordinates.interface";
 export * from "./wheel.interface";
 export * from "./screen/screen.interfaces";
 export * from "./screen/screen-storage.interface";
