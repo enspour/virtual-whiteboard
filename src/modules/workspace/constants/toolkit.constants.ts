@@ -1,4 +1,10 @@
-import { Tool, ToolCursors, ToolIcons, ToolTips } from "@workspace/interfaces";
+import {
+  ExecutableTool,
+  Tool,
+  ToolCursors,
+  ToolIcons,
+  ToolTips,
+} from "@workspace/interfaces";
 
 export const TOOLKIT: Tool[] = [
   { name: "hand", isMutation: false },
@@ -22,7 +28,12 @@ export const TOOLKIT: Tool[] = [
     strokeWidth: 2,
     isMutation: true,
   },
-  { name: "arrow", strokeColor: "#eeeeee", strokeWidth: 2, isMutation: true },
+  {
+    name: "arrow",
+    strokeColor: "#eeeeee",
+    strokeWidth: 2,
+    isMutation: true,
+  },
   {
     name: "text",
     textColor: "#eeeeee",
@@ -32,6 +43,18 @@ export const TOOLKIT: Tool[] = [
     isMutation: true,
   },
   { name: "eraser", isMutation: true },
+];
+
+export const EXECUTABLE_TOOLS: ExecutableTool[] = [
+  ...TOOLKIT,
+  {
+    name: "selection-select",
+    isMutation: false,
+  },
+  {
+    name: "selection-move",
+    isMutation: false,
+  },
 ];
 
 export const TOOL_ICONS: ToolIcons = {
@@ -51,6 +74,12 @@ export const TOOL_CURSOR: ToolCursors = {
 
   selection: "auto",
   "executed--selection": "auto",
+
+  "selection-select": "auto",
+  "executed--selection-select": "auto",
+
+  "selection-move": "move",
+  "executed--selection-move": "move",
 
   brush: "crosshair",
   "executed--brush": "crosshair",

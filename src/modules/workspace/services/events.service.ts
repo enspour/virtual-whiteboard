@@ -4,20 +4,24 @@ import { Observable, Subject, fromEvent, takeUntil, throttleTime } from "rxjs";
 
 import { getWheelDirection } from "@workspace/utils";
 
-import { ScreenEvent, ToolkitEvent } from "@workspace/interfaces";
+import { ScreenEvent, ToolEvent } from "@workspace/interfaces";
 
 import { MOUSE_MOVE_THROTTLE } from "@workspace/constants";
 
 import { DestroyService } from "./destroy.service";
+import { ToolkitService } from "./toolkit/toolkit.service";
 
 @Injectable()
 export class EventsService {
   public screenEvents$ = new Subject<ScreenEvent>();
-  public toolkitEvents$ = new Subject<ToolkitEvent>();
+  public toolkitEvents$ = new Subject<ToolEvent>();
 
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
-  constructor(private zone: NgZone) {}
+  constructor(
+    private zone: NgZone,
+    private toolkitService: ToolkitService
+  ) {}
 
   setCanvas(canvas: HTMLCanvasElement) {
     this.zone.runOutsideAngular(() => {
@@ -82,7 +86,7 @@ export class EventsService {
   private onMouseDown(event: MouseEvent) {
     if (event.button === 0) {
       return this.toolkitEvents$.next({
-        tool: "--selected",
+        tool: this.toolkitService.SelectedTool.name,
         stage: "start",
         event,
       });
@@ -100,7 +104,7 @@ export class EventsService {
   private onMouseUp(event: MouseEvent) {
     if (event.button === 0) {
       return this.toolkitEvents$.next({
-        tool: "--selected",
+        tool: this.toolkitService.SelectedTool.name,
         stage: "end",
         event,
       });
@@ -118,7 +122,7 @@ export class EventsService {
   private onMouseLeave(event: MouseEvent) {
     if (event.buttons === 1) {
       return this.toolkitEvents$.next({
-        tool: "--selected",
+        tool: this.toolkitService.SelectedTool.name,
         stage: "end",
         event,
       });
@@ -136,7 +140,7 @@ export class EventsService {
   private onMouseMove(event: MouseEvent) {
     if (event.buttons === 1) {
       return this.toolkitEvents$.next({
-        tool: "--selected",
+        tool: this.toolkitService.SelectedTool.name,
         stage: "process",
         event,
       });

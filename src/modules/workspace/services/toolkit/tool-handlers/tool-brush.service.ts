@@ -43,6 +43,8 @@ export class ToolBrushService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
+    this.toolkitService.setExecutedTool("brush");
+
     this.tool = this.toolkitService.ExecutedTool! as ToolBrush;
 
     this.points$ = new Subject();
@@ -82,6 +84,8 @@ export class ToolBrushService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     if (this.drawing.width || this.drawing.height) {
       const command = new CreateDrawingCommand(this.drawing, this.injector);

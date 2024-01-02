@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { Tool } from "@workspace/interfaces";
+import { ExecutableTool, Tool } from "@workspace/interfaces";
+
+import { EXECUTABLE_TOOLS } from "@workspace/constants";
 
 import {
   LS_SELECTED_TOOL,
@@ -12,13 +14,15 @@ import {
 
 @Injectable()
 export class ToolkitService {
+  private executableTools = EXECUTABLE_TOOLS;
+
   private toolkit: BehaviorSubject<Tool[]>;
   public toolkit$: Observable<Tool[]>;
 
   private selectedTool: BehaviorSubject<Tool>;
   public selectedTool$: Observable<Tool>;
 
-  private executedTool = new BehaviorSubject<Tool | null>(null);
+  private executedTool = new BehaviorSubject<ExecutableTool | null>(null);
   public executedTool$ = this.executedTool.asObservable();
 
   constructor(private localStorageService: LocalStorageService) {
@@ -71,13 +75,11 @@ export class ToolkitService {
     }
   }
 
-  public setExecutedTool(name: Tool["name"] | "") {
-    const toolkit = this.toolkit.value;
-
-    const index = toolkit.findIndex((tool) => tool.name === name);
+  public setExecutedTool(name: ExecutableTool["name"] | "") {
+    const index = this.executableTools.findIndex((tool) => tool.name === name);
 
     if (index !== -1) {
-      this.executedTool.next(toolkit[index]);
+      this.executedTool.next(this.executableTools[index]);
     } else {
       this.executedTool.next(null);
     }

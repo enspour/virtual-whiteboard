@@ -5,6 +5,7 @@ import { Subject, takeUntil } from "rxjs";
 import { Point, ToolHandler } from "@workspace/interfaces";
 
 import { ScreenService } from "../../screen/screen.service";
+import { ToolkitService } from "../toolkit.service";
 
 @Injectable()
 export class ToolHandService implements ToolHandler {
@@ -15,10 +16,15 @@ export class ToolHandService implements ToolHandler {
 
   private prevPoint!: Point;
 
-  constructor(private screenService: ScreenService) {}
+  constructor(
+    private toolkitService: ToolkitService,
+    private screenService: ScreenService
+  ) {}
 
   start(e: MouseEvent): void {
     this.isHandling = true;
+
+    this.toolkitService.setExecutedTool("hand");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -41,6 +47,8 @@ export class ToolHandService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

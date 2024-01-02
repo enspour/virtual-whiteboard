@@ -46,6 +46,8 @@ export class ToolArrowService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
+    this.toolkitService.setExecutedTool("arrow");
+
     this.tool = this.toolkitService.ExecutedTool! as ToolArrow;
 
     this.points$ = new Subject();
@@ -91,6 +93,8 @@ export class ToolArrowService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     if (this.drawing.width || this.drawing.height) {
       const command = new CreateDrawingCommand(this.drawing, this.injector);

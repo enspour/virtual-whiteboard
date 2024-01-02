@@ -13,6 +13,8 @@ import { isPointOnDrawing } from "@workspace/utils";
 
 import { Point, ToolHandler } from "@workspace/interfaces";
 
+import { ToolkitService } from "../toolkit.service";
+
 @Injectable()
 export class ToolEraserService implements ToolHandler {
   private isHandling = false;
@@ -23,6 +25,7 @@ export class ToolEraserService implements ToolHandler {
   constructor(
     private injector: Injector,
 
+    private toolkitService: ToolkitService,
     private screenService: ScreenService,
     private painterService: PainterService,
     private drawingsTrashService: DrawingsTrashService,
@@ -32,6 +35,8 @@ export class ToolEraserService implements ToolHandler {
 
   start(e: MouseEvent): void {
     this.isHandling = true;
+
+    this.toolkitService.setExecutedTool("eraser");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -49,6 +54,8 @@ export class ToolEraserService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     const drawings = this.drawingsTrashService.Trash;
 

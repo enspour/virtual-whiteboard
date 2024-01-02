@@ -8,6 +8,8 @@ import { SelectionService } from "@workspace/services/selection/selection.servic
 
 import { Point, ToolHandler } from "@workspace/interfaces";
 
+import { ToolkitService } from "../toolkit.service";
+
 @Injectable()
 export class ToolSelectionSelectService implements ToolHandler {
   private isHandling = false;
@@ -19,6 +21,7 @@ export class ToolSelectionSelectService implements ToolHandler {
   private initialY!: number;
 
   constructor(
+    private toolkitService: ToolkitService,
     private screenService: ScreenService,
     private selectionService: SelectionService,
     private painterService: PainterService
@@ -26,6 +29,8 @@ export class ToolSelectionSelectService implements ToolHandler {
 
   start(e: MouseEvent): void {
     this.isHandling = true;
+
+    this.toolkitService.setExecutedTool("selection-select");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -57,6 +62,8 @@ export class ToolSelectionSelectService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     this.selectionService.removeSelection();
 

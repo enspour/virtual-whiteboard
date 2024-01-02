@@ -46,6 +46,8 @@ export class ToolRectangleService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
+    this.toolkitService.setExecutedTool("rectangle");
+
     this.tool = this.toolkitService.ExecutedTool! as ToolRectangle;
 
     this.points$ = new Subject();
@@ -88,6 +90,8 @@ export class ToolRectangleService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     if (this.drawing.width || this.drawing.height) {
       const command = new CreateDrawingCommand(this.drawing, this.injector);

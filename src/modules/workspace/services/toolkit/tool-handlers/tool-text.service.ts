@@ -39,6 +39,8 @@ export class ToolTextService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
+    this.toolkitService.setExecutedTool("text");
+
     this.tool = this.toolkitService.ExecutedTool as ToolText;
 
     const clientX = e.clientX;
@@ -88,6 +90,8 @@ export class ToolTextService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
   }
 
   process(): void {

@@ -46,6 +46,8 @@ export class ToolEllipseService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
+    this.toolkitService.setExecutedTool("ellipse");
+
     this.tool = this.toolkitService.ExecutedTool! as ToolEllipse;
 
     this.points$ = new Subject();
@@ -87,6 +89,8 @@ export class ToolEllipseService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
 
     if (this.drawing.width || this.drawing.height) {
       const command = new CreateDrawingCommand(this.drawing, this.injector);

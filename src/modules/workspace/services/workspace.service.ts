@@ -5,11 +5,11 @@ import { Observable, merge, takeUntil } from "rxjs";
 import { AppService } from "@shared/modules/app/services/app.service";
 
 import {
+  ExecutableTool,
   ScreenEvent,
   ScreenEventHandlers,
-  Tool,
-  ToolkitEvent,
-  ToolkitEventHandlers,
+  ToolEvent,
+  ToolEventHandlers,
 } from "@workspace/interfaces";
 
 import { DestroyService } from "./destroy.service";
@@ -50,7 +50,7 @@ export class WorkspaceService {
     "scroll right": () => this.screenService.scrollRight(),
   };
 
-  private toolkitEventHandlers: ToolkitEventHandlers = {
+  private toolEventHandlers: ToolEventHandlers = {
     hand: this.toolHandService,
     brush: this.toolBrushService,
     selection: this.toolSelectionService,
@@ -120,24 +120,11 @@ export class WorkspaceService {
     this.screenEventHandlers[event.type](event);
   }
 
-  private onToolkitEvent(event: ToolkitEvent) {
-    const name =
-      event.tool === "--selected"
-        ? this.toolkitService.SelectedTool.name
-        : event.tool;
-
-    if (event.stage === "start") {
-      this.toolkitService.setExecutedTool(name);
-    }
-
-    if (event.stage === "end") {
-      this.toolkitService.setExecutedTool("");
-    }
-
-    this.toolkitEventHandlers[name][event.stage](event.event);
+  private onToolkitEvent(event: ToolEvent) {
+    this.toolEventHandlers[event.tool][event.stage](event.event);
   }
 
-  private onExecutedTool(tool: Tool | null) {
+  private onExecutedTool(tool: ExecutableTool | null) {
     if (tool && tool.isMutation) {
       this.drawingsOnSelectionService.removeSelection();
     }

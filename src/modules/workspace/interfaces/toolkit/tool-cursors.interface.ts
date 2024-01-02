@@ -1,6 +1,6 @@
-import { Tool } from "..";
+import { ExecutableTool } from "..";
 
-export type ToolCursorType =
+export type Cursor =
   | "auto"
   | "grab"
   | "grabbing"
@@ -8,6 +8,8 @@ export type ToolCursorType =
   | "crosshair"
   | "move";
 
-export type ToolCursorName = Tool["name"] | `executed--${Tool["name"]}`;
+export type CursorName =
+  | ExecutableTool["name"]
+  | `executed--${ExecutableTool["name"]}`;
 
-export type ToolCursors = Record<ToolCursorName, ToolCursorType>;
+export type ToolCursors = Record<CursorName, Cursor>;

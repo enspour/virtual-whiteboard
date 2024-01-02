@@ -9,6 +9,8 @@ import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { Drawing, Point, ToolHandler } from "@workspace/interfaces";
 
+import { ToolkitService } from "../toolkit.service";
+
 @Injectable()
 export class ToolSelectionMoveService implements ToolHandler {
   private isHandling = false;
@@ -19,6 +21,7 @@ export class ToolSelectionMoveService implements ToolHandler {
   private prevPoint!: Point;
 
   constructor(
+    private toolkitService: ToolkitService,
     private screenService: ScreenService,
     private painterService: PainterService,
     private drawingsService: DrawingsService,
@@ -27,6 +30,8 @@ export class ToolSelectionMoveService implements ToolHandler {
 
   start(e: MouseEvent): void {
     this.isHandling = true;
+
+    this.toolkitService.setExecutedTool("selection-move");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -50,6 +55,8 @@ export class ToolSelectionMoveService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    this.toolkitService.setExecutedTool("");
   }
 
   process(e: MouseEvent): void {
