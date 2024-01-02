@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { Painter } from "@workspace/interfaces";
+import { Drawing, DrawingArrow, Painter } from "@workspace/interfaces";
 
 import { ThemeService } from "@theme";
 
@@ -76,21 +76,7 @@ export class SelectionPainterService implements Painter {
     }
 
     if (drawings.length === 1) {
-      const { coordinates } = drawings[0];
-
-      this.paintOneSelection(
-        coordinates.startX,
-        coordinates.startY,
-        coordinates.endX,
-        coordinates.endY
-      );
-
-      this.paintAnchors(
-        coordinates.startX,
-        coordinates.startY,
-        coordinates.endX,
-        coordinates.endY
-      );
+      this.paintDrawingSelection(drawings[0]);
     } else {
       let startX = drawings[0].coordinates.startX;
       let startY = drawings[0].coordinates.startY;
@@ -100,7 +86,7 @@ export class SelectionPainterService implements Painter {
       for (let i = 0; i < drawings.length; i++) {
         const { coordinates } = drawings[i];
 
-        this.paintOneSelection(
+        this.paintBorder(
           coordinates.startX,
           coordinates.startY,
           coordinates.endX,
@@ -124,12 +110,61 @@ export class SelectionPainterService implements Painter {
         }
       }
 
-      this.paintMultipleSelection(startX, startY, endX, endY);
+      this.paintDashedBorder(startX, startY, endX, endY);
       this.paintAnchors(startX, startY, endX, endY);
     }
   }
 
-  private paintOneSelection(
+  private paintDrawingSelection(drawing: Drawing) {
+    switch (drawing.type) {
+      case "rectangle":
+      case "ellipse":
+      case "text":
+      case "brush": {
+        const { coordinates } = drawing;
+
+        this.paintBorder(
+          coordinates.startX,
+          coordinates.startY,
+          coordinates.endX,
+          coordinates.endY
+        );
+
+        this.paintAnchors(
+          coordinates.startX,
+          coordinates.startY,
+          coordinates.endX,
+          coordinates.endY
+        );
+
+        return;
+      }
+
+      case "arrow": {
+        return this.paintDrawingArrowSelection(drawing);
+      }
+    }
+  }
+
+  private paintDrawingArrowSelection(drawing: DrawingArrow) {
+    if (!this.context) {
+      return;
+    }
+
+    const scroll = this.screenService.Scroll;
+    const scale = this.screenService.Scale;
+
+    const { points } = drawing;
+
+    for (const point of points) {
+      const x = (point.x + scroll.x) * scale;
+      const y = (point.y + scroll.y) * scale;
+
+      this.paintAnchor(x, y);
+    }
+  }
+
+  private paintBorder(
     startX: number,
     startY: number,
     endX: number,
@@ -164,7 +199,7 @@ export class SelectionPainterService implements Painter {
     this.context.stroke();
   }
 
-  private paintMultipleSelection(
+  private paintDashedBorder(
     startX: number,
     startY: number,
     endX: number,
@@ -238,6 +273,7 @@ export class SelectionPainterService implements Painter {
     const properties = this.themeService.Properties;
 
     const bg = properties["--theme-primary-board-bg"];
+    const border = properties["--theme-primary-selection-border"];
 
     const width = 8;
     const height = 8;
@@ -246,6 +282,7 @@ export class SelectionPainterService implements Painter {
 
     this.context.lineWidth = 1;
     this.context.fillStyle = bg;
+    this.context.strokeStyle = border;
 
     this.context.roundRect(x - width / 2, y - height / 2, width, height);
 

@@ -20,13 +20,12 @@ export const isPointOnDrawing = (point: Point, drawing: Drawing): boolean => {
   ) {
     switch (drawing.type) {
       case "brush":
+      case "arrow":
         return isPointOnDrawingWithPoints(point, drawing);
       case "rectangle":
         return isPointOnRectangleDrawing(point, drawing);
       case "ellipse":
         return isPointOnEllipseDrawing(point, drawing);
-      case "arrow":
-        return isPointOnDrawingWithPoints(point, drawing);
       case "text":
         return true;
     }

@@ -62,7 +62,7 @@ export class DrawingArrowPainter implements DrawingPainter {
     const x = (p2.x + scroll.x) * scale;
     const y = (p2.y + scroll.y) * scale;
 
-    const strokeWidth = drawing.strokeWidth * scale * 3;
+    const strokeWidth = drawing.strokeWidth * scale * 5;
 
     this.context.moveTo(
       x - strokeWidth * Math.cos(angle - arrowAngle),
