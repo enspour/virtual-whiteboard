@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "miro-clone": {
+    "virtual-whiteboard": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/miro-clone",
+            "outputPath": "dist/virtual-whiteboard",
             "index": "src/index.html",
             "browser": "src/index.ts",
             "polyfills": ["zone.js"],
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "miro-clone:build:production"
+              "buildTarget": "virtual-whiteboard:build:production"
             },
             "development": {
-              "buildTarget": "miro-clone:build:development"
+              "buildTarget": "virtual-whiteboard:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -70,7 +70,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "miro-clone:build"
+            "buildTarget": "virtual-whiteboard:build"
           }
         },
         "test": {

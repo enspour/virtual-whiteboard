@@ -1,8 +1,8 @@
-# MiroClone
+# Virtual Whiteboard
 
 [Demo]()
 
-# Вдохновлен:
+# Clone Of:
 
 - [Excalidraw](https://excalidraw.com/)
 - [Miro](https://miro.com/)

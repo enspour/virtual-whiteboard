@@ -19,5 +19,5 @@ import { ThemeService } from "@theme";
   providers: [AppService, LocalStorageService, ThemeService],
 })
 export class AppComponent {
-  title = "miro-clone";
+  title = "Virtual Whiteboard";
 }
