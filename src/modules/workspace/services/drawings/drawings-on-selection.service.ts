@@ -13,7 +13,12 @@ import { DrawingsService } from "./drawings.service";
 export class DrawingsOnSelectionService {
   private drawingsOnSelection: Drawing[] = [];
 
-  private coordinates: SelectionCoordinates = this.selectionService.Coordinates;
+  private coordinates: SelectionCoordinates = {
+    startX: 0,
+    startY: 0,
+    endX: 0,
+    endY: 0,
+  };
 
   private destroy$ = inject(DestroyService, { self: true });
 
@@ -28,8 +33,8 @@ export class DrawingsOnSelectionService {
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.selectionService.IsSelection) {
-          this.coordinates = this.selectionService.Coordinates;
+        if (!this.selectionService.IsSelection) {
+          return;
         }
 
         const drawings = this.drawingsOnScreen.DrawingsOnScreen;
@@ -37,6 +42,8 @@ export class DrawingsOnSelectionService {
         this.drawingsOnSelection = drawings.filter((drawing) =>
           this.isContains(drawing)
         );
+
+        this.updateCoordinates();
       });
   }
 
@@ -44,11 +51,20 @@ export class DrawingsOnSelectionService {
     return this.drawingsOnSelection;
   }
 
-  public add(drawing: Drawing) {
-    this.drawingsOnSelection.push(drawing);
+  get Coordinates() {
+    return this.coordinates;
   }
 
-  public clear() {
+  public setCoordinates(coordinates: SelectionCoordinates) {
+    this.coordinates = coordinates;
+  }
+
+  public addToSelection(drawing: Drawing) {
+    this.drawingsOnSelection.push(drawing);
+    this.updateCoordinatesByDrawing(drawing);
+  }
+
+  public removeSelection() {
     this.drawingsOnSelection = [];
 
     this.coordinates = {
@@ -60,7 +76,7 @@ export class DrawingsOnSelectionService {
   }
 
   private isContains(drawing: Drawing) {
-    const selection = this.coordinates;
+    const selection = this.selectionService.Coordinates;
 
     const startX = drawing.coordinates.startX;
     const startY = drawing.coordinates.startY;
@@ -77,5 +93,39 @@ export class DrawingsOnSelectionService {
     }
 
     return false;
+  }
+
+  private updateCoordinates() {
+    const drawings = this.drawingsOnSelection;
+
+    if (drawings.length === 0) {
+      return;
+    }
+
+    this.coordinates = { ...drawings[0].coordinates };
+
+    for (let i = 1; i < drawings.length; i++) {
+      this.updateCoordinatesByDrawing(drawings[i]);
+    }
+  }
+
+  private updateCoordinatesByDrawing(drawing: Drawing) {
+    const { coordinates } = drawing;
+
+    if (coordinates.startX < this.coordinates.startX) {
+      this.coordinates.startX = coordinates.startX;
+    }
+
+    if (coordinates.startY < this.coordinates.startY) {
+      this.coordinates.startY = coordinates.startY;
+    }
+
+    if (coordinates.endX > this.coordinates.endX) {
+      this.coordinates.endX = coordinates.endX;
+    }
+
+    if (coordinates.endY > this.coordinates.endY) {
+      this.coordinates.endY = coordinates.endY;
+    }
   }
 }

@@ -78,10 +78,8 @@ export class SelectionPainterService implements Painter {
     if (drawings.length === 1) {
       this.paintDrawingSelection(drawings[0]);
     } else {
-      let startX = drawings[0].coordinates.startX;
-      let startY = drawings[0].coordinates.startY;
-      let endX = drawings[0].coordinates.endX;
-      let endY = drawings[0].coordinates.endY;
+      const { startX, startY, endX, endY } =
+        this.drawingsOnSelectionService.Coordinates;
 
       for (let i = 0; i < drawings.length; i++) {
         const { coordinates } = drawings[i];
@@ -92,22 +90,6 @@ export class SelectionPainterService implements Painter {
           coordinates.endX,
           coordinates.endY
         );
-
-        if (coordinates.startX < startX) {
-          startX = coordinates.startX;
-        }
-
-        if (coordinates.startY < startY) {
-          startY = coordinates.startY;
-        }
-
-        if (coordinates.endX > endX) {
-          endX = coordinates.endX;
-        }
-
-        if (coordinates.endY > endY) {
-          endY = coordinates.endY;
-        }
       }
 
       this.paintDashedBorder(startX, startY, endX, endY);

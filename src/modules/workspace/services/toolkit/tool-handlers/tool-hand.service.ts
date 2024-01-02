@@ -13,37 +13,26 @@ export class ToolHandService implements ToolHandler {
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private prevPoint?: Point;
+  private prevPoint!: Point;
 
   constructor(private screenService: ScreenService) {}
 
-  start(): void {
+  start(e: MouseEvent): void {
     this.isHandling = true;
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
 
-    this.prevPoint = undefined;
+    const scale = this.screenService.Scale;
 
-    this.points$.pipe(takeUntil(this.destroy$)).subscribe((point) => {
-      if (!this.prevPoint) {
-        this.prevPoint = point;
-      }
+    const x = e.clientX / scale;
+    const y = e.clientY / scale;
 
-      const diff = {
-        x: point.x - this.prevPoint.x,
-        y: point.y - this.prevPoint.y,
-      };
+    this.prevPoint = { x, y };
 
-      const scroll = this.screenService.Scroll;
-
-      this.screenService.setScroll({
-        x: scroll.x + diff.x,
-        y: scroll.y + diff.y,
-      });
-
-      this.prevPoint = point;
-    });
+    this.points$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((point) => this.handlePoint(point));
   }
 
   end(): void {
@@ -62,11 +51,31 @@ export class ToolHandService implements ToolHandler {
       return;
     }
 
+    this.nextPoint(e);
+  }
+
+  private nextPoint(e: MouseEvent) {
     const scale = this.screenService.Scale;
 
     const x = e.clientX / scale;
     const y = e.clientY / scale;
 
-    this.points$.next({ x, y });
+    const point = { x, y };
+
+    this.points$.next(point);
+  }
+
+  private handlePoint(point: Point) {
+    const diffX = point.x - this.prevPoint.x;
+    const diffY = point.y - this.prevPoint.y;
+
+    const scroll = this.screenService.Scroll;
+
+    this.screenService.setScroll({
+      x: scroll.x + diffX,
+      y: scroll.y + diffY,
+    });
+
+    this.prevPoint = point;
   }
 }

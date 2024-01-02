@@ -127,6 +127,7 @@ export class ToolTextService implements ToolHandler {
       };
 
       this.drawingsService.append(drawing);
+
       this.painterService.paint();
     }
   }

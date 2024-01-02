@@ -139,7 +139,7 @@ export class WorkspaceService {
 
   private onExecutedTool(tool: Tool | null) {
     if (tool && tool.isMutation) {
-      this.drawingsOnSelectionService.clear();
+      this.drawingsOnSelectionService.removeSelection();
     }
   }
 
@@ -153,6 +153,8 @@ export class WorkspaceService {
     const ids = drawings.map((drawing) => drawing.id);
 
     await this.drawingsService.remove(...ids);
+
+    this.drawingsOnSelectionService.removeSelection();
 
     this.painterService.paint();
   }
