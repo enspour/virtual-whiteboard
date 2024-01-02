@@ -32,6 +32,10 @@ export class LayoutComponent {
       return this.appService.emitEscape(event);
     }
 
+    if (event.code === "Delete") {
+      return this.appService.emitDelete(event);
+    }
+
     if (event.ctrlKey && event.shiftKey && event.code === "KeyZ") {
       return this.appService.emitRedo(event);
     }

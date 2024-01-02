@@ -21,6 +21,9 @@ export class AppService {
   private escape = new Subject<Event>();
   public escape$ = this.escape.asObservable();
 
+  private delete = new Subject<Event>();
+  public delete$ = this.delete.asObservable();
+
   constructor() {
     const sizes = {
       width: 0,
@@ -53,5 +56,9 @@ export class AppService {
 
   public emitEscape(event: Event) {
     this.escape.next(event);
+  }
+
+  public emitDelete(event: Event) {
+    this.delete.next(event);
   }
 }

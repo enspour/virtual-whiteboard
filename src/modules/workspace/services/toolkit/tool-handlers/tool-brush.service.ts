@@ -10,8 +10,6 @@ import { HistoryService } from "@workspace/services/history/history.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 
-import { handleAddedDrawingPoint } from "@workspace/utils";
-
 import {
   DrawingBrush,
   Point,
@@ -117,7 +115,18 @@ export class ToolBrushService implements ToolHandler {
   private handlePoint(point: Point) {
     this.drawing.points.push(point);
 
-    handleAddedDrawingPoint(this.drawing, point);
+    const { x, y } = point;
+
+    const { coordinates } = this.drawing;
+
+    coordinates.startX = Math.min(coordinates.startX, x);
+    coordinates.startY = Math.min(coordinates.startY, y);
+
+    coordinates.endX = Math.max(coordinates.endX, x);
+    coordinates.endY = Math.max(coordinates.endY, y);
+
+    this.drawing.width = Math.abs(coordinates.endX - coordinates.startX);
+    this.drawing.height = Math.abs(coordinates.endY - coordinates.startY);
 
     this.drawingsService.append(this.drawing);
 

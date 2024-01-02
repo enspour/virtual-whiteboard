@@ -1,12 +1,15 @@
 {
   "--theme-primary-bg": "#222222",
   "--theme-primary-bg--hover": "#333333",
-  "--theme-primary-color": "#ffffff",
-  "--theme-primary-icon": "#ffffff",
+  "--theme-primary-color": "#eeeeee",
+  "--theme-primary-icon": "#eeeeee",
 
   "--theme-primary-board-bg": "#222222",
   "--theme-primary-board-color": "#333333",
 
   "--theme-primary-tooltip-bg": "#333333",
-  "--theme-primary-tooltip-color": "#ffffff"
+  "--theme-primary-tooltip-color": "#ffffff",
+
+  "--theme-primary-selection-border": "#289ed4",
+  "--theme-primary-selection-bg": "#289ed41A"
 }

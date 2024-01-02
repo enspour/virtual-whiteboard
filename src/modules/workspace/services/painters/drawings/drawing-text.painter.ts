@@ -50,7 +50,5 @@ export class DrawingTextPainter implements DrawingPainter {
     }
 
     this.context.stroke();
-
-    this.context.closePath();
   }
 }

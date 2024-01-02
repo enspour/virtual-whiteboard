@@ -8,5 +8,8 @@
   "--theme-primary-board-color": "#cccccc",
 
   "--theme-primary-tooltip-bg": "#eeeeee",
-  "--theme-primary-tooltip-color": "#ffffff"
+  "--theme-primary-tooltip-color": "#ffffff",
+
+  "--theme-primary-selection-border": "#289ed4",
+  "--theme-primary-selection-bg": "#289ed41A"
 }

@@ -55,7 +55,5 @@ export class DrawingEllipsePainter implements DrawingPainter {
     );
 
     this.context.stroke();
-
-    this.context.closePath();
   }
 }

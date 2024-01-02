@@ -5,6 +5,7 @@ import { Painter } from "@workspace/interfaces";
 import { ScreenService } from "../screen/screen.service";
 import { BoardPainterService } from "./board-painter.service";
 import { DrawingsPainterService } from "./drawings-painter.service";
+import { SelectionPainterService } from "./selection-painter.service";
 
 @Injectable()
 export class PainterService implements Painter {
@@ -15,7 +16,8 @@ export class PainterService implements Painter {
   constructor(
     private screenService: ScreenService,
     private boardPainterService: BoardPainterService,
-    private drawingsPainterService: DrawingsPainterService
+    private drawingsPainterService: DrawingsPainterService,
+    private selectionPainterService: SelectionPainterService
   ) {}
 
   setContext(context: CanvasRenderingContext2D) {
@@ -23,6 +25,7 @@ export class PainterService implements Painter {
 
     this.boardPainterService.setContext(context);
     this.drawingsPainterService.setContext(context);
+    this.selectionPainterService.setContext(context);
   }
 
   paint() {
@@ -46,5 +49,6 @@ export class PainterService implements Painter {
 
     this.boardPainterService.paint();
     this.drawingsPainterService.paint();
+    this.selectionPainterService.paint();
   }
 }

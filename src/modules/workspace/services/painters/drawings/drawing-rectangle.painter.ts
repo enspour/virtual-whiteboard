@@ -41,7 +41,5 @@ export class DrawingRectanglePainter implements DrawingPainter {
     this.context.roundRect(startX, startY, width, height, drawing.roundness);
 
     this.context.stroke();
-
-    this.context.closePath();
   }
 }

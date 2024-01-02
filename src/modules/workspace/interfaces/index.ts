@@ -30,3 +30,4 @@ export * from "./drawing/drawings/drawing-text.interface";
 export * from "./drawing/drawing.interface";
 export * from "./history/history-command.interface";
 export * from "./history/history-storage.interface";
+export * from "./selection/selection.interface";

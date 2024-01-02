@@ -1,18 +1,23 @@
 import { Injectable, inject } from "@angular/core";
 
-import { Observable, takeUntil } from "rxjs";
+import { Observable, merge, takeUntil } from "rxjs";
+
+import { AppService } from "@shared/modules/app/services/app.service";
 
 import {
   ScreenEvent,
   ScreenEventHandlers,
+  Tool,
   ToolkitEvent,
   ToolkitEventHandlers,
 } from "@workspace/interfaces";
 
 import { DestroyService } from "./destroy.service";
+import { DrawingsOnSelectionService } from "./drawings/drawings-on-selection.service";
 import { DrawingsService } from "./drawings/drawings.service";
 import { EventsService } from "./events.service";
 import { HistoryService } from "./history/history.service";
+import { PainterService } from "./painters/painter.service";
 import { ScreenService } from "./screen/screen.service";
 import { ToolArrowService } from "./toolkit/tool-handlers/tool-arrow.service";
 import { ToolBrushService } from "./toolkit/tool-handlers/tool-brush.service";
@@ -59,9 +64,11 @@ export class WorkspaceService {
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
   constructor(
+    private appService: AppService,
     private eventsService: EventsService,
     private screenService: ScreenService,
     private historyService: HistoryService,
+    private painterService: PainterService,
 
     private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
@@ -73,13 +80,28 @@ export class WorkspaceService {
     private toolTextService: ToolTextService,
     private toolEraserService: ToolEraserService,
 
-    private drawingsService: DrawingsService
+    private drawingsService: DrawingsService,
+    private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {}
 
   async init() {
     await this.screenService.restore();
     await this.historyService.restore();
     await this.drawingsService.restore();
+
+    merge(
+      this.screenService.scroll$,
+      this.screenService.sizes$,
+      this.screenService.scale$
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.painterService.paint();
+      });
+
+    this.appService.delete$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.onDelete());
 
     this.eventsService.screenEvents$
       .pipe(takeUntil(this.destroy$))
@@ -88,6 +110,10 @@ export class WorkspaceService {
     this.eventsService.toolkitEvents$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onToolkitEvent(event));
+
+    this.toolkitService.executedTool$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((tool) => this.onExecutedTool(tool));
   }
 
   private onScreenEvent(event: ScreenEvent) {
@@ -109,5 +135,25 @@ export class WorkspaceService {
     }
 
     this.toolkitEventHandlers[name][event.stage](event.event);
+  }
+
+  private onExecutedTool(tool: Tool | null) {
+    if (tool && tool.isMutation) {
+      this.drawingsOnSelectionService.clear();
+    }
+  }
+
+  private async onDelete() {
+    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+
+    if (drawings.length === 0) {
+      return;
+    }
+
+    const ids = drawings.map((drawing) => drawing.id);
+
+    await this.drawingsService.remove(...ids);
+
+    this.painterService.paint();
   }
 }

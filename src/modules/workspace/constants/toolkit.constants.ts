@@ -1,33 +1,37 @@
 import { Tool, ToolCursors, ToolIcons, ToolTips } from "@workspace/interfaces";
 
 export const TOOLKIT: Tool[] = [
-  { name: "hand" },
-  { name: "selection" },
+  { name: "hand", isMutation: false },
+  { name: "selection", isMutation: false },
   {
     name: "brush",
-    strokeColor: "#ffffff",
-    strokeWidth: 6,
+    strokeColor: "#eeeeee",
+    strokeWidth: 2,
+    isMutation: true,
   },
   {
     name: "rectangle",
     roundness: 16,
-    strokeColor: "#ffffff",
-    strokeWidth: 6,
+    strokeColor: "#eeeeee",
+    strokeWidth: 2,
+    isMutation: true,
   },
   {
     name: "ellipse",
-    strokeColor: "#ffffff",
-    strokeWidth: 6,
+    strokeColor: "#eeeeee",
+    strokeWidth: 2,
+    isMutation: true,
   },
-  { name: "arrow", strokeColor: "#ffffff", strokeWidth: 6 },
+  { name: "arrow", strokeColor: "#eeeeee", strokeWidth: 2, isMutation: true },
   {
     name: "text",
-    textColor: "#ffffff",
+    textColor: "#eeeeee",
     textSize: 20,
     textFamily: "Roboto",
     lineHeight: 20,
+    isMutation: true,
   },
-  { name: "eraser" },
+  { name: "eraser", isMutation: true },
 ];
 
 export const TOOL_ICONS: ToolIcons = {

@@ -12,6 +12,7 @@ import { HeaderToolkitComponent } from "@workspace/components/ui/header-toolkit/
 
 import { DestroyService } from "@workspace/services/destroy.service";
 import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
+import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
 import { DrawingsTrashService } from "@workspace/services/drawings/drawings-trash.service";
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
 import { LocalDrawingStorageService } from "@workspace/services/drawings/local-drawing-storage.service";
@@ -22,8 +23,10 @@ import { LocalHistoryStorageService } from "@workspace/services/history/local-hi
 import { BoardPainterService } from "@workspace/services/painters/board-painter.service";
 import { DrawingsPainterService } from "@workspace/services/painters/drawings-painter.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
+import { SelectionPainterService } from "@workspace/services/painters/selection-painter.service";
 import { LocalScreenStorageService } from "@workspace/services/screen/local-screen-storage.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
+import { SelectionService } from "@workspace/services/selection/selection.service";
 import { ToolArrowService } from "@workspace/services/toolkit/tool-handlers/tool-arrow.service";
 import { ToolBrushService } from "@workspace/services/toolkit/tool-handlers/tool-brush.service";
 import { ToolEllipseService } from "@workspace/services/toolkit/tool-handlers/tool-ellipse.service";
@@ -88,6 +91,7 @@ import { DrawingStorageToken } from "@workspace/tokens";
     PainterService,
     BoardPainterService,
     DrawingsPainterService,
+    SelectionPainterService,
 
     ToolkitService,
 
@@ -102,7 +106,10 @@ import { DrawingStorageToken } from "@workspace/tokens";
 
     DrawingsService,
     DrawingsOnScreenService,
+    DrawingsOnSelectionService,
     DrawingsTrashService,
+
+    SelectionService,
   ],
 })
 export class WorkspaceOnlineComponent {

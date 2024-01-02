@@ -77,7 +77,5 @@ export class DrawingArrowPainter implements DrawingPainter {
     );
 
     this.context.stroke();
-
-    this.context.closePath();
   }
 }

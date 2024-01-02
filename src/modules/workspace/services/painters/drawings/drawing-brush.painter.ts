@@ -48,7 +48,5 @@ export class DrawingBrushPainter implements DrawingPainter {
     }
 
     this.context.stroke();
-
-    this.context.closePath();
   }
 }

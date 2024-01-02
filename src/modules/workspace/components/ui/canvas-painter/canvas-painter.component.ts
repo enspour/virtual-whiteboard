@@ -4,12 +4,8 @@ import {
   Input,
   OnInit,
 } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-
-import { merge } from "rxjs";
 
 import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { CanvasComponent } from "../canvas/canvas.component";
 
@@ -22,20 +18,7 @@ import { CanvasComponent } from "../canvas/canvas.component";
 export class CanvasPainterComponent implements OnInit {
   @Input({ required: true }) canvas!: CanvasComponent;
 
-  constructor(
-    private screenService: ScreenService,
-    private painterService: PainterService
-  ) {
-    merge(
-      this.screenService.scroll$,
-      this.screenService.sizes$,
-      this.screenService.scale$
-    )
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => {
-        this.painterService.paint();
-      });
-  }
+  constructor(private painterService: PainterService) {}
 
   ngOnInit(): void {
     const canvas = this.canvas.canvas?.nativeElement;

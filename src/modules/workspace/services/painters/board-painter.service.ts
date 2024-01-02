@@ -63,7 +63,5 @@ export class BoardPainterService implements Painter {
     }
 
     this.context.stroke();
-
-    this.context.closePath();
   }
 }
