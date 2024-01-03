@@ -14,13 +14,7 @@ import { ToolkitService } from "./toolkit/toolkit.service";
 @Injectable()
 export class EventsService {
   public screenEvents$ = new Subject<ScreenEvent>();
-  public toolkitEvents$ = new Subject<ToolEvent>();
-
-  public wheel$ = new Subject<WheelEvent>();
-  public mousedown$ = new Subject<MouseEvent>();
-  public mouseup$ = new Subject<MouseEvent>();
-  public mouseleave$ = new Subject<MouseEvent>();
-  public mousemove$ = new Subject<MouseEvent>();
+  public toolEvents$ = new Subject<ToolEvent>();
 
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
@@ -60,8 +54,6 @@ export class EventsService {
   private onWheel(event: WheelEvent) {
     event.preventDefault();
 
-    this.wheel$.next(event);
-
     if (event.ctrlKey) {
       return this.onScaling(event);
     }
@@ -92,10 +84,8 @@ export class EventsService {
   }
 
   private onMouseDown(event: MouseEvent) {
-    this.mousedown$.next(event);
-
     if (event.button === 0) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: this.toolkitService.SelectedTool.name,
         stage: "start",
         event,
@@ -103,7 +93,7 @@ export class EventsService {
     }
 
     if (event.button === 1) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: "hand",
         stage: "start",
         event,
@@ -112,10 +102,8 @@ export class EventsService {
   }
 
   private onMouseUp(event: MouseEvent) {
-    this.mouseup$.next(event);
-
     if (event.button === 0) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: this.toolkitService.SelectedTool.name,
         stage: "end",
         event,
@@ -123,7 +111,7 @@ export class EventsService {
     }
 
     if (event.button === 1) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: "hand",
         stage: "end",
         event,
@@ -132,10 +120,8 @@ export class EventsService {
   }
 
   private onMouseLeave(event: MouseEvent) {
-    this.mouseleave$.next(event);
-
     if (event.buttons === 1) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: this.toolkitService.SelectedTool.name,
         stage: "end",
         event,
@@ -143,7 +129,7 @@ export class EventsService {
     }
 
     if (event.buttons === 4) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: "hand",
         stage: "end",
         event,
@@ -152,10 +138,8 @@ export class EventsService {
   }
 
   private onMouseMove(event: MouseEvent) {
-    this.mousemove$.next(event);
-
     if (event.buttons === 1) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: this.toolkitService.SelectedTool.name,
         stage: "process",
         event,
@@ -163,7 +147,7 @@ export class EventsService {
     }
 
     if (event.buttons === 4) {
-      return this.toolkitEvents$.next({
+      return this.toolEvents$.next({
         tool: "hand",
         stage: "process",
         event,

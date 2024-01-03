@@ -4,10 +4,11 @@ import {
   Component,
   Inject,
   Input,
-  computed,
+  OnInit,
+  Signal,
 } from "@angular/core";
 
-import { PortalsController } from "../../interfaces";
+import { Portal, PortalsController } from "../../interfaces";
 
 import { portalsControllerToken } from "../../tokens/portals-controller.token";
 
@@ -18,14 +19,17 @@ import { portalsControllerToken } from "../../tokens/portals-controller.token";
   templateUrl: "./portal-host.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PortalHostComponent {
+export class PortalHostComponent implements OnInit {
   @Input({ required: true }) id!: string;
 
-  public portals = computed(() => {
-    return this.portalsController.portals().get(this.id) || [];
-  });
+  public portals!: Signal<Portal[]>;
 
   constructor(
-    @Inject(portalsControllerToken) private portalsController: PortalsController
+    @Inject(portalsControllerToken)
+    private portalsController: PortalsController
   ) {}
+
+  ngOnInit(): void {
+    this.portals = this.portalsController.getPortals(this.id);
+  }
 }

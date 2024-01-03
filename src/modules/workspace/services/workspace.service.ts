@@ -107,7 +107,7 @@ export class WorkspaceService {
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onScreenEvent(event));
 
-    this.eventsService.toolkitEvents$
+    this.eventsService.toolEvents$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onToolkitEvent(event));
 
@@ -125,7 +125,7 @@ export class WorkspaceService {
   }
 
   private onExecutedTool(tool: ExecutableTool | null) {
-    if (tool && tool.isMutation) {
+    if (tool && tool.isRemoveSelection) {
       this.drawingsOnSelectionService.removeSelection();
     }
   }

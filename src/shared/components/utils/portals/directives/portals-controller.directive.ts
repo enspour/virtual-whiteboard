@@ -1,8 +1,6 @@
 import { Directive, signal } from "@angular/core";
 
-import { produce } from "immer";
-
-import { Portal, PortalsController } from "../interfaces";
+import { Hosts, Portal, PortalsController } from "../interfaces";
 
 import { portalsControllerToken } from "../tokens/portals-controller.token";
 
@@ -14,20 +12,31 @@ import { portalsControllerToken } from "../tokens/portals-controller.token";
   ],
 })
 export class PortalsControllerDirective implements PortalsController {
-  private _portals = signal<Map<string, Portal[]>>(new Map());
-  public portals = this._portals.asReadonly();
+  private hosts: Hosts = new Map();
 
-  public openPortal(id: string, portal: Portal): void {
-    this._portals.update((map) => {
-      const portals = [...(map.get(id) || []), portal];
-      return produce(map, (draft) => draft.set(id, portals));
-    });
+  public getPortals(hostId: string) {
+    if (this.hosts.has(hostId)) {
+      return this.hosts.get(hostId)!;
+    }
+
+    const portals = signal<Portal[]>([]);
+
+    this.hosts.set(hostId, portals);
+
+    return portals;
   }
 
-  public closePortal(id: string, portal: Portal): void {
-    this._portals.update((map) => {
-      const portals = (map.get(id) || []).filter((item) => item !== portal);
-      return produce(map, (draft) => draft.set(id, portals));
-    });
+  public openPortal(hostId: string, portal: Portal): void {
+    if (this.hosts.has(hostId)) {
+      const portals = this.hosts.get(hostId)!;
+      portals.update((portals) => [...portals, portal]);
+    }
+  }
+
+  public closePortal(hostId: string, portal: Portal): void {
+    if (this.hosts.has(hostId)) {
+      const portals = this.hosts.get(hostId)!;
+      portals.update((portals) => portals.filter((item) => item !== portal));
+    }
   }
 }

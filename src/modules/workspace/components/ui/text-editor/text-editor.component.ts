@@ -19,7 +19,7 @@ import { ScreenService } from "@workspace/services/screen/screen.service";
 
 import { Point } from "@workspace/interfaces";
 
-import { TextEditorChannel, TextEditorSettings } from "./text-editor.interface";
+import { TextEditorChannel, TextEditorOptions } from "./text-editor.interface";
 
 @Component({
   selector: "app-text-editor",
@@ -32,11 +32,10 @@ import { TextEditorChannel, TextEditorSettings } from "./text-editor.interface";
 export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("editor") editorRef!: ElementRef<HTMLDivElement>;
 
+  @Input({ required: true }) text!: string;
   @Input({ required: true }) position!: Point;
-  @Input({ required: true }) settings!: TextEditorSettings;
+  @Input({ required: true }) options!: TextEditorOptions;
   @Input({ required: true }) channel$!: TextEditorChannel;
-
-  @Input() text: string = "";
 
   public scale!: number;
 
@@ -71,7 +70,23 @@ export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.editorRef.nativeElement.focus(), 0);
+    const editor = this.editorRef.nativeElement;
+
+    editor.innerText = this.text;
+
+    setTimeout(() => editor.focus(), 0);
+
+    if (this.text) {
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+
+      const selection = window.getSelection();
+
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
   }
 
   public onInput(event: Event) {

@@ -1,3 +1,3 @@
 export interface ToolBase {
-  isMutation: boolean;
+  isRemoveSelection: boolean;
 }

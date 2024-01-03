@@ -1,16 +1,12 @@
-import { Inject, Injectable, Injector } from "@angular/core";
-
-import { ReplaySubject } from "rxjs";
+import { Injectable } from "@angular/core";
 
 import { nanoid } from "nanoid";
 
 import {
-  Portal,
-  PortalsController,
-  portalsControllerToken,
-} from "@shared/components/utils/portals";
-import { TextEditorComponent } from "@workspace/components/ui/text-editor/text-editor.component";
-import { TextEditorChannel } from "@workspace/components/ui/text-editor/text-editor.interface";
+  TextEditorMessageClosing,
+  TextEditorPosition,
+} from "@workspace/components/ui/text-editor/text-editor.interface";
+import { TextEditorService } from "@workspace/components/ui/text-editor/text-editor.service";
 
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
@@ -27,13 +23,11 @@ export class ToolTextService implements ToolHandler {
   private tool!: ToolText;
 
   constructor(
-    @Inject(portalsControllerToken)
-    private portalsController: PortalsController,
-    private injector: Injector,
     private screenService: ScreenService,
     private toolkitService: ToolkitService,
     private painterService: PainterService,
-    private drawingsService: DrawingsService
+    private drawingsService: DrawingsService,
+    private textEditorService: TextEditorService
   ) {}
 
   start(e: MouseEvent): void {
@@ -43,45 +37,25 @@ export class ToolTextService implements ToolHandler {
 
     this.tool = this.toolkitService.ExecutedTool as ToolText;
 
-    const clientX = e.clientX;
-    const clientY = e.clientY;
+    const text = "";
 
-    const channel$: TextEditorChannel = new ReplaySubject();
-
-    const portal: Portal = {
-      id: nanoid(6),
-      type: "component",
-      componentType: TextEditorComponent,
-      componentInjector: this.injector,
-      componentInputs: {
-        position: {
-          x: clientX,
-          y: clientY,
-        },
-        settings: {
-          ...this.tool,
-        },
-        channel$,
-      },
+    const position = {
+      x: e.clientX,
+      y: e.clientY,
     };
 
-    channel$.subscribe((message) => {
+    const options = { ...this.tool };
+
+    const textEditor = this.textEditorService.open(text, position, options);
+
+    textEditor.channel$.subscribe((message) => {
       if (message.type === "closing") {
-        this.portalsController.closePortal("text-editor", portal);
+        this.onTextEditorClosing(message, position);
 
-        this.createTextDrawing(
-          message.text,
-          message.width,
-          message.height,
-          clientX,
-          clientY
-        );
-
-        channel$.complete();
+        textEditor.channel$.complete();
+        textEditor.close();
       }
     });
-
-    this.portalsController.openPortal("text-editor", portal);
   }
 
   end(): void {
@@ -100,19 +74,18 @@ export class ToolTextService implements ToolHandler {
     }
   }
 
-  private createTextDrawing(
-    text: string,
-    width: number,
-    height: number,
-    clientX: number,
-    clientY: number
+  private onTextEditorClosing(
+    message: TextEditorMessageClosing,
+    position: TextEditorPosition
   ) {
+    const { text, width, height } = message;
+
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
     if (text) {
-      const x = clientX / scale - scroll.x;
-      const y = clientY / scale - scroll.y;
+      const x = position.x / scale - scroll.x;
+      const y = position.y / scale - scroll.y;
 
       const drawing: DrawingText = {
         id: nanoid(),

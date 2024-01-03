@@ -1,11 +1,15 @@
 import { ReplaySubject } from "rxjs";
 
-export interface TextEditorSettings {
+import { Point } from "@workspace/interfaces";
+
+export type TextEditorPosition = Point;
+
+export type TextEditorOptions = {
   textColor: string;
   textSize: number;
   textFamily: string;
   lineHeight: number;
-}
+};
 
 export type TextEditorMessageClosing = {
   type: "closing";

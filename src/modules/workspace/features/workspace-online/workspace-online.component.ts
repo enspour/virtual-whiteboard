@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 
+import { SharedModule } from "@shared/shared.module";
+
 import { WorkspaceLayoutComponent } from "@workspace/components/layouts/workspace-layout/workspace-layout.component";
 import { CanvasCursorComponent } from "@workspace/components/ui/canvas-cursor/canvas-cursor.component";
 import { CanvasEventsComponent } from "@workspace/components/ui/canvas-events/canvas-events.component";
@@ -9,6 +11,7 @@ import { FooterHistoryComponent } from "@workspace/components/ui/footer-history/
 import { FooterScaleComponent } from "@workspace/components/ui/footer-scale/footer-scale.component";
 import { HeaderActionBarComponent } from "@workspace/components/ui/header-action-bar/header-action-bar.component";
 import { HeaderToolkitComponent } from "@workspace/components/ui/header-toolkit/header-toolkit.component";
+import { TextEditorService } from "@workspace/components/ui/text-editor/text-editor.service";
 
 import { DestroyService } from "@workspace/services/destroy.service";
 import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
@@ -50,6 +53,8 @@ import { DrawingStorageToken } from "@workspace/tokens";
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SharedModule,
+
     WorkspaceLayoutComponent,
 
     CanvasComponent,
@@ -114,6 +119,8 @@ import { DrawingStorageToken } from "@workspace/tokens";
     DrawingsTrashService,
 
     SelectionService,
+
+    TextEditorService,
   ],
 })
 export class WorkspaceOnlineComponent {
