@@ -25,21 +25,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: "npm"
       - name: "Install dependencies"
-        run: npm ci
+        run: npm install
       - name: Build
         run: npm run build
+      - name: Prepare Pages
+        run: |
+          mkdir ./dist/virtual-whiteboard/browser/workspace
+          cp ./dist/virtual-whiteboard/browser/index.html ./dist/virtual-whiteboard/browser/workspace/online.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: "./dist/virtual-whiteboard/browser"
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3

@@ -1,6 +1,9 @@
 # Virtual Whiteboard
 
-[Demo]()
+[![ci](https://github.com/enspour/virtual-whiteboard/actions/workflows/ci.yml/badge.svg)](https://github.com/enspour/virtual-whiteboard/actions/workflows/ci.yml)
+[![cd](https://github.com/enspour/virtual-whiteboard/actions/workflows/cd.yml/badge.svg)](https://github.com/enspour/virtual-whiteboard/actions/workflows/cd.yml)
+
+[Demo](https://enspour.github.io/virtual-whiteboard/workspace/online)
 
 # Clone Of:
 
@@ -20,7 +23,7 @@
 
 ### Требования к проекту
 
-- [ ] Настроен CI/CD.
+- [x] Настроен CI/CD.
 - [x] Использование Prettier.
 - [x] Использование Eslint.
 - [x] Использование стратегии OnPush.

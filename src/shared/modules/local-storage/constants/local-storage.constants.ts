@@ -16,7 +16,7 @@ export const LS_HISTORY_COMMANDS = "__v1/history/commands";
 export const LS_HISTORY_POSITION = "__v1/history/position";
 
 export const LS_DEFAULTS: LocalStoragePairs = {
-  [LS_THEME]: "light",
+  [LS_THEME]: "dark",
 
   [LS_SCREEN_SCALE]: 1,
   [LS_SCREEN_SCROLL]: {
