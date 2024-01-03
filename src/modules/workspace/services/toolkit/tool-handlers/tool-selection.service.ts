@@ -41,17 +41,31 @@ export class ToolSelectionService implements ToolHandler {
     this.initialX = e.clientX / scale - scroll.x;
     this.initialY = e.clientY / scale - scroll.y;
 
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
-    const coordinates = this.drawingsOnSelectionService.Coordinates;
-
     const point = { x: this.initialX, y: this.initialY };
 
-    if (isPointOnDrawingsSelection(point, drawings, coordinates)) {
+    const drawingsOnSelection =
+      this.drawingsOnSelectionService.DrawingsOnSelection;
+
+    const coordinates = this.drawingsOnSelectionService.Coordinates;
+
+    if (isPointOnDrawingsSelection(point, drawingsOnSelection, coordinates)) {
       this.handler = this.toolSelectionMoveService;
-    } else {
-      this.handler = this.toolSelectionSelectService;
+      return this.handler.start(e);
     }
 
+    const drawingsOnScreen = this.drawingsOnScreenService.DrawingsOnScreen;
+
+    for (const drawing of drawingsOnScreen) {
+      if (isPointOnDrawing(point, drawing)) {
+        this.drawingsOnSelectionService.removeSelection();
+        this.drawingsOnSelectionService.addToSelection(drawing);
+
+        this.handler = this.toolSelectionMoveService;
+        return this.handler.start(e);
+      }
+    }
+
+    this.handler = this.toolSelectionSelectService;
     this.handler.start(e);
   }
 

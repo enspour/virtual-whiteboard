@@ -89,7 +89,7 @@ export class ToolSelectionMoveService implements ToolHandler {
       this.updateDrawingCoordinates(drawings[i], diffX, diffY);
     }
 
-    this.updateSelectionCoordinates(diffX, diffY);
+    this.drawingsOnSelectionService.updateCoordinates();
 
     this.prevPoint = point;
 
@@ -116,16 +116,5 @@ export class ToolSelectionMoveService implements ToolHandler {
         y: point.y + diffY,
       }));
     }
-  }
-
-  private updateSelectionCoordinates(diffX: number, diffY: number) {
-    const coordinates = this.drawingsOnSelectionService.Coordinates;
-
-    this.drawingsOnSelectionService.setCoordinates({
-      startX: coordinates.startX + diffX,
-      startY: coordinates.startY + diffY,
-      endX: coordinates.endX + diffX,
-      endY: coordinates.endY + diffY,
-    });
   }
 }

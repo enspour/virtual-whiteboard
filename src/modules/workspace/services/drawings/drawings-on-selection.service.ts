@@ -55,10 +55,6 @@ export class DrawingsOnSelectionService {
     return this.coordinates;
   }
 
-  public setCoordinates(coordinates: SelectionCoordinates) {
-    this.coordinates = coordinates;
-  }
-
   public addToSelection(drawing: Drawing) {
     this.drawingsOnSelection.push(drawing);
     this.updateCoordinatesByDrawing(drawing);
@@ -73,6 +69,20 @@ export class DrawingsOnSelectionService {
       endX: 0,
       endY: 0,
     };
+  }
+
+  public updateCoordinates() {
+    const drawings = this.drawingsOnSelection;
+
+    if (drawings.length === 0) {
+      return;
+    }
+
+    this.coordinates = { ...drawings[0].coordinates };
+
+    for (let i = 1; i < drawings.length; i++) {
+      this.updateCoordinatesByDrawing(drawings[i]);
+    }
   }
 
   private isContains(drawing: Drawing) {
@@ -93,20 +103,6 @@ export class DrawingsOnSelectionService {
     }
 
     return false;
-  }
-
-  private updateCoordinates() {
-    const drawings = this.drawingsOnSelection;
-
-    if (drawings.length === 0) {
-      return;
-    }
-
-    this.coordinates = { ...drawings[0].coordinates };
-
-    for (let i = 1; i < drawings.length; i++) {
-      this.updateCoordinatesByDrawing(drawings[i]);
-    }
   }
 
   private updateCoordinatesByDrawing(drawing: Drawing) {
