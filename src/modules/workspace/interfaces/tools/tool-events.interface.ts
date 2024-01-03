@@ -1,7 +1,7 @@
-import { Tool, ToolHandlerStage, ToolHandlers } from "..";
+import { SelectableTool, ToolHandlerStage, ToolHandlers } from "..";
 
 export type ToolEvent = {
-  tool: Tool["name"];
+  tool: SelectableTool["name"];
   stage: ToolHandlerStage;
   event: MouseEvent;
 };

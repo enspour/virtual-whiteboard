@@ -18,7 +18,7 @@ import { SortableListItemsSwap } from "@shared/components/utils/sortable-list";
 import { DestroyService } from "@workspace/services/destroy.service";
 import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 
-import { Tool } from "modules/workspace/interfaces";
+import { SelectableTool } from "modules/workspace/interfaces";
 
 import { TOOL_ICONS, TOOL_TIP } from "@workspace/constants";
 
@@ -65,7 +65,7 @@ export class HeaderToolkitComponent implements OnInit {
       });
   }
 
-  handleToolClick(name: Tool["name"]) {
+  handleToolClick(name: SelectableTool["name"]) {
     this.toolkitService.setSelectedTool(name);
   }
 

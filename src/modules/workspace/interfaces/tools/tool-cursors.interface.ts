@@ -1,15 +1,15 @@
 import { ExecutableTool } from "..";
 
 export type Cursor =
-  | "auto"
+  | "default"
   | "grab"
   | "grabbing"
   | "text"
   | "crosshair"
   | "move";
 
-export type CursorName =
+export type CursorStatus =
   | ExecutableTool["name"]
   | `executed--${ExecutableTool["name"]}`;
 
-export type ToolCursors = Record<CursorName, Cursor>;
+export type ToolCursors = Record<CursorStatus, Cursor>;

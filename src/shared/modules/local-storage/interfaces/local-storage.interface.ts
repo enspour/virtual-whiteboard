@@ -4,7 +4,7 @@ import {
   HistoryStorageData,
   ScreenScale,
   ScreenScroll,
-  Tool,
+  SelectableTool,
 } from "@workspace/interfaces";
 
 import {
@@ -24,8 +24,8 @@ export interface LocalStoragePairs {
   [LS_SCREEN_SCROLL]: ScreenScroll;
   [LS_SCREEN_SCALE]: ScreenScale;
 
-  [LS_TOOLKIT]: Tool[];
-  [LS_SELECTED_TOOL]: Tool["name"];
+  [LS_TOOLKIT]: SelectableTool[];
+  [LS_SELECTED_TOOL]: SelectableTool["name"];
 
   [LS_DRAWINGS]: Drawing[];
 

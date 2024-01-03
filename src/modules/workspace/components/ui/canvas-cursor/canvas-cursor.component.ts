@@ -1,4 +1,3 @@
-import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,7 +8,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 
-import { Cursor, CursorName, ExecutableTool } from "@workspace/interfaces";
+import { CursorStatus, ExecutableTool } from "@workspace/interfaces";
 
 import { TOOL_CURSOR } from "@workspace/constants";
 
@@ -19,7 +18,6 @@ import { CanvasComponent } from "../canvas/canvas.component";
   selector: "app-canvas-cursor",
   templateUrl: "./canvas-cursor.component.html",
   standalone: true,
-  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CanvasCursorComponent implements OnInit {
@@ -41,7 +39,7 @@ export class CanvasCursorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setCursorByName(this.selectedTool.name);
+    this.setSelectedToolCursor();
   }
 
   private onSelectedToolChange(tool: ExecutableTool) {
@@ -56,14 +54,14 @@ export class CanvasCursorComponent implements OnInit {
 
   private setExecutedToolCursor() {
     if (this.executedTool) {
-      this.captureCursorByName(`executed--${this.executedTool.name}`);
+      this.captureCursor(`executed--${this.executedTool.name}`);
     } else {
       this.releaseCursor();
     }
   }
 
   private setSelectedToolCursor() {
-    this.setCursorByName(this.selectedTool.name);
+    this.setCursor(this.selectedTool.name);
   }
 
   private releaseCursor() {
@@ -71,27 +69,18 @@ export class CanvasCursorComponent implements OnInit {
     this.setSelectedToolCursor();
   }
 
-  private captureCursorByName(name: CursorName) {
-    this.setCursorByName(name);
+  private captureCursor(status: CursorStatus) {
+    this.setCursor(status);
     this.captured = true;
   }
 
-  private captureCursor(cursor: Cursor) {
-    this.setCursor(cursor);
-    this.captured = true;
-  }
-
-  private setCursorByName(name: CursorName) {
-    this.setCursor(TOOL_CURSOR[name]);
-  }
-
-  private setCursor(cursor: Cursor) {
+  private setCursor(status: CursorStatus) {
     const canvas = this.canvas?.canvas?.nativeElement;
 
     if (!canvas || this.captured) {
       return;
     }
 
-    canvas.style.cursor = cursor;
+    canvas.style.cursor = TOOL_CURSOR[status];
   }
 }

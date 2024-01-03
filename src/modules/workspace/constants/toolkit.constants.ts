@@ -1,12 +1,12 @@
 import {
   ExecutableTool,
-  Tool,
+  SelectableTool,
   ToolCursors,
   ToolIcons,
   ToolTips,
 } from "@workspace/interfaces";
 
-export const TOOLKIT: Tool[] = [
+export const TOOLKIT: SelectableTool[] = [
   { name: "hand", isMutation: false },
   { name: "selection", isMutation: false },
   {
@@ -72,11 +72,11 @@ export const TOOL_CURSOR: ToolCursors = {
   hand: "grab",
   "executed--hand": "grabbing",
 
-  selection: "auto",
-  "executed--selection": "auto",
+  selection: "default",
+  "executed--selection": "default",
 
-  "selection-select": "auto",
-  "executed--selection-select": "auto",
+  "selection-select": "default",
+  "executed--selection-select": "default",
 
   "selection-move": "move",
   "executed--selection-move": "move",

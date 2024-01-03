@@ -1,10 +1,5 @@
-import { Point } from "..";
+import { Point, Sizes } from "..";
 
 export type ScreenScroll = Point;
-
-export type ScreenSizes = {
-  height: number;
-  width: number;
-};
-
+export type ScreenSizes = Sizes;
 export type ScreenScale = number;

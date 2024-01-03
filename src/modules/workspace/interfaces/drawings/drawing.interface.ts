@@ -10,5 +10,3 @@ export type Drawing =
   | DrawingEllipse
   | DrawingRectangle
   | DrawingText;
-
-export type DrawingType = Drawing["type"];

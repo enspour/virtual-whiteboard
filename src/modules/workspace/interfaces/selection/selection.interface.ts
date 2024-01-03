@@ -1,8 +1,5 @@
 import { Coordinates } from "../coordinates.interface";
+import { Sizes } from "../sizes.interface";
 
 export type SelectionCoordinates = Coordinates;
-
-export interface SelectionSizes {
-  width: number;
-  height: number;
-}
+export type SelectionSizes = Sizes;
