@@ -28,15 +28,12 @@ export class SelectionPainterService implements Painter {
       return;
     }
 
-    if (this.selectionService.IsSelection) {
-      this.paintSelection();
-    }
-
+    this.paintSelection();
     this.paintDrawingsSelection();
   }
 
   private paintSelection() {
-    if (!this.context) {
+    if (!this.context || !this.selectionService.Coordinates) {
       return;
     }
 
@@ -69,17 +66,17 @@ export class SelectionPainterService implements Painter {
   }
 
   private paintDrawingsSelection() {
+    const coordinates = this.drawingsOnSelectionService.Coordinates;
     const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
 
-    if (drawings.length === 0) {
+    if (!coordinates || drawings.length === 0) {
       return;
     }
 
     if (drawings.length === 1) {
       this.paintDrawingSelection(drawings[0]);
     } else {
-      const { startX, startY, endX, endY } =
-        this.drawingsOnSelectionService.Coordinates;
+      const { startX, startY, endX, endY } = coordinates;
 
       for (let i = 0; i < drawings.length; i++) {
         const { coordinates } = drawings[i];

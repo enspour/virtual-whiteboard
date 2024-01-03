@@ -13,12 +13,7 @@ import { DrawingsService } from "./drawings.service";
 export class DrawingsOnSelectionService {
   private drawingsOnSelection: Drawing[] = [];
 
-  private coordinates: SelectionCoordinates = {
-    startX: 0,
-    startY: 0,
-    endX: 0,
-    endY: 0,
-  };
+  private coordinates: SelectionCoordinates | null = null;
 
   private destroy$ = inject(DestroyService, { self: true });
 
@@ -33,7 +28,7 @@ export class DrawingsOnSelectionService {
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (!this.selectionService.IsSelection) {
+        if (!this.selectionService.Coordinates) {
           return;
         }
 
@@ -88,6 +83,10 @@ export class DrawingsOnSelectionService {
   private isContains(drawing: Drawing) {
     const selection = this.selectionService.Coordinates;
 
+    if (!selection) {
+      return false;
+    }
+
     const startX = drawing.coordinates.startX;
     const startY = drawing.coordinates.startY;
     const endX = drawing.coordinates.endX;
@@ -108,20 +107,24 @@ export class DrawingsOnSelectionService {
   private updateCoordinatesByDrawing(drawing: Drawing) {
     const { coordinates } = drawing;
 
-    if (coordinates.startX < this.coordinates.startX) {
-      this.coordinates.startX = coordinates.startX;
-    }
+    if (!this.coordinates) {
+      this.coordinates = { ...coordinates };
+    } else {
+      if (coordinates.startX < this.coordinates.startX) {
+        this.coordinates.startX = coordinates.startX;
+      }
 
-    if (coordinates.startY < this.coordinates.startY) {
-      this.coordinates.startY = coordinates.startY;
-    }
+      if (coordinates.startY < this.coordinates.startY) {
+        this.coordinates.startY = coordinates.startY;
+      }
 
-    if (coordinates.endX > this.coordinates.endX) {
-      this.coordinates.endX = coordinates.endX;
-    }
+      if (coordinates.endX > this.coordinates.endX) {
+        this.coordinates.endX = coordinates.endX;
+      }
 
-    if (coordinates.endY > this.coordinates.endY) {
-      this.coordinates.endY = coordinates.endY;
+      if (coordinates.endY > this.coordinates.endY) {
+        this.coordinates.endY = coordinates.endY;
+      }
     }
   }
 }

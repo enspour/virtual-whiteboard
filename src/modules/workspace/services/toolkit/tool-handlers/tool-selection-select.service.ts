@@ -6,7 +6,11 @@ import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 import { SelectionService } from "@workspace/services/selection/selection.service";
 
-import { Point, ToolHandler } from "@workspace/interfaces";
+import {
+  Point,
+  SelectionCoordinates,
+  ToolHandler,
+} from "@workspace/interfaces";
 
 import { ToolkitService } from "../toolkit.service";
 
@@ -19,6 +23,8 @@ export class ToolSelectionSelectService implements ToolHandler {
 
   private initialX!: number;
   private initialY!: number;
+
+  private selection!: SelectionCoordinates;
 
   constructor(
     private toolkitService: ToolkitService,
@@ -44,12 +50,12 @@ export class ToolSelectionSelectService implements ToolHandler {
     this.initialX = x;
     this.initialY = y;
 
-    this.selectionService.select({
+    this.selection = {
       startX: x,
       startY: y,
       endX: x,
       endY: y,
-    });
+    };
 
     this.points$
       .pipe(takeUntil(this.destroy$))
@@ -94,25 +100,23 @@ export class ToolSelectionSelectService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const coordinates = this.selectionService.Coordinates;
-
     if (this.initialX < point.x) {
-      coordinates.startX = this.initialX;
-      coordinates.endX = point.x;
+      this.selection.startX = this.initialX;
+      this.selection.endX = point.x;
     } else {
-      coordinates.startX = point.x;
-      coordinates.endX = this.initialX;
+      this.selection.startX = point.x;
+      this.selection.endX = this.initialX;
     }
 
     if (this.initialY < point.y) {
-      coordinates.startY = this.initialY;
-      coordinates.endY = point.y;
+      this.selection.startY = this.initialY;
+      this.selection.endY = point.y;
     } else {
-      coordinates.startY = point.y;
-      coordinates.endY = this.initialY;
+      this.selection.startY = point.y;
+      this.selection.endY = this.initialY;
     }
 
-    this.selectionService.select(coordinates);
+    this.selectionService.select(this.selection);
 
     this.painterService.paint();
   }

@@ -6,10 +6,8 @@ import { SelectionCoordinates, SelectionSizes } from "@workspace/interfaces";
 
 @Injectable()
 export class SelectionService {
-  private coordinates: BehaviorSubject<SelectionCoordinates>;
-  public coordinates$: Observable<SelectionCoordinates>;
-
-  private isSelection = false;
+  private coordinates: BehaviorSubject<SelectionCoordinates | null>;
+  public coordinates$: Observable<SelectionCoordinates | null>;
 
   private sizes: SelectionSizes = {
     width: 0,
@@ -17,14 +15,7 @@ export class SelectionService {
   };
 
   constructor() {
-    const initialCoordinates = {
-      startX: 0,
-      startY: 0,
-      endX: 0,
-      endY: 0,
-    };
-
-    this.coordinates = new BehaviorSubject(initialCoordinates);
+    this.coordinates = new BehaviorSubject<SelectionCoordinates | null>(null);
     this.coordinates$ = this.coordinates.asObservable();
   }
 
@@ -36,13 +27,7 @@ export class SelectionService {
     return this.coordinates.value;
   }
 
-  get IsSelection() {
-    return this.isSelection;
-  }
-
   public select(coordinates: SelectionCoordinates) {
-    this.isSelection = true;
-
     this.coordinates.next(coordinates);
 
     this.sizes.width = coordinates.endX - coordinates.startX;
@@ -50,13 +35,6 @@ export class SelectionService {
   }
 
   public removeSelection() {
-    this.isSelection = false;
-
-    this.coordinates.next({
-      startX: 0,
-      startY: 0,
-      endX: 0,
-      endY: 0,
-    });
+    this.coordinates.next(null);
   }
 }

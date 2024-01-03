@@ -48,7 +48,10 @@ export class ToolSelectionService implements ToolHandler {
 
     const coordinates = this.drawingsOnSelectionService.Coordinates;
 
-    if (isPointOnDrawingsSelection(point, drawingsOnSelection, coordinates)) {
+    if (
+      coordinates &&
+      isPointOnDrawingsSelection(point, drawingsOnSelection, coordinates)
+    ) {
       this.handler = this.toolSelectionMoveService;
       return this.handler.start(e);
     }

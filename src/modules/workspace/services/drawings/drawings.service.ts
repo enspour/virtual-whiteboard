@@ -24,40 +24,40 @@ export class DrawingsService {
   }
 
   public async append(...drawings: Drawing[]) {
-    let _drawings = [...this.drawings.value];
+    let newDrawings = [...this.drawings.value];
 
     for (const drawing of drawings) {
       const { id } = drawing;
 
-      const index = _drawings.findIndex((drawing) => drawing.id === id);
+      const index = newDrawings.findIndex((drawing) => drawing.id === id);
 
       if (index === -1) {
-        _drawings.push(drawing);
+        newDrawings.push(drawing);
       } else {
-        _drawings = [
-          ..._drawings.slice(0, index),
+        newDrawings = [
+          ...newDrawings.slice(0, index),
           drawing,
-          ..._drawings.slice(index + 1),
+          ...newDrawings.slice(index + 1),
         ];
       }
     }
 
-    this.drawings.next(_drawings);
+    this.drawings.next(newDrawings);
     await this.drawingStorage.setDrawings(this.drawings.value);
   }
 
   public async remove(...ids: string[]) {
     let count = 0;
 
-    let _drawings = [...this.drawings.value];
+    let newDrawings = [...this.drawings.value];
 
     for (const id of ids) {
-      const index = _drawings.findIndex((drawing) => drawing.id === id);
+      const index = newDrawings.findIndex((drawing) => drawing.id === id);
 
       if (index !== -1) {
-        _drawings = [
-          ..._drawings.slice(0, index),
-          ..._drawings.slice(index + 1),
+        newDrawings = [
+          ...newDrawings.slice(0, index),
+          ...newDrawings.slice(index + 1),
         ];
 
         count += 1;
@@ -65,7 +65,7 @@ export class DrawingsService {
     }
 
     if (count) {
-      this.drawings.next(_drawings);
+      this.drawings.next(newDrawings);
       await this.drawingStorage.setDrawings(this.drawings.value);
     }
   }
