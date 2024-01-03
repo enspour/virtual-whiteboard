@@ -1,13 +1,17 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
 import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
+import { MoveDrawingsCommand } from "@workspace/services/history/commands/move-drawings.command";
+import { HistoryService } from "@workspace/services/history/history.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 
-import { Drawing, Point, ToolHandler } from "@workspace/interfaces";
+import { updateDrawingCoordinates } from "@workspace/utils";
+
+import { Point, ToolHandler } from "@workspace/interfaces";
 
 import { ToolkitService } from "../toolkit.service";
 
@@ -20,10 +24,14 @@ export class ToolSelectionMoveService implements ToolHandler {
 
   private prevPoint!: Point;
 
+  private totalDiff!: Point;
+
   constructor(
+    private injector: Injector,
     private toolkitService: ToolkitService,
     private screenService: ScreenService,
     private painterService: PainterService,
+    private historyService: HistoryService,
     private drawingsService: DrawingsService,
     private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {}
@@ -44,6 +52,11 @@ export class ToolSelectionMoveService implements ToolHandler {
 
     this.prevPoint = { x, y };
 
+    this.totalDiff = {
+      x: 0,
+      y: 0,
+    };
+
     this.points$
       .pipe(takeUntil(this.destroy$))
       .subscribe((point) => this.handlePoint(point));
@@ -55,6 +68,16 @@ export class ToolSelectionMoveService implements ToolHandler {
     }
 
     this.isHandling = false;
+
+    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+
+    const diff = this.totalDiff;
+
+    if (diff.x !== 0 || diff.y !== 0) {
+      const args = { drawings, diff };
+      const command = new MoveDrawingsCommand(args, this.injector);
+      this.historyService.add(command);
+    }
 
     this.toolkitService.setExecutedTool("");
   }
@@ -80,13 +103,16 @@ export class ToolSelectionMoveService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
-
     const diffX = point.x - this.prevPoint.x;
     const diffY = point.y - this.prevPoint.y;
 
+    this.totalDiff.x += diffX;
+    this.totalDiff.y += diffY;
+
+    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+
     for (let i = 0; i < drawings.length; i++) {
-      this.updateDrawingCoordinates(drawings[i], diffX, diffY);
+      updateDrawingCoordinates(drawings[i], diffX, diffY);
     }
 
     this.drawingsOnSelectionService.updateCoordinates();
@@ -96,25 +122,5 @@ export class ToolSelectionMoveService implements ToolHandler {
     this.drawingsService.append(...drawings);
 
     this.painterService.paint();
-  }
-
-  private updateDrawingCoordinates(
-    drawing: Drawing,
-    diffX: number,
-    diffY: number
-  ) {
-    const { coordinates } = drawing;
-
-    coordinates.startX += diffX;
-    coordinates.startY += diffY;
-    coordinates.endX += diffX;
-    coordinates.endY += diffY;
-
-    if ("points" in drawing) {
-      drawing.points = drawing.points.map((point) => ({
-        x: point.x + diffX,
-        y: point.y + diffY,
-      }));
-    }
   }
 }

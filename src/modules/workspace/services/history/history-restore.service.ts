@@ -10,6 +10,7 @@ import { HistoryRestoreData } from "@workspace/interfaces/history/history-restor
 import { HistoryStorageToken } from "@workspace/tokens";
 
 import { CreateDrawingCommand } from "./commands/create-drawing.command";
+import { MoveDrawingsCommand } from "./commands/move-drawings.command";
 import { RemoveDrawingsCommand } from "./commands/remove-drawings.command";
 
 // eslint-disable-next-line
@@ -22,6 +23,8 @@ export class HistoryRestoreService {
       new CreateDrawingCommand(args, injector),
     "remove-drawings-command": (args, injector) =>
       new RemoveDrawingsCommand(args, injector),
+    "move-drawings-command": (args, injector) =>
+      new MoveDrawingsCommand(args, injector),
   };
 
   constructor(
