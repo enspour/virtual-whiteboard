@@ -33,6 +33,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/virtual-whiteboard/",
               "budgets": [
                 {
                   "type": "initial",
