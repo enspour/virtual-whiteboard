@@ -50,9 +50,21 @@ export class DrawingsOnSelectionService {
     return this.coordinates;
   }
 
-  public addToSelection(drawing: Drawing) {
-    this.drawingsOnSelection.push(drawing);
-    this.updateCoordinatesByDrawing(drawing);
+  public addToSelection(...drawings: Drawing[]) {
+    for (const drawing of drawings) {
+      this.drawingsOnSelection.push(drawing);
+      this.updateCoordinatesByDrawing(drawing);
+    }
+  }
+
+  public removeFromSelection(...drawings: Drawing[]) {
+    for (const drawing of drawings) {
+      this.drawingsOnSelection = this.drawingsOnSelection.filter(
+        (item) => item.id !== drawing.id
+      );
+    }
+
+    this.updateCoordinates();
   }
 
   public removeSelection() {
@@ -70,6 +82,7 @@ export class DrawingsOnSelectionService {
     const drawings = this.drawingsOnSelection;
 
     if (drawings.length === 0) {
+      this.coordinates = null;
       return;
     }
 

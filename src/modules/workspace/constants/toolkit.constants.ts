@@ -7,32 +7,28 @@ import {
 } from "@workspace/interfaces";
 
 export const TOOLKIT: SelectableTool[] = [
-  { name: "hand", isRemoveSelection: false },
-  { name: "selection", isRemoveSelection: false },
+  { name: "hand" },
+  { name: "selection" },
   {
     name: "brush",
     strokeColor: "#eeeeee",
     strokeWidth: 2,
-    isRemoveSelection: true,
   },
   {
     name: "rectangle",
     roundness: 16,
     strokeColor: "#eeeeee",
     strokeWidth: 2,
-    isRemoveSelection: true,
   },
   {
     name: "ellipse",
     strokeColor: "#eeeeee",
     strokeWidth: 2,
-    isRemoveSelection: true,
   },
   {
     name: "arrow",
     strokeColor: "#eeeeee",
     strokeWidth: 2,
-    isRemoveSelection: true,
   },
   {
     name: "text",
@@ -40,20 +36,17 @@ export const TOOLKIT: SelectableTool[] = [
     textSize: 20,
     textFamily: "Roboto",
     lineHeight: 20,
-    isRemoveSelection: true,
   },
-  { name: "eraser", isRemoveSelection: true },
+  { name: "eraser" },
 ];
 
 export const EXECUTABLE_TOOLS: ExecutableTool[] = [
   ...TOOLKIT,
   {
     name: "selection-select",
-    isRemoveSelection: false,
   },
   {
     name: "selection-move",
-    isRemoveSelection: false,
   },
 ];
 

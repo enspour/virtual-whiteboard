@@ -3,6 +3,7 @@ import { Injectable, Injector } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
 import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
+import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
 import { DrawingsTrashService } from "@workspace/services/drawings/drawings-trash.service";
 import { RemoveDrawingsCommand } from "@workspace/services/history/commands/remove-drawings.command";
 import { HistoryService } from "@workspace/services/history/history.service";
@@ -28,9 +29,10 @@ export class ToolEraserService implements ToolHandler {
     private toolkitService: ToolkitService,
     private screenService: ScreenService,
     private painterService: PainterService,
+    private historyService: HistoryService,
     private drawingsTrashService: DrawingsTrashService,
     private drawingsOnScreenServices: DrawingsOnScreenService,
-    private historyService: HistoryService
+    private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {}
 
   start(e: MouseEvent): void {
@@ -59,12 +61,16 @@ export class ToolEraserService implements ToolHandler {
 
     const drawings = this.drawingsTrashService.Trash;
 
-    if (drawings.length) {
-      const command = new RemoveDrawingsCommand(drawings, this.injector);
-      this.historyService.add(command);
-    }
+    this.drawingsTrashService.clear().then(() => {
+      this.drawingsOnSelectionService.removeFromSelection(...drawings);
 
-    this.drawingsTrashService.clear().then(() => this.painterService.paint());
+      this.painterService.paint();
+
+      if (drawings.length) {
+        const command = new RemoveDrawingsCommand(drawings, this.injector);
+        this.historyService.add(command);
+      }
+    });
 
     this.destroy$.next();
     this.destroy$.complete();

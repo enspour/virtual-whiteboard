@@ -1,11 +1,10 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, Injector, inject } from "@angular/core";
 
 import { Observable, merge, takeUntil } from "rxjs";
 
 import { AppService } from "@shared/modules/app/services/app.service";
 
 import {
-  ExecutableTool,
   ScreenEvent,
   ScreenEventHandlers,
   ToolEvent,
@@ -16,6 +15,7 @@ import { DestroyService } from "./destroy.service";
 import { DrawingsOnSelectionService } from "./drawings/drawings-on-selection.service";
 import { DrawingsService } from "./drawings/drawings.service";
 import { EventsService } from "./events.service";
+import { RemoveDrawingsCommand } from "./history/commands/remove-drawings.command";
 import { HistoryService } from "./history/history.service";
 import { PainterService } from "./painters/painter.service";
 import { ScreenService } from "./screen/screen.service";
@@ -27,7 +27,6 @@ import { ToolHandService } from "./toolkit/tool-handlers/tool-hand.service";
 import { ToolRectangleService } from "./toolkit/tool-handlers/tool-rectangle.service";
 import { ToolSelectionService } from "./toolkit/tool-handlers/tool-selection.service";
 import { ToolTextService } from "./toolkit/tool-handlers/tool-text.service";
-import { ToolkitService } from "./toolkit/toolkit.service";
 
 @Injectable()
 export class WorkspaceService {
@@ -64,13 +63,14 @@ export class WorkspaceService {
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
   constructor(
+    private injector: Injector,
+
     private appService: AppService,
     private eventsService: EventsService,
     private screenService: ScreenService,
     private historyService: HistoryService,
     private painterService: PainterService,
 
-    private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
     private toolBrushService: ToolBrushService,
     private toolSelectionService: ToolSelectionService,
@@ -110,10 +110,6 @@ export class WorkspaceService {
     this.eventsService.toolEvents$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onToolkitEvent(event));
-
-    this.toolkitService.executedTool$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((tool) => this.onExecutedTool(tool));
   }
 
   private onScreenEvent(event: ScreenEvent) {
@@ -122,12 +118,6 @@ export class WorkspaceService {
 
   private onToolkitEvent(event: ToolEvent) {
     this.toolEventHandlers[event.tool][event.stage](event.event);
-  }
-
-  private onExecutedTool(tool: ExecutableTool | null) {
-    if (tool && tool.isRemoveSelection) {
-      this.drawingsOnSelectionService.removeSelection();
-    }
   }
 
   private async onDelete() {
@@ -144,5 +134,8 @@ export class WorkspaceService {
     this.drawingsOnSelectionService.removeSelection();
 
     this.painterService.paint();
+
+    const command = new RemoveDrawingsCommand(drawings, this.injector);
+    this.historyService.add(command);
   }
 }
