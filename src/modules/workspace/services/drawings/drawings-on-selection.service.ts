@@ -69,13 +69,7 @@ export class DrawingsOnSelectionService {
 
   public removeSelection() {
     this.drawingsOnSelection = [];
-
-    this.coordinates = {
-      startX: 0,
-      startY: 0,
-      endX: 0,
-      endY: 0,
-    };
+    this.coordinates = null;
   }
 
   public updateCoordinates() {

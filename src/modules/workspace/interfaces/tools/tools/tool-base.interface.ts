@@ -1,1 +1,3 @@
-export interface ToolBase {}
+export interface ToolBase {
+  isRemoveSelection: boolean;
+}

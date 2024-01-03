@@ -40,6 +40,10 @@ export class RemoveDrawingsCommand implements HistoryCommand {
 
   public async undo(): Promise<void> {
     await this.drawingsService.append(...this.args);
+
+    this.drawingsOnSelectionService.removeSelection();
+    this.drawingsOnSelectionService.addToSelection(...this.args);
+
     this.painterService.paint();
   }
 }

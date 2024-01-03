@@ -31,14 +31,17 @@ export class CreateDrawingCommand implements HistoryCommand {
   public async exec(): Promise<void> {
     await this.drawingsService.append(this.args);
 
+    this.drawingsOnSelectionService.removeSelection();
+    this.drawingsOnSelectionService.addToSelection(this.args);
+
     this.painterService.paint();
   }
 
   public async undo(): Promise<void> {
     await this.drawingsService.remove(this.args.id);
 
-    this.painterService.paint();
-
     this.drawingsOnSelectionService.removeFromSelection(this.args);
+
+    this.painterService.paint();
   }
 }

@@ -5,6 +5,7 @@ import { Observable, merge, takeUntil } from "rxjs";
 import { AppService } from "@shared/modules/app/services/app.service";
 
 import {
+  ExecutableTool,
   ScreenEvent,
   ScreenEventHandlers,
   ToolEvent,
@@ -27,6 +28,7 @@ import { ToolHandService } from "./toolkit/tool-handlers/tool-hand.service";
 import { ToolRectangleService } from "./toolkit/tool-handlers/tool-rectangle.service";
 import { ToolSelectionService } from "./toolkit/tool-handlers/tool-selection.service";
 import { ToolTextService } from "./toolkit/tool-handlers/tool-text.service";
+import { ToolkitService } from "./toolkit/toolkit.service";
 
 @Injectable()
 export class WorkspaceService {
@@ -71,6 +73,7 @@ export class WorkspaceService {
     private historyService: HistoryService,
     private painterService: PainterService,
 
+    private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
     private toolBrushService: ToolBrushService,
     private toolSelectionService: ToolSelectionService,
@@ -103,6 +106,10 @@ export class WorkspaceService {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.onDelete());
 
+    this.toolkitService.executedTool$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((tool) => this.onExecutedTool(tool));
+
     this.eventsService.screenEvents$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onScreenEvent(event));
@@ -118,6 +125,12 @@ export class WorkspaceService {
 
   private onToolkitEvent(event: ToolEvent) {
     this.toolEventHandlers[event.tool][event.stage](event.event);
+  }
+
+  private onExecutedTool(tool: ExecutableTool | null) {
+    if (tool && tool.isRemoveSelection) {
+      this.drawingsOnSelectionService.removeSelection();
+    }
   }
 
   private async onDelete() {
