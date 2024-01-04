@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
@@ -8,9 +7,9 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
+import { EventsService } from "@workspace/services/events.service";
+import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
-
-import { ScreenSizes } from "@workspace/interfaces";
 
 @Component({
   selector: "app-canvas",
@@ -20,31 +19,49 @@ import { ScreenSizes } from "@workspace/interfaces";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CanvasComponent implements OnInit {
-  @ViewChild("canvas") canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild("canvas", { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(
-    private cdRef: ChangeDetectorRef,
-    private screenService: ScreenService
+    private screenService: ScreenService,
+    private eventsService: EventsService,
+    private painterService: PainterService
   ) {
     this.screenService.sizes$
       .pipe(takeUntilDestroyed())
-      .subscribe((sizes) => this.updateSizes(sizes));
+      .subscribe(() => this.updateSizes());
   }
 
   ngOnInit(): void {
-    this.cdRef.detectChanges();
+    this.updateSizes();
+    this.updateServices();
   }
 
-  private updateSizes(sizes: ScreenSizes) {
+  private updateSizes() {
     const canvas = this.canvas?.nativeElement;
 
     if (!canvas) {
       return;
     }
 
-    const { width, height } = sizes;
+    const { width, height } = this.screenService.Sizes;
 
     canvas.width = width;
     canvas.height = height;
+  }
+
+  private updateServices() {
+    const canvas = this.canvas?.nativeElement;
+
+    if (!canvas) {
+      return;
+    }
+
+    this.eventsService.setCanvas(canvas);
+
+    const context = canvas.getContext("2d");
+
+    if (context) {
+      this.painterService.setContext(context);
+    }
   }
 }

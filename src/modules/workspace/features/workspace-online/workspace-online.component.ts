@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 import { SharedModule } from "@shared/shared.module";
 
-import { WorkspaceLayoutComponent } from "@workspace/components/layouts/workspace-layout/workspace-layout.component";
 import { CanvasCursorComponent } from "@workspace/components/ui/canvas-cursor/canvas-cursor.component";
-import { CanvasEventsComponent } from "@workspace/components/ui/canvas-events/canvas-events.component";
-import { CanvasPainterComponent } from "@workspace/components/ui/canvas-painter/canvas-painter.component";
 import { CanvasComponent } from "@workspace/components/ui/canvas/canvas.component";
 import { FooterHistoryComponent } from "@workspace/components/ui/footer-history/footer-history.component";
 import { FooterScaleComponent } from "@workspace/components/ui/footer-scale/footer-scale.component";
@@ -36,6 +33,7 @@ import { ToolEllipseService } from "@workspace/services/toolkit/tool-handlers/to
 import { ToolEraserService } from "@workspace/services/toolkit/tool-handlers/tool-eraser.service";
 import { ToolHandService } from "@workspace/services/toolkit/tool-handlers/tool-hand.service";
 import { ToolRectangleService } from "@workspace/services/toolkit/tool-handlers/tool-rectangle.service";
+import { ToolSelectionClickService } from "@workspace/services/toolkit/tool-handlers/tool-selection-click.service";
 import { ToolSelectionMoveService } from "@workspace/services/toolkit/tool-handlers/tool-selection-move.service";
 import { ToolSelectionSelectService } from "@workspace/services/toolkit/tool-handlers/tool-selection-select.service";
 import { ToolSelectionService } from "@workspace/services/toolkit/tool-handlers/tool-selection.service";
@@ -55,11 +53,7 @@ import { DrawingStorageToken } from "@workspace/tokens";
   imports: [
     SharedModule,
 
-    WorkspaceLayoutComponent,
-
     CanvasComponent,
-    CanvasPainterComponent,
-    CanvasEventsComponent,
     CanvasCursorComponent,
 
     HeaderToolkitComponent,
@@ -106,6 +100,7 @@ import { DrawingStorageToken } from "@workspace/tokens";
     ToolSelectionService,
     ToolSelectionSelectService,
     ToolSelectionMoveService,
+    ToolSelectionClickService,
     ToolBrushService,
     ToolRectangleService,
     ToolEllipseService,

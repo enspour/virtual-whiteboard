@@ -9,7 +9,7 @@ import {
   ScreenEvent,
   ScreenEventHandlers,
   ToolEvent,
-  ToolEventHandlers,
+  ToolHandlers,
 } from "@workspace/interfaces";
 
 import { DestroyService } from "./destroy.service";
@@ -51,7 +51,7 @@ export class WorkspaceService {
     "scroll right": () => this.screenService.scrollRight(),
   };
 
-  private toolEventHandlers: ToolEventHandlers = {
+  private toolEventHandlers: ToolHandlers = {
     hand: this.toolHandService,
     brush: this.toolBrushService,
     selection: this.toolSelectionService,
@@ -124,7 +124,7 @@ export class WorkspaceService {
   }
 
   private onToolkitEvent(event: ToolEvent) {
-    this.toolEventHandlers[event.tool][event.stage](event.event);
+    this.toolEventHandlers[event.tool][event.type](event.event);
   }
 
   private onExecutedTool(tool: ExecutableTool | null) {

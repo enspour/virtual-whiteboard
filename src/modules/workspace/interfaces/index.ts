@@ -11,7 +11,6 @@ export * from "./tools/tool-events.interface";
 export * from "./tools/tool-cursors.interface";
 export * from "./tools/tool-icons.interface";
 export * from "./tools/tool-tips.interface";
-export * from "./tools/tool-handlers.interface";
 export * from "./tools/tool.interface";
 export * from "./tools/tools/tool-base.interface";
 export * from "./tools/tools/tool-brush.interface";

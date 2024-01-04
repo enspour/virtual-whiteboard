@@ -15,7 +15,7 @@ import { ThemeService } from "@theme";
   selector: "app-root",
   templateUrl: "./app.component.html",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SharedModule, LayoutComponent],
+  imports: [RouterOutlet, CommonModule, SharedModule, LayoutComponent],
   providers: [AppService, LocalStorageService, ThemeService],
 })
 export class AppComponent {

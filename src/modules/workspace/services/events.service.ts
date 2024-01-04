@@ -4,7 +4,12 @@ import { Observable, Subject, fromEvent, takeUntil, throttleTime } from "rxjs";
 
 import { getWheelDirection } from "@workspace/utils";
 
-import { ScreenEvent, ToolEvent } from "@workspace/interfaces";
+import {
+  ScreenEvent,
+  ToolEvent,
+  ToolEventNativeEvent,
+  ToolEventType,
+} from "@workspace/interfaces";
 
 import { MOUSE_MOVE_THROTTLE } from "@workspace/constants";
 
@@ -84,74 +89,50 @@ export class EventsService {
   }
 
   private onMouseDown(event: MouseEvent) {
-    if (event.button === 0) {
-      return this.toolEvents$.next({
-        tool: this.toolkitService.SelectedTool.name,
-        stage: "start",
-        event,
-      });
-    }
-
-    if (event.button === 1) {
-      return this.toolEvents$.next({
-        tool: "hand",
-        stage: "start",
-        event,
-      });
+    switch (event.button) {
+      case 0:
+        return this.emitSelectedToolEvent("start", event);
+      case 1:
+        return this.emitHandToolEvent("start", event);
     }
   }
 
   private onMouseUp(event: MouseEvent) {
-    if (event.button === 0) {
-      return this.toolEvents$.next({
-        tool: this.toolkitService.SelectedTool.name,
-        stage: "end",
-        event,
-      });
-    }
-
-    if (event.button === 1) {
-      return this.toolEvents$.next({
-        tool: "hand",
-        stage: "end",
-        event,
-      });
+    switch (event.button) {
+      case 0:
+        return this.emitSelectedToolEvent("end", event);
+      case 1:
+        return this.emitHandToolEvent("end", event);
     }
   }
 
   private onMouseLeave(event: MouseEvent) {
-    if (event.buttons === 1) {
-      return this.toolEvents$.next({
-        tool: this.toolkitService.SelectedTool.name,
-        stage: "end",
-        event,
-      });
-    }
-
-    if (event.buttons === 4) {
-      return this.toolEvents$.next({
-        tool: "hand",
-        stage: "end",
-        event,
-      });
+    switch (event.buttons) {
+      case 1:
+        return this.emitSelectedToolEvent("end", event);
+      case 4:
+        return this.emitHandToolEvent("end", event);
     }
   }
 
   private onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1) {
-      return this.toolEvents$.next({
-        tool: this.toolkitService.SelectedTool.name,
-        stage: "process",
-        event,
-      });
+    switch (event.buttons) {
+      case 1:
+        return this.emitSelectedToolEvent("process", event);
+      case 4:
+        return this.emitHandToolEvent("process", event);
     }
+  }
 
-    if (event.buttons === 4) {
-      return this.toolEvents$.next({
-        tool: "hand",
-        stage: "process",
-        event,
-      });
-    }
+  private emitSelectedToolEvent(
+    type: ToolEventType,
+    event: ToolEventNativeEvent
+  ) {
+    const { name } = this.toolkitService.SelectedTool;
+    this.toolEvents$.next({ tool: name, type, event });
+  }
+
+  private emitHandToolEvent(type: ToolEventType, event: ToolEventNativeEvent) {
+    this.toolEvents$.next({ tool: "hand", type, event });
   }
 }

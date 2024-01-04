@@ -6,8 +6,12 @@ import { isPointOnDrawingCoordinates } from "./point-on-drawing-coordinates.util
 export const isPointOnDrawingsSelection = (
   point: Point,
   drawings: Drawing[],
-  coordinates: Coordinates
+  coordinates: Coordinates | null
 ) => {
+  if (!coordinates) {
+    return false;
+  }
+
   if (drawings.length === 1) {
     if (isPointOnDrawingCoordinates(point, drawings[0])) {
       return true;

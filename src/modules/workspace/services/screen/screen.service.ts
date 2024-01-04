@@ -2,6 +2,8 @@ import { Inject, Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
+import { AppService } from "@shared/modules/app/services/app.service";
+
 import {
   Point,
   ScreenScale,
@@ -21,7 +23,6 @@ import { ScreenStorageToken } from "@workspace/tokens";
 
 @Injectable()
 export class ScreenService {
-  private sizes: BehaviorSubject<ScreenSizes>;
   public sizes$: Observable<ScreenSizes>;
 
   private scroll: BehaviorSubject<ScreenScroll>;
@@ -31,15 +32,11 @@ export class ScreenService {
   public scale$: Observable<ScreenScale>;
 
   constructor(
-    @Inject(ScreenStorageToken) private screenStorage: ScreenStorage
+    @Inject(ScreenStorageToken)
+    private screenStorage: ScreenStorage,
+    private appService: AppService
   ) {
-    const sizes = {
-      width: 0,
-      height: 0,
-    };
-
-    this.sizes = new BehaviorSubject(sizes);
-    this.sizes$ = this.sizes.asObservable();
+    this.sizes$ = this.appService.sizes$;
 
     const scroll = {
       x: 0,
@@ -53,16 +50,16 @@ export class ScreenService {
     this.scale$ = this.scale.asObservable();
   }
 
+  get Sizes() {
+    return this.appService.Sizes;
+  }
+
   get Scroll() {
     return this.scroll.getValue();
   }
 
   get Scale() {
     return this.scale.getValue();
-  }
-
-  get Sizes() {
-    return this.sizes.getValue();
   }
 
   async restore() {
@@ -72,16 +69,12 @@ export class ScreenService {
     this.scale.next(scale);
   }
 
-  public async setSizes(sizes: ScreenSizes) {
-    this.sizes.next(sizes);
-  }
-
-  public async setScale(scale: ScreenScale) {
+  public setScale(scale: ScreenScale) {
     this.scale.next(scale);
     this.screenStorage.setScale(scale);
   }
 
-  public async setScroll(scroll: ScreenScroll) {
+  public setScroll(scroll: ScreenScroll) {
     this.scroll.next(scroll);
     this.screenStorage.setScroll(scroll);
   }
