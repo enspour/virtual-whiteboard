@@ -37,6 +37,8 @@ import { ToolSelectionClickService } from "@workspace/services/toolkit/tool-hand
 import { ToolSelectionMoveService } from "@workspace/services/toolkit/tool-handlers/tool-selection-move.service";
 import { ToolSelectionSelectService } from "@workspace/services/toolkit/tool-handlers/tool-selection-select.service";
 import { ToolSelectionService } from "@workspace/services/toolkit/tool-handlers/tool-selection.service";
+import { ToolTextCreateService } from "@workspace/services/toolkit/tool-handlers/tool-text-create.service";
+import { ToolTextEditService } from "@workspace/services/toolkit/tool-handlers/tool-text-edit.service";
 import { ToolTextService } from "@workspace/services/toolkit/tool-handlers/tool-text.service";
 import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
 import { WorkspaceService } from "@workspace/services/workspace.service";
@@ -105,6 +107,8 @@ import { DrawingStorageToken } from "@workspace/tokens";
     ToolRectangleService,
     ToolEllipseService,
     ToolTextService,
+    ToolTextCreateService,
+    ToolTextEditService,
     ToolArrowService,
     ToolEraserService,
 

@@ -17,8 +17,6 @@ import { ToolSelectionSelectService } from "./tool-selection-select.service";
 
 @Injectable()
 export class ToolSelectionService implements ToolHandler {
-  private isHandling = false;
-
   private handler!: ToolHandler;
 
   private initialX!: number;
@@ -26,16 +24,14 @@ export class ToolSelectionService implements ToolHandler {
 
   constructor(
     private screenService: ScreenService,
+    private drawingsOnScreenService: DrawingsOnScreenService,
+    private drawingsOnSelectionService: DrawingsOnSelectionService,
     private toolSelectionSelectService: ToolSelectionSelectService,
     private toolSelectionMoveService: ToolSelectionMoveService,
-    private toolSelectionClickService: ToolSelectionClickService,
-    private drawingsOnScreenService: DrawingsOnScreenService,
-    private drawingsOnSelectionService: DrawingsOnSelectionService
+    private toolSelectionClickService: ToolSelectionClickService
   ) {}
 
   start(e: MouseEvent): void {
-    this.isHandling = true;
-
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
@@ -71,12 +67,6 @@ export class ToolSelectionService implements ToolHandler {
   }
 
   end(e: MouseEvent): void {
-    if (!this.isHandling) {
-      return;
-    }
-
-    this.isHandling = false;
-
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
@@ -91,10 +81,6 @@ export class ToolSelectionService implements ToolHandler {
   }
 
   process(e: MouseEvent): void {
-    if (!this.isHandling) {
-      return;
-    }
-
     this.handler.process(e);
   }
 }
