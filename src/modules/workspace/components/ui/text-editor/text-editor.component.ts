@@ -1,6 +1,5 @@
 import { CommonModule } from "@angular/common";
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -29,8 +28,8 @@ import { TextEditorChannel, TextEditorOptions } from "./text-editor.interface";
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
 })
-export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild("editor") editorRef!: ElementRef<HTMLDivElement>;
+export class TextEditorComponent implements OnInit, OnDestroy {
+  @ViewChild("editor", { static: true }) editorRef!: ElementRef<HTMLDivElement>;
 
   @Input({ required: true }) text!: string;
   @Input({ required: true }) position!: Point;
@@ -62,14 +61,7 @@ export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.scale = scale;
         this.cdRef.detectChanges();
       });
-  }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  ngAfterViewInit(): void {
     const editor = this.editorRef.nativeElement;
 
     editor.innerText = this.text;
@@ -89,9 +81,21 @@ export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   public onInput(event: Event) {
     const target = event.target as HTMLDivElement;
-    this.text = target.innerText;
+
+    this.text = target.innerHTML
+      .replace(/<div><br><\/div>/g, "\n")
+      .replace(/<div>/g, "\n")
+      .replace(/<\/div>/g, "")
+      .replace(/<br>/g, "\n")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">");
   }
 
   private onAppClick(event: MouseEvent) {
@@ -105,7 +109,13 @@ export class TextEditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private close() {
-    const rect = this.editorRef.nativeElement.getBoundingClientRect();
+    this.text = this.text.trim();
+
+    const editor = this.editorRef.nativeElement;
+
+    editor.innerText = this.text;
+
+    const rect = editor.getBoundingClientRect();
 
     this.channel$.next({
       type: "closing",

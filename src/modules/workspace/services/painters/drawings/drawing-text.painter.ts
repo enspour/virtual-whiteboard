@@ -39,7 +39,7 @@ export class DrawingTextPainter implements DrawingPainter {
     const startY =
       (coordinates.startY + scroll.y + lineHeight) * scale + yMeasurementError;
 
-    const splitted = text.replaceAll("\n\n", "\n").split("\n");
+    const splitted = text.split("\n");
 
     for (let i = 0; i < splitted.length; i++) {
       this.context.fillText(
