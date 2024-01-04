@@ -34,14 +34,14 @@ export class MoveDrawingsCommand implements HistoryCommand {
     this.drawingsOnSelectionService = injector.get(DrawingsOnSelectionService);
   }
 
-  public async exec(): Promise<void> {
+  public exec(): void {
     const { drawings, diff } = this.args;
 
     for (const drawing of drawings) {
       updateDrawingCoordinates(drawing, diff.x, diff.y);
     }
 
-    await this.drawingsService.append(...drawings);
+    this.drawingsService.append(...drawings);
 
     this.drawingsOnSelectionService.removeSelection();
     this.drawingsOnSelectionService.addToSelection(...drawings);
@@ -49,14 +49,14 @@ export class MoveDrawingsCommand implements HistoryCommand {
     this.painterService.paint();
   }
 
-  public async undo(): Promise<void> {
+  public undo(): void {
     const { drawings, diff } = this.args;
 
     for (const drawing of drawings) {
       updateDrawingCoordinates(drawing, -diff.x, -diff.y);
     }
 
-    await this.drawingsService.append(...drawings);
+    this.drawingsService.append(...drawings);
 
     this.drawingsOnSelectionService.removeSelection();
     this.drawingsOnSelectionService.addToSelection(...drawings);

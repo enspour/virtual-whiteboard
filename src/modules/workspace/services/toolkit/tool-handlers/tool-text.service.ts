@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 
 import { nanoid } from "nanoid";
 
@@ -9,6 +9,8 @@ import {
 import { TextEditorService } from "@workspace/components/ui/text-editor/text-editor.service";
 
 import { DrawingsService } from "@workspace/services/drawings/drawings.service";
+import { CreateDrawingCommand } from "@workspace/services/history/commands/create-drawing.command";
+import { HistoryService } from "@workspace/services/history/history.service";
 import { PainterService } from "@workspace/services/painters/painter.service";
 import { ScreenService } from "@workspace/services/screen/screen.service";
 
@@ -23,11 +25,13 @@ export class ToolTextService implements ToolHandler {
   private tool!: ToolText;
 
   constructor(
+    private injector: Injector,
     private screenService: ScreenService,
     private toolkitService: ToolkitService,
     private painterService: PainterService,
     private drawingsService: DrawingsService,
-    private textEditorService: TextEditorService
+    private textEditorService: TextEditorService,
+    private historyService: HistoryService
   ) {}
 
   start(e: MouseEvent): void {
@@ -104,6 +108,9 @@ export class ToolTextService implements ToolHandler {
       };
 
       this.drawingsService.append(drawing);
+
+      const command = new CreateDrawingCommand(drawing, this.injector);
+      this.historyService.add(command);
 
       this.painterService.paint();
     }

@@ -69,11 +69,11 @@ export class ToolSelectionSelectService implements ToolHandler {
 
     this.isHandling = false;
 
-    this.toolkitService.setExecutedTool("");
-
     this.selectionService.removeSelection();
 
     this.painterService.paint();
+
+    this.toolkitService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

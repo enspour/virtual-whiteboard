@@ -28,8 +28,8 @@ export class CreateDrawingCommand implements HistoryCommand {
     this.drawingsOnSelectionService = injector.get(DrawingsOnSelectionService);
   }
 
-  public async exec(): Promise<void> {
-    await this.drawingsService.append(this.args);
+  public exec(): void {
+    this.drawingsService.append(this.args);
 
     this.drawingsOnSelectionService.removeSelection();
     this.drawingsOnSelectionService.addToSelection(this.args);
@@ -37,8 +37,8 @@ export class CreateDrawingCommand implements HistoryCommand {
     this.painterService.paint();
   }
 
-  public async undo(): Promise<void> {
-    await this.drawingsService.remove(this.args.id);
+  public undo(): void {
+    this.drawingsService.remove(this.args.id);
 
     this.drawingsOnSelectionService.removeFromSelection(this.args);
 

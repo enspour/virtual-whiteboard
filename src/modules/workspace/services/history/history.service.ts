@@ -40,13 +40,13 @@ export class HistoryService {
     this.position = position;
   }
 
-  public async exec(command: HistoryCommand) {
+  public exec(command: HistoryCommand) {
     command.exec();
 
-    await this.add(command);
+    this.add(command);
   }
 
-  public async add(command: HistoryCommand) {
+  public add(command: HistoryCommand) {
     if (this.commands.length !== this.position) {
       this.commands = this.commands.slice(0, this.position);
     }
@@ -63,10 +63,10 @@ export class HistoryService {
       position: this.position,
     };
 
-    await this.historyStorage.update(data);
+    this.historyStorage.update(data);
   }
 
-  public async undo() {
+  public undo() {
     if (this.position === 0) {
       return;
     }
@@ -74,10 +74,10 @@ export class HistoryService {
     this.position -= 1;
     this.commands[this.position].undo();
 
-    await this.historyStorage.setPosition(this.position);
+    this.historyStorage.setPosition(this.position);
   }
 
-  public async redo() {
+  public redo() {
     if (this.position === this.commands.length) {
       return;
     }
@@ -85,6 +85,6 @@ export class HistoryService {
     this.commands[this.position].exec();
     this.position += 1;
 
-    await this.historyStorage.setPosition(this.position);
+    this.historyStorage.setPosition(this.position);
   }
 }

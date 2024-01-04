@@ -28,18 +28,18 @@ export class RemoveDrawingsCommand implements HistoryCommand {
     this.drawingsOnSelectionService = injector.get(DrawingsOnSelectionService);
   }
 
-  public async exec(): Promise<void> {
+  public exec(): void {
     const ids = this.args.map((drawing) => drawing.id);
 
-    await this.drawingsService.remove(...ids);
+    this.drawingsService.remove(...ids);
 
     this.drawingsOnSelectionService.removeFromSelection(...this.args);
 
     this.painterService.paint();
   }
 
-  public async undo(): Promise<void> {
-    await this.drawingsService.append(...this.args);
+  public undo(): void {
+    this.drawingsService.append(...this.args);
 
     this.drawingsOnSelectionService.removeSelection();
     this.drawingsOnSelectionService.addToSelection(...this.args);

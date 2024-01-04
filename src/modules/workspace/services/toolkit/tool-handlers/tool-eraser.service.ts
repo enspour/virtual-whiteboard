@@ -57,20 +57,20 @@ export class ToolEraserService implements ToolHandler {
 
     this.isHandling = false;
 
-    this.toolkitService.setExecutedTool("");
-
     const drawings = this.drawingsTrashService.Trash;
 
-    this.drawingsTrashService.clear().then(() => {
-      this.drawingsOnSelectionService.removeFromSelection(...drawings);
+    this.drawingsTrashService.clear();
 
-      this.painterService.paint();
+    if (drawings.length) {
+      const command = new RemoveDrawingsCommand(drawings, this.injector);
+      this.historyService.add(command);
+    }
 
-      if (drawings.length) {
-        const command = new RemoveDrawingsCommand(drawings, this.injector);
-        this.historyService.add(command);
-      }
-    });
+    this.drawingsOnSelectionService.removeFromSelection(...drawings);
+
+    this.painterService.paint();
+
+    this.toolkitService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

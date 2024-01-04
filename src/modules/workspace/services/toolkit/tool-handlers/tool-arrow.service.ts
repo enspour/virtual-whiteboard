@@ -94,12 +94,12 @@ export class ToolArrowService implements ToolHandler {
 
     this.isHandling = false;
 
-    this.toolkitService.setExecutedTool("");
-
     if (this.drawing.width || this.drawing.height) {
       const command = new CreateDrawingCommand(this.drawing, this.injector);
       this.historyService.add(command);
     }
+
+    this.toolkitService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

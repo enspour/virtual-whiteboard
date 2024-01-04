@@ -24,10 +24,10 @@ export class DrawingsTrashService {
     return this.trash.has(drawing);
   }
 
-  public async clear() {
+  public clear() {
     const ids = [...this.trash].map((drawing) => drawing.id);
 
-    await this.drawingsService.remove(...ids);
+    this.drawingsService.remove(...ids);
 
     this.trash.clear();
   }

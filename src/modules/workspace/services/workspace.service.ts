@@ -142,7 +142,7 @@ export class WorkspaceService {
 
     const ids = drawings.map((drawing) => drawing.id);
 
-    await this.drawingsService.remove(...ids);
+    this.drawingsService.remove(...ids);
 
     this.drawingsOnSelectionService.removeSelection();
 

@@ -23,7 +23,7 @@ export class DrawingsService {
     this.drawings.next(drawings);
   }
 
-  public async append(...drawings: Drawing[]) {
+  public append(...drawings: Drawing[]) {
     let newDrawings = [...this.drawings.value];
 
     for (const drawing of drawings) {
@@ -43,10 +43,10 @@ export class DrawingsService {
     }
 
     this.drawings.next(newDrawings);
-    await this.drawingStorage.setDrawings(this.drawings.value);
+    this.drawingStorage.setDrawings(this.drawings.value);
   }
 
-  public async remove(...ids: string[]) {
+  public remove(...ids: string[]) {
     let count = 0;
 
     let newDrawings = [...this.drawings.value];
@@ -66,7 +66,7 @@ export class DrawingsService {
 
     if (count) {
       this.drawings.next(newDrawings);
-      await this.drawingStorage.setDrawings(this.drawings.value);
+      this.drawingStorage.setDrawings(this.drawings.value);
     }
   }
 }
