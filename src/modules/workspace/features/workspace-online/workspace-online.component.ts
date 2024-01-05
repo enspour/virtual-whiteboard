@@ -12,11 +12,12 @@ import { HeaderToolkitComponent } from "@workspace/components/ui/header-toolkit/
 import {
   BoardPainterService,
   DestroyService,
+  DrawingsOnEditService,
   DrawingsOnScreenService,
   DrawingsOnSelectionService,
+  DrawingsOnTrashService,
   DrawingsPainterService,
   DrawingsService,
-  DrawingsTrashService,
   EventsService,
   HistoryRestoreService,
   HistoryService,
@@ -122,7 +123,8 @@ import {
     DrawingsService,
     DrawingsOnScreenService,
     DrawingsOnSelectionService,
-    DrawingsTrashService,
+    DrawingsOnTrashService,
+    DrawingsOnEditService,
 
     SelectionService,
 

@@ -15,8 +15,16 @@ export class ToolTextCreateService implements ToolHandler {
     private textEditorCreateService: TextEditorCreateService
   ) {}
 
-  start(e: MouseEvent): void {
+  start(): void {
     this.isHandling = true;
+  }
+
+  end(e: MouseEvent): void {
+    if (!this.isHandling) {
+      return;
+    }
+
+    this.isHandling = false;
 
     this.toolkitService.setExecutedTool("text");
 
@@ -30,14 +38,6 @@ export class ToolTextCreateService implements ToolHandler {
     const options = { ...this.tool };
 
     this.textEditorCreateService.create(position, options);
-  }
-
-  end(): void {
-    if (!this.isHandling) {
-      return;
-    }
-
-    this.isHandling = false;
 
     this.toolkitService.setExecutedTool("");
   }

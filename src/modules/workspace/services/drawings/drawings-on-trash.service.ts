@@ -5,30 +5,30 @@ import { DrawingsService } from "@workspace/services";
 import { Drawing } from "@workspace/interfaces";
 
 @Injectable()
-export class DrawingsTrashService {
-  private trash = new Set<Drawing>();
+export class DrawingsOnTrashService {
+  private drawingsOnTrash = new Set<Drawing>();
 
   constructor(private drawingsService: DrawingsService) {}
 
-  get Trash() {
-    return [...this.trash];
+  get DrawingsOnTrash() {
+    return [...this.drawingsOnTrash];
   }
 
   public append(...drawings: Drawing[]) {
     for (const drawing of drawings) {
-      this.trash.add(drawing);
+      this.drawingsOnTrash.add(drawing);
     }
   }
 
   public has(drawing: Drawing) {
-    return this.trash.has(drawing);
+    return this.drawingsOnTrash.has(drawing);
   }
 
   public clear() {
-    const ids = [...this.trash].map((drawing) => drawing.id);
+    const ids = [...this.drawingsOnTrash].map((drawing) => drawing.id);
 
     this.drawingsService.remove(...ids);
 
-    this.trash.clear();
+    this.drawingsOnTrash.clear();
   }
 }

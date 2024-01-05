@@ -1,4 +1,4 @@
-import { Injectable, Injector } from "@angular/core";
+import { ChangeDetectorRef, Injectable, Injector } from "@angular/core";
 
 import { nanoid } from "nanoid";
 
@@ -23,6 +23,7 @@ import {
 export class TextEditorCreateService {
   constructor(
     private injector: Injector,
+    private cdRef: ChangeDetectorRef,
     private screenService: ScreenService,
     private painterService: PainterService,
     private historyService: HistoryService,
@@ -36,6 +37,8 @@ export class TextEditorCreateService {
     this.painterService.paint();
 
     const textEditor = this.textEditorService.open("", position, options);
+
+    this.cdRef.detectChanges();
 
     textEditor.channel$.subscribe((event) => {
       if (event.type === "closing") {

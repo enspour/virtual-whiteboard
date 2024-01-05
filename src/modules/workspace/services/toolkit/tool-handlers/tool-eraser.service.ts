@@ -5,7 +5,7 @@ import { Subject, takeUntil } from "rxjs";
 import {
   DrawingsOnScreenService,
   DrawingsOnSelectionService,
-  DrawingsTrashService,
+  DrawingsOnTrashService,
   HistoryService,
   PainterService,
   RemoveDrawingsCommand,
@@ -31,7 +31,7 @@ export class ToolEraserService implements ToolHandler {
     private screenService: ScreenService,
     private painterService: PainterService,
     private historyService: HistoryService,
-    private drawingsTrashService: DrawingsTrashService,
+    private drawingsOnTrashService: DrawingsOnTrashService,
     private drawingsOnScreenServices: DrawingsOnScreenService,
     private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {}
@@ -60,9 +60,9 @@ export class ToolEraserService implements ToolHandler {
 
     this.isHandling = false;
 
-    const drawings = this.drawingsTrashService.Trash;
+    const drawings = this.drawingsOnTrashService.DrawingsOnTrash;
 
-    this.drawingsTrashService.clear();
+    this.drawingsOnTrashService.clear();
 
     if (drawings.length) {
       const command = new RemoveDrawingsCommand(drawings, this.injector);
@@ -104,7 +104,7 @@ export class ToolEraserService implements ToolHandler {
 
     for (const drawing of drawings) {
       if (isPointOnDrawing(point, drawing)) {
-        this.drawingsTrashService.append(drawing);
+        this.drawingsOnTrashService.append(drawing);
       }
     }
 

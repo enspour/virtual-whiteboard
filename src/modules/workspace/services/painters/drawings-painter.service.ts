@@ -6,8 +6,9 @@ import {
   DrawingEllipsePainter,
   DrawingRectanglePainter,
   DrawingTextPainter,
+  DrawingsOnEditService,
   DrawingsOnScreenService,
-  DrawingsTrashService,
+  DrawingsOnTrashService,
   ScreenService,
 } from "@workspace/services";
 
@@ -21,7 +22,8 @@ export class DrawingsPainterService implements Painter {
 
   constructor(
     private screenService: ScreenService,
-    private drawingsTrashService: DrawingsTrashService,
+    private drawingsOnEditService: DrawingsOnEditService,
+    private drawingsOnTrashService: DrawingsOnTrashService,
     private drawingsOnScreenService: DrawingsOnScreenService
   ) {}
 
@@ -49,7 +51,11 @@ export class DrawingsPainterService implements Painter {
     const drawings = this.drawingsOnScreenService.DrawingsOnScreen;
 
     for (const drawing of drawings) {
-      const inTrash = this.drawingsTrashService.has(drawing);
+      if (this.drawingsOnEditService.has(drawing)) {
+        continue;
+      }
+
+      const inTrash = this.drawingsOnTrashService.has(drawing);
 
       this.painters[drawing.type].paint(drawing, scroll, sizes, scale, inTrash);
     }
