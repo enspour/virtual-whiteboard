@@ -71,12 +71,6 @@ export class TextEditorEditService {
   ) {
     const { text, width, height } = event;
 
-    if (drawing.text === text) {
-      this.drawingsService.append(drawing);
-      this.painterService.paint();
-      return;
-    }
-
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
@@ -97,7 +91,6 @@ export class TextEditorEditService {
     };
 
     this.drawingsOnEditService.remove(drawing);
-
     this.drawingsService.append(newDrawing);
 
     const args = { old: drawing, new: newDrawing };

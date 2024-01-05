@@ -2,10 +2,11 @@
   #editor
   class="text-editor"
   contenteditable="true"
-  tabindex="0"
+  tabindex="1"
   [style.top]="position.y + 'px'"
   [style.left]="position.x + 'px'"
   [style.color]="options.textColor"
   [style.font-size]="options.textSize * scale + 'px'"
   [style.line-height]="options.lineHeight * scale + 'px'"
+  (keydown)="onKeyDown($event)"
 ></div>

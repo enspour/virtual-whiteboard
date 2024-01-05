@@ -1,9 +1,10 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, DOCUMENT } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -44,6 +45,7 @@ export class TextEditorComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private cdRef: ChangeDetectorRef,
     private appService: AppService,
     private screenService: ScreenService
@@ -65,28 +67,21 @@ export class TextEditorComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
       });
 
-    const editor = this.editorRef.nativeElement;
+    this.editorRef.nativeElement.innerText = this.text;
 
-    editor.innerText = this.text;
-
-    setTimeout(() => editor.focus(), 0);
-
-    if (this.text) {
-      const range = document.createRange();
-      range.selectNodeContents(editor);
-
-      const selection = window.getSelection();
-
-      if (selection) {
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-    }
+    this.selectAllText();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  public onKeyDown(event: KeyboardEvent) {
+    if (event.code === "Tab") {
+      event.preventDefault();
+      this.onTabClick();
+    }
   }
 
   private onAppClick(event: MouseEvent) {
@@ -96,6 +91,39 @@ export class TextEditorComponent implements OnInit, OnDestroy {
 
     if (!element.contains(target)) {
       this.close();
+    }
+  }
+
+  private onTabClick() {
+    const selection = this.document.defaultView?.getSelection();
+
+    if (selection) {
+      const range = selection.getRangeAt(0);
+
+      const tab = "\u00a0\u00a0\u00a0\u00a0";
+      const tabNode = this.document.createTextNode(tab);
+
+      range.insertNode(tabNode);
+
+      range.setStartAfter(tabNode);
+      range.setEndAfter(tabNode);
+
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+
+  private selectAllText() {
+    const editor = this.editorRef.nativeElement;
+
+    const range = this.document.createRange();
+    range.selectNodeContents(editor);
+
+    const selection = this.document.defaultView?.getSelection();
+
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   }
 
