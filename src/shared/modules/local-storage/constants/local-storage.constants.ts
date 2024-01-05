@@ -1,14 +1,14 @@
 import { LocalStoragePairs } from "../interfaces";
 
-import { TOOLKIT } from "@workspace/constants";
+import { TOOLS } from "@workspace/constants";
 
 export const LS_THEME = "__v1/theme";
 
 export const LS_SCREEN_SCROLL = "__v1/screen/scroll";
 export const LS_SCREEN_SCALE = "__v1/screen/scale";
 
-export const LS_TOOLKIT = "__v1/toolkit";
-export const LS_SELECTED_TOOL = "__v1/toolkit/selected";
+export const LS_TOOLS = "__v1/tools";
+export const LS_SELECTED_TOOL = "__v1/tools/selected";
 
 export const LS_DRAWINGS = "__v1/drawings";
 
@@ -24,8 +24,8 @@ export const LS_DEFAULTS: LocalStoragePairs = {
     y: 0,
   },
 
-  [LS_TOOLKIT]: TOOLKIT,
-  [LS_SELECTED_TOOL]: TOOLKIT[0].name,
+  [LS_TOOLS]: TOOLS,
+  [LS_SELECTED_TOOL]: "hand",
 
   [LS_DRAWINGS]: [],
 

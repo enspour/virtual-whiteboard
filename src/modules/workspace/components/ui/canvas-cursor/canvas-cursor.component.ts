@@ -8,7 +8,11 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 import { ToolkitService } from "@workspace/services";
 
-import { CursorStatus, ExecutableTool } from "@workspace/interfaces";
+import {
+  CursorStatus,
+  ExecutableTool,
+  SelectableTool,
+} from "@workspace/interfaces";
 
 import { TOOL_CURSOR } from "@workspace/constants";
 
@@ -23,7 +27,7 @@ import { CanvasComponent } from "../canvas/canvas.component";
 export class CanvasCursorComponent implements OnInit {
   @Input({ required: true }) canvas!: CanvasComponent;
 
-  private selectedTool!: ExecutableTool;
+  private selectedTool!: SelectableTool;
   private executedTool!: ExecutableTool | null;
 
   private captured = false;
@@ -42,7 +46,7 @@ export class CanvasCursorComponent implements OnInit {
     this.setSelectedToolCursor();
   }
 
-  private onSelectedToolChange(tool: ExecutableTool) {
+  private onSelectedToolChange(tool: SelectableTool) {
     this.selectedTool = tool;
     this.setSelectedToolCursor();
   }

@@ -1,6 +1,7 @@
-import { ExecutableTool } from "..";
+import { ExecutableTool, SelectableTool } from "..";
 
 export type Cursor =
+  | "auto"
   | "default"
   | "grab"
   | "grabbing"
@@ -9,7 +10,7 @@ export type Cursor =
   | "move";
 
 export type CursorStatus =
-  | ExecutableTool["name"]
+  | SelectableTool["name"]
   | `executed--${ExecutableTool["name"]}`;
 
 export type ToolCursors = Record<CursorStatus, Cursor>;

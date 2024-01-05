@@ -1,6 +1,7 @@
 import { Theme } from "../../theme/interfaces/theme.interface";
 import {
   Drawing,
+  ExecutableTool,
   HistoryStorageData,
   ScreenScale,
   ScreenScroll,
@@ -15,7 +16,7 @@ import {
   LS_SCREEN_SCROLL,
   LS_SELECTED_TOOL,
   LS_THEME,
-  LS_TOOLKIT,
+  LS_TOOLS,
 } from "../constants";
 
 export interface LocalStoragePairs {
@@ -24,7 +25,7 @@ export interface LocalStoragePairs {
   [LS_SCREEN_SCROLL]: ScreenScroll;
   [LS_SCREEN_SCALE]: ScreenScale;
 
-  [LS_TOOLKIT]: SelectableTool[];
+  [LS_TOOLS]: (ExecutableTool | SelectableTool)[];
   [LS_SELECTED_TOOL]: SelectableTool["name"];
 
   [LS_DRAWINGS]: Drawing[];

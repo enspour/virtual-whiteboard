@@ -2,15 +2,15 @@ import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { LS_SELECTED_TOOL, LS_TOOLKIT, LocalStorageService } from "@shared";
+import { LS_SELECTED_TOOL, LS_TOOLS, LocalStorageService } from "@shared";
 
 import { ExecutableTool, SelectableTool } from "@workspace/interfaces";
 
-import { EXECUTABLE_TOOLS } from "@workspace/constants";
+import { isSelectedTool } from "@workspace/guards";
 
 @Injectable()
 export class ToolkitService {
-  private executableTools = EXECUTABLE_TOOLS;
+  private tools: (ExecutableTool | SelectableTool)[];
 
   private toolkit: BehaviorSubject<SelectableTool[]>;
   public toolkit$: Observable<SelectableTool[]>;
@@ -22,7 +22,9 @@ export class ToolkitService {
   public executedTool$ = this.executedTool.asObservable();
 
   constructor(private localStorageService: LocalStorageService) {
-    const toolkit = localStorageService.get(LS_TOOLKIT);
+    this.tools = localStorageService.get(LS_TOOLS);
+
+    const toolkit = this.tools.filter(isSelectedTool);
 
     this.toolkit = new BehaviorSubject(toolkit);
     this.toolkit$ = this.toolkit.asObservable();
@@ -46,7 +48,7 @@ export class ToolkitService {
   }
 
   public setToolkit(toolkit: SelectableTool[]) {
-    this.localStorageService.set(LS_TOOLKIT, toolkit);
+    this.localStorageService.set(LS_TOOLS, toolkit);
     this.toolkit.next(toolkit);
   }
 
@@ -72,12 +74,12 @@ export class ToolkitService {
   }
 
   public setExecutedTool(name: ExecutableTool["name"] | "") {
-    const index = this.executableTools.findIndex((tool) => tool.name === name);
+    const index = this.tools.findIndex((tool) => tool.name === name);
 
     if (index !== -1) {
-      this.executedTool.next(this.executableTools[index]);
-    } else {
-      this.executedTool.next(null);
+      return this.executedTool.next(this.tools[index]);
     }
+
+    this.executedTool.next(null);
   }
 }

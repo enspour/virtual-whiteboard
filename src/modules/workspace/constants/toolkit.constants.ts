@@ -6,9 +6,18 @@ import {
   ToolTips,
 } from "@workspace/interfaces";
 
-export const TOOLKIT: SelectableTool[] = [
+export const EXECUTABLE_TOOLS: ExecutableTool[] = [
+  { name: "selection-select" },
+  { name: "selection-move" },
+  { name: "selection-click" },
+  { name: "text-create" },
+  { name: "text-edit" },
+];
+
+export const SELECTABLE_TOOLS: SelectableTool[] = [
   { name: "hand" },
   { name: "selection" },
+
   {
     name: "brush",
     strokeColor: "#eeeeee",
@@ -30,6 +39,7 @@ export const TOOLKIT: SelectableTool[] = [
     strokeColor: "#eeeeee",
     strokeWidth: 2,
   },
+
   {
     name: "text",
     textColor: "#eeeeee",
@@ -40,14 +50,9 @@ export const TOOLKIT: SelectableTool[] = [
   { name: "eraser" },
 ];
 
-export const EXECUTABLE_TOOLS: ExecutableTool[] = [
-  ...TOOLKIT,
-  {
-    name: "selection-select",
-  },
-  {
-    name: "selection-move",
-  },
+export const TOOLS: (ExecutableTool | SelectableTool)[] = [
+  ...EXECUTABLE_TOOLS,
+  ...SELECTABLE_TOOLS,
 ];
 
 export const TOOL_ICONS: ToolIcons = {
@@ -67,12 +72,9 @@ export const TOOL_CURSOR: ToolCursors = {
 
   selection: "default",
   "executed--selection": "default",
-
-  "selection-select": "default",
   "executed--selection-select": "default",
-
-  "selection-move": "move",
   "executed--selection-move": "move",
+  "executed--selection-click": "auto",
 
   brush: "crosshair",
   "executed--brush": "crosshair",
@@ -88,6 +90,8 @@ export const TOOL_CURSOR: ToolCursors = {
 
   text: "text",
   "executed--text": "text",
+  "executed--text-create": "auto",
+  "executed--text-edit": "auto",
 
   eraser: "crosshair",
   "executed--eraser": "crosshair",

@@ -20,9 +20,6 @@ import { ToolHandler } from "@workspace/interfaces";
 export class ToolSelectionService implements ToolHandler {
   private handler!: ToolHandler;
 
-  private initialX!: number;
-  private initialY!: number;
-
   constructor(
     private screenService: ScreenService,
     private drawingsOnScreenService: DrawingsOnScreenService,
@@ -33,13 +30,15 @@ export class ToolSelectionService implements ToolHandler {
   ) {}
 
   start(e: MouseEvent): void {
+    this.toolSelectionClickService.start(e);
+
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
-    this.initialX = e.clientX / scale - scroll.x;
-    this.initialY = e.clientY / scale - scroll.y;
+    const x = e.clientX / scale - scroll.x;
+    const y = e.clientY / scale - scroll.y;
 
-    const point = { x: this.initialX, y: this.initialY };
+    const point = { x, y };
 
     const drawingsOnSelection =
       this.drawingsOnSelectionService.DrawingsOnSelection;
@@ -68,20 +67,12 @@ export class ToolSelectionService implements ToolHandler {
   }
 
   end(e: MouseEvent): void {
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
-
-    const x = e.clientX / scale - scroll.x;
-    const y = e.clientY / scale - scroll.y;
-
-    if (x - this.initialX === 0 && y - this.initialY === 0) {
-      this.toolSelectionClickService.click(e);
-    }
-
+    this.toolSelectionClickService.end(e);
     this.handler.end(e);
   }
 
   process(e: MouseEvent): void {
+    this.toolSelectionClickService.process(e);
     this.handler.process(e);
   }
 }
