@@ -2,14 +2,14 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 
-import { SharedModule } from "@shared/shared.module";
+import {
+  AppService,
+  LocalStorageService,
+  SharedModule,
+  ThemeService,
+} from "@shared";
 
 import { LayoutComponent } from "./components/layout/layout.component";
-
-import { AppService } from "@shared/modules/app/services/app.service";
-
-import { LocalStorageService } from "@local-storage";
-import { ThemeService } from "@theme";
 
 @Component({
   selector: "app-root",

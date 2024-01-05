@@ -4,11 +4,7 @@ import {
   HostListener,
 } from "@angular/core";
 
-import { SharedModule } from "@shared/shared.module";
-
-import { AppService } from "@shared/modules/app/services/app.service";
-
-import { AppSizes } from "@shared/modules/app/interfaces";
+import { AppService, AppSizes, SharedModule } from "@shared";
 
 @Component({
   selector: "app-layout",

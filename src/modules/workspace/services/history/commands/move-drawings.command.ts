@@ -1,8 +1,10 @@
 import { Injector } from "@angular/core";
 
-import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
-import { DrawingsService } from "@workspace/services/drawings/drawings.service";
-import { PainterService } from "@workspace/services/painters/painter.service";
+import {
+  DrawingsOnSelectionService,
+  DrawingsService,
+  PainterService,
+} from "@workspace/services";
 
 import { updateDrawingCoordinates } from "@workspace/utils";
 

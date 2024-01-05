@@ -2,17 +2,18 @@ import { Injectable } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
-import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
-import { SelectionService } from "@workspace/services/selection/selection.service";
+import {
+  PainterService,
+  ScreenService,
+  SelectionService,
+  ToolkitService,
+} from "@workspace/services";
 
 import {
   Point,
   SelectionCoordinates,
   ToolHandler,
 } from "@workspace/interfaces";
-
-import { ToolkitService } from "../toolkit.service";
 
 @Injectable()
 export class ToolSelectionSelectService implements ToolHandler {

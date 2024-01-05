@@ -2,11 +2,13 @@ import { Injectable, inject } from "@angular/core";
 
 import { combineLatest, takeUntil } from "rxjs";
 
-import { Drawing } from "@workspace/interfaces";
+import {
+  DestroyService,
+  DrawingsService,
+  ScreenService,
+} from "@workspace/services";
 
-import { DestroyService } from "../destroy.service";
-import { ScreenService } from "../screen/screen.service";
-import { DrawingsService } from "./drawings.service";
+import { Drawing } from "@workspace/interfaces";
 
 @Injectable()
 export class DrawingsOnScreenService {

@@ -2,15 +2,11 @@ import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
+import { LS_SELECTED_TOOL, LS_TOOLKIT, LocalStorageService } from "@shared";
+
 import { ExecutableTool, SelectableTool } from "@workspace/interfaces";
 
 import { EXECUTABLE_TOOLS } from "@workspace/constants";
-
-import {
-  LS_SELECTED_TOOL,
-  LS_TOOLKIT,
-  LocalStorageService,
-} from "@local-storage";
 
 @Injectable()
 export class ToolkitService {

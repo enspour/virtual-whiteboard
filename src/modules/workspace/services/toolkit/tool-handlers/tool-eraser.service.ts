@@ -2,19 +2,20 @@ import { Injectable, Injector } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
-import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
-import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
-import { DrawingsTrashService } from "@workspace/services/drawings/drawings-trash.service";
-import { RemoveDrawingsCommand } from "@workspace/services/history/commands/remove-drawings.command";
-import { HistoryService } from "@workspace/services/history/history.service";
-import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import {
+  DrawingsOnScreenService,
+  DrawingsOnSelectionService,
+  DrawingsTrashService,
+  HistoryService,
+  PainterService,
+  RemoveDrawingsCommand,
+  ScreenService,
+  ToolkitService,
+} from "@workspace/services";
 
 import { isPointOnDrawing } from "@workspace/utils";
 
 import { Point, ToolHandler } from "@workspace/interfaces";
-
-import { ToolkitService } from "../toolkit.service";
 
 @Injectable()
 export class ToolEraserService implements ToolHandler {
@@ -37,6 +38,8 @@ export class ToolEraserService implements ToolHandler {
 
   start(e: MouseEvent): void {
     this.isHandling = true;
+
+    this.drawingsOnSelectionService.removeSelection();
 
     this.toolkitService.setExecutedTool("eraser");
 

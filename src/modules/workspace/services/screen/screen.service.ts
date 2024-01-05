@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { AppService } from "@shared/modules/app/services/app.service";
+import { AppService } from "@shared";
 
 import {
   Point,

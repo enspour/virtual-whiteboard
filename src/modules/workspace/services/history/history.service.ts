@@ -2,15 +2,17 @@ import { Inject, Injectable, inject } from "@angular/core";
 
 import { takeUntil } from "rxjs";
 
-import { AppService } from "@shared/modules/app/services/app.service";
+import { AppService } from "@shared";
 
-import { HistoryStorage, HistoryStorageData } from "@workspace/interfaces";
-import { HistoryCommand } from "@workspace/interfaces/history/history-command.interface";
+import { DestroyService, HistoryRestoreService } from "@workspace/services";
+
+import {
+  HistoryCommand,
+  HistoryStorage,
+  HistoryStorageData,
+} from "@workspace/interfaces";
 
 import { HistoryStorageToken } from "@workspace/tokens";
-
-import { DestroyService } from "../destroy.service";
-import { HistoryRestoreService } from "./history-restore.service";
 
 @Injectable()
 export class HistoryService {

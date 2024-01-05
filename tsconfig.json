@@ -24,9 +24,7 @@
     "baseUrl": "./src",
     "paths": {
       "@utils": ["./utils"],
-
-      "@local-storage": ["./shared/modules/local-storage"],
-      "@theme": ["./shared/modules/theme"],
+      "@shared": ["./shared"],
 
       "@shared/*": ["./shared/*"],
       "@assets/*": ["./assets/*"],

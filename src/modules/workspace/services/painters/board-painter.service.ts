@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 
+import { ThemeService } from "@shared";
+
+import { ScreenService } from "@workspace/services";
+
 import { Painter } from "@workspace/interfaces";
 
 import { PAINTER_BOARD_STEP } from "@workspace/constants";
-
-import { ThemeService } from "@theme";
-
-import { ScreenService } from "../screen/screen.service";
 
 @Injectable()
 export class BoardPainterService implements Painter {

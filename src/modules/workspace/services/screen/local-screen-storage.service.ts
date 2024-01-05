@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
 
 import {
+  LS_SCREEN_SCALE,
+  LS_SCREEN_SCROLL,
+  LocalStorageService,
+} from "@shared";
+
+import {
   ScreenScale,
   ScreenScroll,
   ScreenStorage,
   ScreenStorageData,
 } from "@workspace/interfaces";
-
-import {
-  LS_SCREEN_SCALE,
-  LS_SCREEN_SCROLL,
-  LocalStorageService,
-} from "@local-storage";
 
 @Injectable()
 export class LocalScreenStorageService implements ScreenStorage {

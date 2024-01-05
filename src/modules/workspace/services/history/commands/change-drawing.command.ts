@@ -12,17 +12,20 @@ import {
   HistoryCommandName,
 } from "@workspace/interfaces";
 
-export type CreateDrawingCommandArgs = Drawing;
+export type ChangeDrawingCommandArgs = {
+  old: Drawing;
+  new: Drawing;
+};
 
-export class CreateDrawingCommand implements HistoryCommand {
-  public name: HistoryCommandName = "create-drawing-command";
+export class ChangeDrawingCommand implements HistoryCommand {
+  public name: HistoryCommandName = "change-drawing-command";
 
   private painterService: PainterService;
   private drawingsService: DrawingsService;
   private drawingsOnSelectionService: DrawingsOnSelectionService;
 
   constructor(
-    public args: CreateDrawingCommandArgs,
+    public args: ChangeDrawingCommandArgs,
     injector: Injector
   ) {
     this.painterService = injector.get(PainterService);
@@ -31,18 +34,19 @@ export class CreateDrawingCommand implements HistoryCommand {
   }
 
   public exec(): void {
-    this.drawingsService.append(this.args);
+    this.drawingsService.append(this.args.new);
 
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(this.args);
+    this.drawingsOnSelectionService.addToSelection(this.args.new);
 
     this.painterService.paint();
   }
 
   public undo(): void {
-    this.drawingsService.remove(this.args.id);
+    this.drawingsService.append(this.args.old);
 
-    this.drawingsOnSelectionService.removeFromSelection(this.args);
+    this.drawingsOnSelectionService.removeSelection();
+    this.drawingsOnSelectionService.addToSelection(this.args.old);
 
     this.painterService.paint();
   }

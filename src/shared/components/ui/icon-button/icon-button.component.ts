@@ -9,7 +9,7 @@ import {
   Output,
 } from "@angular/core";
 
-import { ThemePalette, ThemePaletteToken } from "@theme";
+import { ThemePalette, ThemePaletteToken } from "@shared";
 
 import { IconComponent } from "../icon/icon.component";
 

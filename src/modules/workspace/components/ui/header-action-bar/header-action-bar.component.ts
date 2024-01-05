@@ -10,12 +10,9 @@ import {
 
 import { takeUntil } from "rxjs";
 
-import { SharedModule } from "@shared/shared.module";
+import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 
-import { DestroyService } from "@workspace/services/destroy.service";
-import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
-
-import { ThemePalette, ThemePaletteToken } from "@theme";
+import { DestroyService, ToolkitService } from "@workspace/services";
 
 @Component({
   selector: "app-header-action-bar",

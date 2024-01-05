@@ -2,18 +2,19 @@ import { Injectable, Injector } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
-import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
-import { DrawingsService } from "@workspace/services/drawings/drawings.service";
-import { MoveDrawingsCommand } from "@workspace/services/history/commands/move-drawings.command";
-import { HistoryService } from "@workspace/services/history/history.service";
-import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import {
+  DrawingsOnSelectionService,
+  DrawingsService,
+  HistoryService,
+  MoveDrawingsCommand,
+  PainterService,
+  ScreenService,
+  ToolkitService,
+} from "@workspace/services";
 
 import { updateDrawingCoordinates } from "@workspace/utils";
 
 import { Point, ToolHandler } from "@workspace/interfaces";
-
-import { ToolkitService } from "../toolkit.service";
 
 @Injectable()
 export class ToolSelectionMoveService implements ToolHandler {

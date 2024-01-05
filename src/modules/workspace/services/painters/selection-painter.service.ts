@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 
+import { ThemeService } from "@shared";
+
+import {
+  DrawingsOnSelectionService,
+  ScreenService,
+  SelectionService,
+} from "@workspace/services";
+
 import { Drawing, DrawingArrow, Painter } from "@workspace/interfaces";
-
-import { ThemeService } from "@theme";
-
-import { DrawingsOnSelectionService } from "../drawings/drawings-on-selection.service";
-import { ScreenService } from "../screen/screen.service";
-import { SelectionService } from "../selection/selection.service";
 
 @Injectable()
 export class SelectionPainterService implements Painter {

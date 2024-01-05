@@ -9,13 +9,12 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 import { nanoid } from "nanoid";
 
+import { AppService } from "@shared";
 import {
   Portal,
   PortalsController,
   portalsControllerToken,
 } from "@shared/components/utils/portals";
-
-import { AppService } from "@shared/modules/app/services/app.service";
 
 @Component({
   selector: "app-popup",

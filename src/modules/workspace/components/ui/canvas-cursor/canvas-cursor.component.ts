@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
+import { ToolkitService } from "@workspace/services";
 
 import { CursorStatus, ExecutableTool } from "@workspace/interfaces";
 

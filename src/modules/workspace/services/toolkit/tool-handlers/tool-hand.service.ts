@@ -2,10 +2,9 @@ import { Injectable } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
-import { Point, ToolHandler } from "@workspace/interfaces";
+import { ScreenService, ToolkitService } from "@workspace/services";
 
-import { ScreenService } from "../../screen/screen.service";
-import { ToolkitService } from "../toolkit.service";
+import { Point, ToolHandler } from "@workspace/interfaces";
 
 @Injectable()
 export class ToolHandService implements ToolHandler {

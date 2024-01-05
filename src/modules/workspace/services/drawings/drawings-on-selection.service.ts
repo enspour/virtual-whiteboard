@@ -2,12 +2,14 @@ import { Injectable, inject } from "@angular/core";
 
 import { combineLatest, takeUntil } from "rxjs";
 
-import { Drawing, SelectionCoordinates } from "@workspace/interfaces";
+import {
+  DestroyService,
+  DrawingsOnScreenService,
+  DrawingsService,
+  SelectionService,
+} from "@workspace/services";
 
-import { DestroyService } from "../destroy.service";
-import { SelectionService } from "../selection/selection.service";
-import { DrawingsOnScreenService } from "./drawings-on-screen.service";
-import { DrawingsService } from "./drawings.service";
+import { Drawing, SelectionCoordinates } from "@workspace/interfaces";
 
 @Injectable()
 export class DrawingsOnSelectionService {

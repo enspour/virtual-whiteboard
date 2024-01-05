@@ -7,9 +7,11 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { EventsService } from "@workspace/services/events.service";
-import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import {
+  EventsService,
+  PainterService,
+  ScreenService,
+} from "@workspace/services";
 
 @Component({
   selector: "app-canvas",

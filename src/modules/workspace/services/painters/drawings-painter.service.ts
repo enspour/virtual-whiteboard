@@ -1,16 +1,17 @@
 import { Injectable } from "@angular/core";
 
-import { Drawing, DrawingPainter } from "@workspace/interfaces";
-import { Painter } from "@workspace/interfaces";
+import {
+  DrawingArrowPainter,
+  DrawingBrushPainter,
+  DrawingEllipsePainter,
+  DrawingRectanglePainter,
+  DrawingTextPainter,
+  DrawingsOnScreenService,
+  DrawingsTrashService,
+  ScreenService,
+} from "@workspace/services";
 
-import { DrawingsOnScreenService } from "../drawings/drawings-on-screen.service";
-import { DrawingsTrashService } from "../drawings/drawings-trash.service";
-import { ScreenService } from "../screen/screen.service";
-import { DrawingArrowPainter } from "./drawings/drawing-arrow.painter";
-import { DrawingBrushPainter } from "./drawings/drawing-brush.painter";
-import { DrawingEllipsePainter } from "./drawings/drawing-ellipse.painter";
-import { DrawingRectanglePainter } from "./drawings/drawing-rectangle.painter";
-import { DrawingTextPainter } from "./drawings/drawing-text.painter";
+import { Drawing, DrawingPainter, Painter } from "@workspace/interfaces";
 
 @Injectable()
 export class DrawingsPainterService implements Painter {

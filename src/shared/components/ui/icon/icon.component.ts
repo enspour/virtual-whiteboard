@@ -8,7 +8,7 @@ import {
 
 import { SvgIconComponent } from "angular-svg-icon";
 
-import { ThemePalette, ThemePaletteToken, ThemeService } from "@theme";
+import { ThemePalette, ThemePaletteToken, ThemeService } from "@shared";
 
 @Component({
   selector: "app-icon",

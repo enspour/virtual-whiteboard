@@ -1,14 +1,15 @@
 import { Injectable } from "@angular/core";
 
-import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import {
+  DrawingsOnScreenService,
+  ScreenService,
+  ToolTextCreateService,
+  ToolTextEditService,
+} from "@workspace/services";
 
 import { findDrawingByPoint } from "@workspace/utils";
 
 import { ToolHandler } from "@workspace/interfaces";
-
-import { ToolTextCreateService } from "./tool-text-create.service";
-import { ToolTextEditService } from "./tool-text-edit.service";
 
 @Injectable()
 export class ToolTextService implements ToolHandler {

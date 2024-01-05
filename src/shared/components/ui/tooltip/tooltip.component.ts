@@ -6,9 +6,7 @@ import {
   Input,
 } from "@angular/core";
 
-import { AppService } from "@shared/modules/app/services/app.service";
-
-import { ThemePalette, ThemePaletteToken } from "@theme";
+import { AppService, ThemePalette, ThemePaletteToken } from "@shared";
 
 @Component({
   templateUrl: "./tooltip.component.html",

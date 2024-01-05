@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 
-import { Drawing } from "@workspace/interfaces";
+import { DrawingsService } from "@workspace/services";
 
-import { DrawingsService } from "./drawings.service";
+import { Drawing } from "@workspace/interfaces";
 
 @Injectable()
 export class DrawingsTrashService {

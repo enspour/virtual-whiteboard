@@ -1,8 +1,13 @@
 import { Injectable } from "@angular/core";
 
-import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
-import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import {
+  DrawingsOnScreenService,
+  DrawingsOnSelectionService,
+  ScreenService,
+  ToolSelectionClickService,
+  ToolSelectionMoveService,
+  ToolSelectionSelectService,
+} from "@workspace/services";
 
 import {
   findDrawingByPoint,
@@ -10,10 +15,6 @@ import {
 } from "@workspace/utils";
 
 import { ToolHandler } from "@workspace/interfaces";
-
-import { ToolSelectionClickService } from "./tool-selection-click.service";
-import { ToolSelectionMoveService } from "./tool-selection-move.service";
-import { ToolSelectionSelectService } from "./tool-selection-select.service";
 
 @Injectable()
 export class ToolSelectionService implements ToolHandler {

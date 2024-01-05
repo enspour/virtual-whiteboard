@@ -1,36 +1,25 @@
-import { ChangeDetectorRef, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 
 import {
-  TextEditorMessageClosing,
-  TextEditorPosition,
-} from "@workspace/components/ui/text-editor/text-editor.interface";
-import { TextEditorService } from "@workspace/components/ui/text-editor/text-editor.service";
-
-import { DrawingsOnScreenService } from "@workspace/services/drawings/drawings-on-screen.service";
-import { DrawingsOnSelectionService } from "@workspace/services/drawings/drawings-on-selection.service";
-import { DrawingsService } from "@workspace/services/drawings/drawings.service";
-import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+  DrawingsOnScreenService,
+  ScreenService,
+  TextEditorEditService,
+  ToolkitService,
+} from "@workspace/services";
 
 import { findDrawingByPoint } from "@workspace/utils";
 
-import { Drawing, Point, ToolHandler } from "@workspace/interfaces";
-
-import { ToolkitService } from "../toolkit.service";
+import { ToolHandler } from "@workspace/interfaces";
 
 @Injectable()
 export class ToolTextEditService implements ToolHandler {
   private isHandling = false;
 
   constructor(
-    private cdRef: ChangeDetectorRef,
     private screenService: ScreenService,
     private toolkitService: ToolkitService,
-    private painterService: PainterService,
-    private drawingsService: DrawingsService,
-    private textEditorService: TextEditorService,
     private drawingsOnScreenService: DrawingsOnScreenService,
-    private drawingsOnSelectionService: DrawingsOnSelectionService
+    private textEditorEditService: TextEditorEditService
   ) {}
 
   start(): void {
@@ -54,7 +43,13 @@ export class ToolTextEditService implements ToolHandler {
 
     const point = { x, y };
 
-    this.edit(point);
+    const drawings = this.drawingsOnScreenService.DrawingsOnScreen;
+
+    const drawing = findDrawingByPoint(point, drawings);
+
+    if (drawing && drawing.type === "text") {
+      this.textEditorEditService.edit(drawing);
+    }
 
     this.toolkitService.setExecutedTool("");
   }
@@ -63,77 +58,5 @@ export class ToolTextEditService implements ToolHandler {
     if (!this.isHandling) {
       return;
     }
-  }
-
-  public edit(point: Point) {
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
-
-    const drawings = this.drawingsOnScreenService.DrawingsOnScreen;
-
-    const drawing = findDrawingByPoint(point, drawings);
-
-    if (!drawing || drawing.type !== "text") {
-      return;
-    }
-
-    this.drawingsOnSelectionService.removeSelection();
-    this.drawingsService.remove(drawing.id);
-    this.painterService.paint();
-
-    const position = {
-      x: (drawing.coordinates.startX + scroll.x) * scale,
-      y: (drawing.coordinates.startY + scroll.y) * scale,
-    };
-
-    const options = { ...drawing };
-
-    const textEditor = this.textEditorService.open(
-      drawing.text,
-      position,
-      options
-    );
-
-    this.cdRef.detectChanges();
-
-    textEditor.channel$.subscribe((message) => {
-      if (message.type === "closing") {
-        this.onTextEditorClosing(message, position, drawing);
-
-        textEditor.channel$.complete();
-        textEditor.close();
-      }
-    });
-  }
-
-  private onTextEditorClosing(
-    message: TextEditorMessageClosing,
-    position: TextEditorPosition,
-    drawing: Drawing
-  ) {
-    const { text, width, height } = message;
-
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
-
-    const x = position.x / scale - scroll.x;
-    const y = position.y / scale - scroll.y;
-
-    const newDrawing = {
-      ...drawing,
-      text,
-      width,
-      height,
-      coordinates: {
-        startX: x,
-        endX: x + width / scale,
-        startY: y,
-        endY: y + height / scale,
-      },
-    };
-
-    this.drawingsService.append(newDrawing);
-
-    this.painterService.paint();
   }
 }

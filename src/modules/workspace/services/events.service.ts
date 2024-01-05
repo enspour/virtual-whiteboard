@@ -2,6 +2,8 @@ import { Injectable, NgZone, inject } from "@angular/core";
 
 import { Observable, Subject, fromEvent, takeUntil, throttleTime } from "rxjs";
 
+import { DestroyService, ToolkitService } from "@workspace/services";
+
 import { getWheelDirection } from "@workspace/utils";
 
 import {
@@ -12,9 +14,6 @@ import {
 } from "@workspace/interfaces";
 
 import { MOUSE_MOVE_THROTTLE } from "@workspace/constants";
-
-import { DestroyService } from "./destroy.service";
-import { ToolkitService } from "./toolkit/toolkit.service";
 
 @Injectable()
 export class EventsService {

@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 
+import { LS_DRAWINGS, LocalStorageService } from "@shared";
+
 import {
   Drawing,
   DrawingStorage,
   DrawingStorageData,
 } from "@workspace/interfaces";
-
-import { LS_DRAWINGS, LocalStorageService } from "@local-storage";
 
 @Injectable()
 export class LocalDrawingStorageService implements DrawingStorage {

@@ -11,13 +11,13 @@ import {
 
 import { takeUntil } from "rxjs";
 
-import { SharedModule } from "@shared/shared.module";
+import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 
-import { DestroyService } from "@workspace/services/destroy.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
-import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
-
-import { ThemePalette, ThemePaletteToken } from "@theme";
+import {
+  DestroyService,
+  ScreenService,
+  ToolkitService,
+} from "@workspace/services";
 
 @Component({
   selector: "app-footer-scale",

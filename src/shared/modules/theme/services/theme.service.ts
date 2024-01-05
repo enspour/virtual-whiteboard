@@ -1,14 +1,12 @@
 import { DOCUMENT } from "@angular/common";
 import { Inject, Injectable } from "@angular/core";
 
-import { LocalStorageService } from "@shared/modules/local-storage/services/local-storage.service";
+import { LS_THEME, LocalStorageService } from "@shared";
 
 import { Theme } from "../interfaces";
 
 import dark from "@assets/themes/dark.theme.json";
 import light from "@assets/themes/light.theme.json";
-
-import { LS_THEME } from "@shared/modules/local-storage";
 
 @Injectable()
 export class ThemeService {

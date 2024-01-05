@@ -10,12 +10,14 @@ import {
   portalsControllerToken,
 } from "@shared/components/utils/portals";
 
-import { TextEditorComponent } from "./text-editor.component";
+import { TextEditorComponent } from "@workspace/components/ui/text-editor/text-editor.component";
+
 import {
   TextEditorChannel,
   TextEditorOptions,
   TextEditorPosition,
-} from "./text-editor.interface";
+  TextEditorText,
+} from "@workspace/interfaces";
 
 @Injectable()
 export class TextEditorService {
@@ -25,7 +27,11 @@ export class TextEditorService {
     private injector: Injector
   ) {}
 
-  open(text: string, position: TextEditorPosition, options: TextEditorOptions) {
+  public open(
+    text: TextEditorText,
+    position: TextEditorPosition,
+    options: TextEditorOptions
+  ) {
     const channel$: TextEditorChannel = new ReplaySubject();
 
     const portal: Portal = {

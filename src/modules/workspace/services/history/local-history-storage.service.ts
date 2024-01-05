@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
 
 import {
+  LS_HISTORY_COMMANDS,
+  LS_HISTORY_POSITION,
+  LocalStorageService,
+} from "@shared";
+
+import {
   HistoryCommand,
   HistoryStorage,
   HistoryStorageData,
 } from "@workspace/interfaces";
-
-import {
-  LS_HISTORY_COMMANDS,
-  LS_HISTORY_POSITION,
-  LocalStorageService,
-} from "@local-storage";
 
 @Injectable()
 export class LocalHistoryStorageService implements HistoryStorage {

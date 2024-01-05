@@ -1,17 +1,20 @@
 import { Inject, Injectable, Injector } from "@angular/core";
 
 import {
+  ChangeDrawingCommand,
+  CreateDrawingCommand,
+  MoveDrawingsCommand,
+  RemoveDrawingsCommand,
+} from "@workspace/services";
+
+import {
   HistoryCommand,
   HistoryCommandName,
+  HistoryRestoreData,
   HistoryStorage,
 } from "@workspace/interfaces";
-import { HistoryRestoreData } from "@workspace/interfaces/history/history-restore.interface";
 
 import { HistoryStorageToken } from "@workspace/tokens";
-
-import { CreateDrawingCommand } from "./commands/create-drawing.command";
-import { MoveDrawingsCommand } from "./commands/move-drawings.command";
-import { RemoveDrawingsCommand } from "./commands/remove-drawings.command";
 
 // eslint-disable-next-line
 type HistoryCommandCreator = (args: any, injector: Injector) => HistoryCommand;
@@ -21,6 +24,8 @@ export class HistoryRestoreService {
   private commandsFactory: Record<HistoryCommandName, HistoryCommandCreator> = {
     "create-drawing-command": (args, injector) =>
       new CreateDrawingCommand(args, injector),
+    "change-drawing-command": (args, injector) =>
+      new ChangeDrawingCommand(args, injector),
     "remove-drawings-command": (args, injector) =>
       new RemoveDrawingsCommand(args, injector),
     "move-drawings-command": (args, injector) =>

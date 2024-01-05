@@ -10,13 +10,13 @@ import {
 
 import { takeUntil } from "rxjs";
 
-import { SharedModule } from "@shared/shared.module";
+import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 
-import { DestroyService } from "@workspace/services/destroy.service";
-import { HistoryService } from "@workspace/services/history/history.service";
-import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
-
-import { ThemePalette, ThemePaletteToken } from "@theme";
+import {
+  DestroyService,
+  HistoryService,
+  ToolkitService,
+} from "@workspace/services";
 
 @Component({
   selector: "app-footer-history",

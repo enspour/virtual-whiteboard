@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
 
-import { Painter } from "@workspace/interfaces";
+import {
+  BoardPainterService,
+  DrawingsPainterService,
+  ScreenService,
+  SelectionPainterService,
+} from "@workspace/services";
 
-import { ScreenService } from "../screen/screen.service";
-import { BoardPainterService } from "./board-painter.service";
-import { DrawingsPainterService } from "./drawings-painter.service";
-import { SelectionPainterService } from "./selection-painter.service";
+import { Painter } from "@workspace/interfaces";
 
 @Injectable()
 export class PainterService implements Painter {

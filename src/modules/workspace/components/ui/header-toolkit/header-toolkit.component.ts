@@ -11,18 +11,14 @@ import {
 
 import { takeUntil } from "rxjs";
 
-import { SharedModule } from "@shared/shared.module";
-
+import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 import { SortableListItemsSwap } from "@shared/components/utils/sortable-list";
 
-import { DestroyService } from "@workspace/services/destroy.service";
-import { ToolkitService } from "@workspace/services/toolkit/toolkit.service";
+import { DestroyService, ToolkitService } from "@workspace/services";
 
-import { SelectableTool } from "modules/workspace/interfaces";
+import { SelectableTool } from "@workspace/interfaces";
 
 import { TOOL_ICONS, TOOL_TIP } from "@workspace/constants";
-
-import { ThemePalette, ThemePaletteToken } from "@theme";
 
 @Component({
   selector: "app-header-toolkit",

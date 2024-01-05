@@ -13,12 +13,15 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 import { Subject, takeUntil } from "rxjs";
 
-import { AppService } from "@shared/modules/app/services/app.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import { AppService } from "@shared";
 
-import { Point } from "@workspace/interfaces";
+import { ScreenService } from "@workspace/services";
 
-import { TextEditorChannel, TextEditorOptions } from "./text-editor.interface";
+import {
+  Point,
+  TextEditorChannel,
+  TextEditorOptions,
+} from "@workspace/interfaces";
 
 @Component({
   selector: "app-text-editor",
@@ -86,18 +89,6 @@ export class TextEditorComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public onInput(event: Event) {
-    const target = event.target as HTMLDivElement;
-
-    this.text = target.innerHTML
-      .replace(/<div><br><\/div>/g, "\n")
-      .replace(/<div>/g, "\n")
-      .replace(/<\/div>/g, "")
-      .replace(/<br>/g, "\n")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">");
-  }
-
   private onAppClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
 
@@ -109,17 +100,23 @@ export class TextEditorComponent implements OnInit, OnDestroy {
   }
 
   private close() {
-    this.text = this.text.trim();
-
     const editor = this.editorRef.nativeElement;
 
-    editor.innerText = this.text;
+    editor.innerHTML = editor.innerHTML
+      .replace(/<div><br><\/div>/g, "<br>")
+      .replace(/<div>/g, "<br>")
+      .replace(/<\/div>/g, "")
+      .replace(/<br>/g, "<br>");
+
+    const text = editor.innerText.trim();
+
+    editor.innerText = text;
 
     const rect = editor.getBoundingClientRect();
 
     this.channel$.next({
       type: "closing",
-      text: this.text,
+      text,
       width: rect.width,
       height: rect.height,
     });

@@ -2,33 +2,33 @@ import { Injectable, Injector, inject } from "@angular/core";
 
 import { Observable, merge, takeUntil } from "rxjs";
 
-import { AppService } from "@shared/modules/app/services/app.service";
+import { AppService } from "@shared";
 
 import {
-  ExecutableTool,
+  DestroyService,
+  DrawingsOnSelectionService,
+  DrawingsService,
+  EventsService,
+  HistoryService,
+  PainterService,
+  RemoveDrawingsCommand,
+  ScreenService,
+  ToolArrowService,
+  ToolBrushService,
+  ToolEllipseService,
+  ToolEraserService,
+  ToolHandService,
+  ToolRectangleService,
+  ToolSelectionService,
+  ToolTextService,
+} from "@workspace/services";
+
+import {
   ScreenEvent,
   ScreenEventHandlers,
   ToolEvent,
   ToolHandlers,
 } from "@workspace/interfaces";
-
-import { DestroyService } from "./destroy.service";
-import { DrawingsOnSelectionService } from "./drawings/drawings-on-selection.service";
-import { DrawingsService } from "./drawings/drawings.service";
-import { EventsService } from "./events.service";
-import { RemoveDrawingsCommand } from "./history/commands/remove-drawings.command";
-import { HistoryService } from "./history/history.service";
-import { PainterService } from "./painters/painter.service";
-import { ScreenService } from "./screen/screen.service";
-import { ToolArrowService } from "./toolkit/tool-handlers/tool-arrow.service";
-import { ToolBrushService } from "./toolkit/tool-handlers/tool-brush.service";
-import { ToolEllipseService } from "./toolkit/tool-handlers/tool-ellipse.service";
-import { ToolEraserService } from "./toolkit/tool-handlers/tool-eraser.service";
-import { ToolHandService } from "./toolkit/tool-handlers/tool-hand.service";
-import { ToolRectangleService } from "./toolkit/tool-handlers/tool-rectangle.service";
-import { ToolSelectionService } from "./toolkit/tool-handlers/tool-selection.service";
-import { ToolTextService } from "./toolkit/tool-handlers/tool-text.service";
-import { ToolkitService } from "./toolkit/toolkit.service";
 
 @Injectable()
 export class WorkspaceService {
@@ -73,7 +73,6 @@ export class WorkspaceService {
     private historyService: HistoryService,
     private painterService: PainterService,
 
-    private toolkitService: ToolkitService,
     private toolHandService: ToolHandService,
     private toolBrushService: ToolBrushService,
     private toolSelectionService: ToolSelectionService,
@@ -106,10 +105,6 @@ export class WorkspaceService {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.onDelete());
 
-    this.toolkitService.executedTool$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((tool) => this.onExecutedTool(tool));
-
     this.eventsService.screenEvents$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onScreenEvent(event));
@@ -125,12 +120,6 @@ export class WorkspaceService {
 
   private onToolkitEvent(event: ToolEvent) {
     this.toolEventHandlers[event.tool][event.type](event.event);
-  }
-
-  private onExecutedTool(tool: ExecutableTool | null) {
-    if (tool && tool.isRemoveSelection) {
-      this.drawingsOnSelectionService.removeSelection();
-    }
   }
 
   private async onDelete() {

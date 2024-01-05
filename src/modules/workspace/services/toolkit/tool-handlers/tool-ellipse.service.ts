@@ -4,11 +4,15 @@ import { Subject, takeUntil } from "rxjs";
 
 import { nanoid } from "nanoid";
 
-import { DrawingsService } from "@workspace/services/drawings/drawings.service";
-import { CreateDrawingCommand } from "@workspace/services/history/commands/create-drawing.command";
-import { HistoryService } from "@workspace/services/history/history.service";
-import { PainterService } from "@workspace/services/painters/painter.service";
-import { ScreenService } from "@workspace/services/screen/screen.service";
+import {
+  CreateDrawingCommand,
+  DrawingsOnSelectionService,
+  DrawingsService,
+  HistoryService,
+  PainterService,
+  ScreenService,
+  ToolkitService,
+} from "@workspace/services";
 
 import {
   DrawingEllipse,
@@ -16,8 +20,6 @@ import {
   ToolEllipse,
   ToolHandler,
 } from "@workspace/interfaces";
-
-import { ToolkitService } from "../toolkit.service";
 
 @Injectable()
 export class ToolEllipseService implements ToolHandler {
@@ -39,12 +41,15 @@ export class ToolEllipseService implements ToolHandler {
     private screenService: ScreenService,
     private toolkitService: ToolkitService,
     private painterService: PainterService,
+    private historyService: HistoryService,
     private drawingsService: DrawingsService,
-    private historyService: HistoryService
+    private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {}
 
   start(e: MouseEvent): void {
     this.isHandling = true;
+
+    this.drawingsOnSelectionService.removeSelection();
 
     this.toolkitService.setExecutedTool("ellipse");
 

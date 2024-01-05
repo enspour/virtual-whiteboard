@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { Drawing, DrawingStorage } from "modules/workspace/interfaces";
+import { Drawing, DrawingStorage } from "@workspace/interfaces";
 
 import { DrawingStorageToken } from "@workspace/tokens";
 
