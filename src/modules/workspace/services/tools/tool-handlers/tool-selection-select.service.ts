@@ -6,7 +6,7 @@ import {
   PainterService,
   ScreenService,
   SelectionService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
 import {
@@ -28,7 +28,7 @@ export class ToolSelectionSelectService implements ToolHandler {
   private selection!: SelectionCoordinates;
 
   constructor(
-    private toolkitService: ToolkitService,
+    private toolsService: ToolsService,
     private screenService: ScreenService,
     private selectionService: SelectionService,
     private painterService: PainterService
@@ -37,7 +37,7 @@ export class ToolSelectionSelectService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
-    this.toolkitService.setExecutedTool("selection-select");
+    this.toolsService.setExecutedTool("selection-select");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -74,7 +74,7 @@ export class ToolSelectionSelectService implements ToolHandler {
 
     this.painterService.paint();
 
-    this.toolkitService.setExecutedTool("");
+    this.toolsService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

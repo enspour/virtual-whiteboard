@@ -14,7 +14,7 @@ import { takeUntil } from "rxjs";
 import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 import { SortableListItemsSwap } from "@shared/components/utils/sortable-list";
 
-import { DestroyService, ToolkitService } from "@workspace/services";
+import { DestroyService, ToolsService } from "@workspace/services";
 
 import { SelectableTool } from "@workspace/interfaces";
 
@@ -32,8 +32,8 @@ export class HeaderToolkitComponent implements OnInit {
   public icons = TOOL_ICONS;
   public tips = TOOL_TIP;
 
-  public toolkit$ = this.toolkitService.toolkit$;
-  public selectedTool$ = this.toolkitService.selectedTool$;
+  public toolkit$ = this.toolsService.toolkit$;
+  public selectedTool$ = this.toolsService.selectedTool$;
 
   public disabled = false;
 
@@ -43,7 +43,7 @@ export class HeaderToolkitComponent implements OnInit {
     @Inject(ThemePaletteToken) palette: ThemePalette,
     private cdRef: ChangeDetectorRef,
     private elementRef: ElementRef<HTMLElement>,
-    private toolkitService: ToolkitService
+    private toolsService: ToolsService
   ) {
     const bg = `var(--theme-${palette}-bg)`;
     const bgHover = `var(--theme-${palette}-bg--hover)`;
@@ -53,7 +53,7 @@ export class HeaderToolkitComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toolkitService.executedTool$
+    this.toolsService.executedTool$
       .pipe(takeUntil(this.destroy$))
       .subscribe((tool) => {
         this.disabled = !!tool;
@@ -62,10 +62,10 @@ export class HeaderToolkitComponent implements OnInit {
   }
 
   handleToolClick(name: SelectableTool["name"]) {
-    this.toolkitService.setSelectedTool(name);
+    this.toolsService.setSelectedTool(name);
   }
 
   handleSwapItems(indexes: SortableListItemsSwap) {
-    this.toolkitService.swapToolkit(indexes);
+    this.toolsService.swapToolkit(indexes);
   }
 }

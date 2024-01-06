@@ -12,7 +12,7 @@ import { takeUntil } from "rxjs";
 
 import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 
-import { DestroyService, ToolkitService } from "@workspace/services";
+import { DestroyService, ToolsService } from "@workspace/services";
 
 @Component({
   selector: "app-header-action-bar",
@@ -31,14 +31,14 @@ export class HeaderActionBarComponent implements OnInit {
     @Inject(ThemePaletteToken) palette: ThemePalette,
     private cdRef: ChangeDetectorRef,
     private elementRef: ElementRef<HTMLElement>,
-    private toolkitService: ToolkitService
+    private toolsService: ToolsService
   ) {
     const bg = `var(--theme-${palette}-bg)`;
     this.elementRef.nativeElement.style.setProperty("--bg", bg);
   }
 
   ngOnInit(): void {
-    this.toolkitService.executedTool$
+    this.toolsService.executedTool$
       .pipe(takeUntil(this.destroy$))
       .subscribe((tool) => {
         this.disabled = !!tool;

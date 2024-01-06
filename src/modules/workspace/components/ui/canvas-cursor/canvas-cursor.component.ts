@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { ToolkitService } from "@workspace/services";
+import { ToolsService } from "@workspace/services";
 
 import {
   CursorStatus,
@@ -32,12 +32,12 @@ export class CanvasCursorComponent implements OnInit {
 
   private captured = false;
 
-  constructor(private toolkitService: ToolkitService) {
-    this.toolkitService.selectedTool$
+  constructor(private toolsService: ToolsService) {
+    this.toolsService.selectedTool$
       .pipe(takeUntilDestroyed())
       .subscribe((tool) => this.onSelectedToolChange(tool));
 
-    this.toolkitService.executedTool$
+    this.toolsService.executedTool$
       .pipe(takeUntilDestroyed())
       .subscribe((tool) => this.onExecutedToolChange(tool));
   }

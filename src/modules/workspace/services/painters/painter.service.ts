@@ -1,10 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
+
+import { Observable, merge, takeUntil } from "rxjs";
 
 import {
-  BoardPainterService,
-  DrawingsPainterService,
+  DestroyService,
+  PainterBoardService,
+  PainterDrawingsService,
+  PainterSelectionService,
   ScreenService,
-  SelectionPainterService,
 } from "@workspace/services";
 
 import { Painter } from "@workspace/interfaces";
@@ -15,19 +18,31 @@ export class PainterService implements Painter {
 
   private requestAnimationFrameId: number = 0;
 
+  private destroy$: Observable<void> = inject(DestroyService, { self: true });
+
   constructor(
     private screenService: ScreenService,
-    private boardPainterService: BoardPainterService,
-    private drawingsPainterService: DrawingsPainterService,
-    private selectionPainterService: SelectionPainterService
-  ) {}
+    private painterBoardService: PainterBoardService,
+    private painterDrawingsService: PainterDrawingsService,
+    private painterSelectionService: PainterSelectionService
+  ) {
+    merge(
+      this.screenService.scroll$,
+      this.screenService.sizes$,
+      this.screenService.scale$
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.paint();
+      });
+  }
 
   setContext(context: CanvasRenderingContext2D) {
     this.context = context;
 
-    this.boardPainterService.setContext(context);
-    this.drawingsPainterService.setContext(context);
-    this.selectionPainterService.setContext(context);
+    this.painterBoardService.setContext(context);
+    this.painterDrawingsService.setContext(context);
+    this.painterSelectionService.setContext(context);
   }
 
   paint() {
@@ -49,8 +64,8 @@ export class PainterService implements Painter {
 
     this.context.clearRect(0, 0, width, height);
 
-    this.boardPainterService.paint();
-    this.drawingsPainterService.paint();
-    this.selectionPainterService.paint();
+    this.painterBoardService.paint();
+    this.painterDrawingsService.paint();
+    this.painterSelectionService.paint();
   }
 }

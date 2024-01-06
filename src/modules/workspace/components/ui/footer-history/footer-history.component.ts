@@ -15,7 +15,7 @@ import { SharedModule, ThemePalette, ThemePaletteToken } from "@shared";
 import {
   DestroyService,
   HistoryService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
 @Component({
@@ -36,14 +36,14 @@ export class FooterHistoryComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private elementRef: ElementRef<HTMLElement>,
     private historyService: HistoryService,
-    private toolkitService: ToolkitService
+    private toolsService: ToolsService
   ) {
     const bg = `var(--theme-${palette}-bg)`;
     this.elementRef.nativeElement.style.setProperty("--bg", bg);
   }
 
   ngOnInit(): void {
-    this.toolkitService.executedTool$
+    this.toolsService.executedTool$
       .pipe(takeUntil(this.destroy$))
       .subscribe((tool) => {
         this.disabled = !!tool;

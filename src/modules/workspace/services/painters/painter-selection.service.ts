@@ -11,7 +11,7 @@ import {
 import { Drawing, DrawingArrow, Painter } from "@workspace/interfaces";
 
 @Injectable()
-export class SelectionPainterService implements Painter {
+export class PainterSelectionService implements Painter {
   private context?: CanvasRenderingContext2D;
 
   constructor(

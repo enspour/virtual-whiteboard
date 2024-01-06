@@ -4,7 +4,7 @@ import {
   DrawingsOnScreenService,
   ScreenService,
   TextEditorEditService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
 import { findDrawingByPoint } from "@workspace/utils";
@@ -17,7 +17,7 @@ export class ToolTextEditService implements ToolHandler {
 
   constructor(
     private screenService: ScreenService,
-    private toolkitService: ToolkitService,
+    private toolsService: ToolsService,
     private drawingsOnScreenService: DrawingsOnScreenService,
     private textEditorEditService: TextEditorEditService
   ) {}
@@ -33,7 +33,7 @@ export class ToolTextEditService implements ToolHandler {
 
     this.isHandling = false;
 
-    this.toolkitService.setExecutedTool("text");
+    this.toolsService.setExecutedTool("text");
 
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
@@ -51,7 +51,7 @@ export class ToolTextEditService implements ToolHandler {
       this.textEditorEditService.edit(drawing);
     }
 
-    this.toolkitService.setExecutedTool("");
+    this.toolsService.setExecutedTool("");
   }
 
   process(): void {

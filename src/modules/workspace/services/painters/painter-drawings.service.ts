@@ -6,8 +6,8 @@ import {
   DrawingEllipsePainter,
   DrawingRectanglePainter,
   DrawingTextPainter,
-  DrawingsOnEditService,
   DrawingsOnScreenService,
+  DrawingsOnStashService,
   DrawingsOnTrashService,
   ScreenService,
 } from "@workspace/services";
@@ -15,14 +15,14 @@ import {
 import { Drawing, DrawingPainter, Painter } from "@workspace/interfaces";
 
 @Injectable()
-export class DrawingsPainterService implements Painter {
+export class PainterDrawingsService implements Painter {
   private context?: CanvasRenderingContext2D;
 
   private painters!: Record<Drawing["type"], DrawingPainter>;
 
   constructor(
     private screenService: ScreenService,
-    private drawingsOnEditService: DrawingsOnEditService,
+    private drawingsOnStashService: DrawingsOnStashService,
     private drawingsOnTrashService: DrawingsOnTrashService,
     private drawingsOnScreenService: DrawingsOnScreenService
   ) {}
@@ -51,7 +51,7 @@ export class DrawingsPainterService implements Painter {
     const drawings = this.drawingsOnScreenService.DrawingsOnScreen;
 
     for (const drawing of drawings) {
-      if (this.drawingsOnEditService.has(drawing)) {
+      if (this.drawingsOnStashService.has(drawing)) {
         continue;
       }
 

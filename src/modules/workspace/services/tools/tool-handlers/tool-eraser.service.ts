@@ -3,64 +3,54 @@ import { Injectable, Injector } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
 
 import {
+  DrawingsOnScreenService,
   DrawingsOnSelectionService,
-  DrawingsService,
+  DrawingsOnTrashService,
   HistoryService,
-  MoveDrawingsCommand,
   PainterService,
+  RemoveDrawingsCommand,
   ScreenService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
-import { updateDrawingCoordinates } from "@workspace/utils";
+import { isPointOnDrawing } from "@workspace/utils";
 
 import { Point, ToolHandler } from "@workspace/interfaces";
 
 @Injectable()
-export class ToolSelectionMoveService implements ToolHandler {
+export class ToolEraserService implements ToolHandler {
   private isHandling = false;
 
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private prevPoint!: Point;
-
-  private totalDiff!: Point;
-
   constructor(
     private injector: Injector,
-    private toolkitService: ToolkitService,
+
+    private toolsService: ToolsService,
     private screenService: ScreenService,
     private painterService: PainterService,
     private historyService: HistoryService,
-    private drawingsService: DrawingsService,
+    private drawingsOnTrashService: DrawingsOnTrashService,
+    private drawingsOnScreenServices: DrawingsOnScreenService,
     private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {}
 
   start(e: MouseEvent): void {
     this.isHandling = true;
 
-    this.toolkitService.setExecutedTool("selection-move");
+    this.drawingsOnSelectionService.removeSelection();
+
+    this.toolsService.setExecutedTool("eraser");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
 
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
-
-    const x = e.clientX / scale - scroll.x;
-    const y = e.clientY / scale - scroll.y;
-
-    this.prevPoint = { x, y };
-
-    this.totalDiff = {
-      x: 0,
-      y: 0,
-    };
-
     this.points$
       .pipe(takeUntil(this.destroy$))
       .subscribe((point) => this.handlePoint(point));
+
+    this.nextPoint(e);
   }
 
   end(): void {
@@ -70,17 +60,23 @@ export class ToolSelectionMoveService implements ToolHandler {
 
     this.isHandling = false;
 
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+    const drawings = this.drawingsOnTrashService.DrawingsOnTrash;
 
-    const diff = this.totalDiff;
+    this.drawingsOnTrashService.clear();
 
-    if (diff.x !== 0 || diff.y !== 0) {
-      const args = { drawings, diff };
-      const command = new MoveDrawingsCommand(args, this.injector);
+    if (drawings.length) {
+      const command = new RemoveDrawingsCommand(drawings, this.injector);
       this.historyService.add(command);
     }
 
-    this.toolkitService.setExecutedTool("");
+    this.drawingsOnSelectionService.removeFromSelection(...drawings);
+
+    this.painterService.paint();
+
+    this.toolsService.setExecutedTool("");
+
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   process(e: MouseEvent): void {
@@ -104,23 +100,13 @@ export class ToolSelectionMoveService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const diffX = point.x - this.prevPoint.x;
-    const diffY = point.y - this.prevPoint.y;
+    const drawings = this.drawingsOnScreenServices.DrawingsOnScreen;
 
-    this.totalDiff.x += diffX;
-    this.totalDiff.y += diffY;
-
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
-
-    for (let i = 0; i < drawings.length; i++) {
-      updateDrawingCoordinates(drawings[i], diffX, diffY);
+    for (const drawing of drawings) {
+      if (isPointOnDrawing(point, drawing)) {
+        this.drawingsOnTrashService.append(drawing);
+      }
     }
-
-    this.drawingsOnSelectionService.updateCoordinates();
-
-    this.prevPoint = point;
-
-    this.drawingsService.append(...drawings);
 
     this.painterService.paint();
   }

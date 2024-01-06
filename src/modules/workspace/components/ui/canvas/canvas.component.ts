@@ -7,11 +7,7 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import {
-  EventsService,
-  PainterService,
-  ScreenService,
-} from "@workspace/services";
+import { ScreenService, WorkspaceService } from "@workspace/services";
 
 @Component({
   selector: "app-canvas",
@@ -24,9 +20,8 @@ export class CanvasComponent implements OnInit {
   @ViewChild("canvas", { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
 
   constructor(
-    private screenService: ScreenService,
-    private eventsService: EventsService,
-    private painterService: PainterService
+    private workspaceService: WorkspaceService,
+    private screenService: ScreenService
   ) {
     this.screenService.sizes$
       .pipe(takeUntilDestroyed())
@@ -35,7 +30,7 @@ export class CanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateSizes();
-    this.updateServices();
+    this.updateCanvas();
   }
 
   private updateSizes() {
@@ -51,19 +46,13 @@ export class CanvasComponent implements OnInit {
     canvas.height = height;
   }
 
-  private updateServices() {
+  private updateCanvas() {
     const canvas = this.canvas?.nativeElement;
 
     if (!canvas) {
       return;
     }
 
-    this.eventsService.setCanvas(canvas);
-
-    const context = canvas.getContext("2d");
-
-    if (context) {
-      this.painterService.setContext(context);
-    }
+    this.workspaceService.setCanvas(canvas);
   }
 }

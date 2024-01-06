@@ -11,26 +11,26 @@ import {
   HistoryService,
   PainterService,
   ScreenService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
 import {
-  DrawingEllipse,
+  DrawingRectangle,
   Point,
-  ToolEllipse,
   ToolHandler,
+  ToolRectangle,
 } from "@workspace/interfaces";
 
 @Injectable()
-export class ToolEllipseService implements ToolHandler {
+export class ToolRectangleService implements ToolHandler {
   private isHandling = false;
 
-  private tool!: ToolEllipse;
+  private tool!: ToolRectangle;
 
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private drawing!: DrawingEllipse;
+  private drawing!: DrawingRectangle;
 
   private initialX = 0;
   private initialY = 0;
@@ -39,7 +39,7 @@ export class ToolEllipseService implements ToolHandler {
     private injector: Injector,
 
     private screenService: ScreenService,
-    private toolkitService: ToolkitService,
+    private toolsService: ToolsService,
     private painterService: PainterService,
     private historyService: HistoryService,
     private drawingsService: DrawingsService,
@@ -51,9 +51,9 @@ export class ToolEllipseService implements ToolHandler {
 
     this.drawingsOnSelectionService.removeSelection();
 
-    this.toolkitService.setExecutedTool("ellipse");
+    this.toolsService.setExecutedTool("rectangle");
 
-    this.tool = this.toolkitService.ExecutedTool! as ToolEllipse;
+    this.tool = this.toolsService.ExecutedTool! as ToolRectangle;
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -69,7 +69,7 @@ export class ToolEllipseService implements ToolHandler {
 
     this.drawing = {
       id: nanoid(),
-      type: "ellipse",
+      type: "rectangle",
       angel: 0,
       coordinates: {
         startX: x,
@@ -79,6 +79,7 @@ export class ToolEllipseService implements ToolHandler {
       },
       width: 0,
       height: 0,
+      roundness: this.tool.roundness,
       strokeColor: this.tool.strokeColor,
       strokeWidth: this.tool.strokeWidth,
     };
@@ -100,7 +101,7 @@ export class ToolEllipseService implements ToolHandler {
       this.historyService.add(command);
     }
 
-    this.toolkitService.setExecutedTool("");
+    this.toolsService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

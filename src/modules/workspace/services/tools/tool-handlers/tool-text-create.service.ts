@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { TextEditorCreateService, ToolkitService } from "@workspace/services";
+import { TextEditorCreateService, ToolsService } from "@workspace/services";
 
 import { ToolHandler, ToolText } from "@workspace/interfaces";
 
@@ -11,7 +11,7 @@ export class ToolTextCreateService implements ToolHandler {
   private tool!: ToolText;
 
   constructor(
-    private toolkitService: ToolkitService,
+    private toolsService: ToolsService,
     private textEditorCreateService: TextEditorCreateService
   ) {}
 
@@ -26,9 +26,9 @@ export class ToolTextCreateService implements ToolHandler {
 
     this.isHandling = false;
 
-    this.toolkitService.setExecutedTool("text");
+    this.toolsService.setExecutedTool("text");
 
-    this.tool = this.toolkitService.ExecutedTool as ToolText;
+    this.tool = this.toolsService.ExecutedTool as ToolText;
 
     const position = {
       x: e.clientX,
@@ -39,7 +39,7 @@ export class ToolTextCreateService implements ToolHandler {
 
     this.textEditorCreateService.create(position, options);
 
-    this.toolkitService.setExecutedTool("");
+    this.toolsService.setExecutedTool("");
   }
 
   process(): void {

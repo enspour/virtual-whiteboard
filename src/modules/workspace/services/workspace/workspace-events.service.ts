@@ -1,33 +1,32 @@
 import { Injectable, NgZone, inject } from "@angular/core";
 
-import { Observable, Subject, fromEvent, takeUntil, throttleTime } from "rxjs";
+import { Observable, fromEvent, takeUntil, throttleTime } from "rxjs";
 
-import { DestroyService, ToolkitService } from "@workspace/services";
+import {
+  DestroyService,
+  ScreenHandlerService,
+  ToolsHandlerService,
+  ToolsService,
+} from "@workspace/services";
 
 import { getWheelDirection } from "@workspace/utils";
 
-import {
-  ScreenEvent,
-  ToolEvent,
-  ToolEventNativeEvent,
-  ToolEventType,
-} from "@workspace/interfaces";
+import { ToolEventNativeEvent, ToolEventType } from "@workspace/interfaces";
 
 import { MOUSE_MOVE_THROTTLE } from "@workspace/constants";
 
 @Injectable()
-export class EventsService {
-  public screenEvents$ = new Subject<ScreenEvent>();
-  public toolEvents$ = new Subject<ToolEvent>();
-
+export class WorkspaceEventsService {
   private destroy$: Observable<void> = inject(DestroyService, { self: true });
 
   constructor(
     private zone: NgZone,
-    private toolkitService: ToolkitService
+    private toolsService: ToolsService,
+    private toolsHandlerService: ToolsHandlerService,
+    private screenHandlerService: ScreenHandlerService
   ) {}
 
-  setCanvas(canvas: HTMLCanvasElement) {
+  public setCanvas(canvas: HTMLCanvasElement) {
     this.zone.runOutsideAngular(() => {
       this.attachEvents(canvas);
     });
@@ -72,19 +71,19 @@ export class EventsService {
   private onScaling(event: WheelEvent) {
     const direction = getWheelDirection(event);
     const type = direction === "forward" ? "scale in" : "scale out";
-    this.screenEvents$.next({ type, event });
+    this.screenHandlerService.handle({ type, event });
   }
 
   private onHorizontalScroll(event: WheelEvent) {
     const direction = getWheelDirection(event);
     const type = direction === "forward" ? "scroll left" : "scroll right";
-    this.screenEvents$.next({ type, event });
+    this.screenHandlerService.handle({ type, event });
   }
 
   private onVerticalScroll(event: WheelEvent) {
     const direction = getWheelDirection(event);
     const type = direction === "forward" ? "scroll up" : "scroll down";
-    this.screenEvents$.next({ type, event });
+    this.screenHandlerService.handle({ type, event });
   }
 
   private onMouseDown(event: MouseEvent) {
@@ -127,11 +126,11 @@ export class EventsService {
     type: ToolEventType,
     event: ToolEventNativeEvent
   ) {
-    const { name } = this.toolkitService.SelectedTool;
-    this.toolEvents$.next({ tool: name, type, event });
+    const { name } = this.toolsService.SelectedTool;
+    this.toolsHandlerService.handle({ tool: name, type, event });
   }
 
   private emitHandToolEvent(type: ToolEventType, event: ToolEventNativeEvent) {
-    this.toolEvents$.next({ tool: "hand", type, event });
+    this.toolsHandlerService.handle({ tool: "hand", type, event });
   }
 }

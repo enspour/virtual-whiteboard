@@ -9,7 +9,7 @@ import { ExecutableTool, SelectableTool } from "@workspace/interfaces";
 import { isSelectedTool } from "@workspace/guards";
 
 @Injectable()
-export class ToolkitService {
+export class ToolsService {
   private tools: (ExecutableTool | SelectableTool)[];
 
   private toolkit: BehaviorSubject<SelectableTool[]>;

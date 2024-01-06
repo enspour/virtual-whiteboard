@@ -3,30 +3,30 @@ import { Injectable } from "@angular/core";
 import { Drawing } from "@workspace/interfaces";
 
 @Injectable()
-export class DrawingsOnEditService {
-  private drawingsOnEdit = new Set<Drawing>();
+export class DrawingsOnStashService {
+  private drawingsOnStash = new Set<Drawing>();
 
-  get DrawingsOnEdit() {
-    return [...this.drawingsOnEdit];
+  get DrawingsOnStash() {
+    return [...this.drawingsOnStash];
   }
 
   public append(...drawings: Drawing[]) {
     for (const drawing of drawings) {
-      this.drawingsOnEdit.add(drawing);
+      this.drawingsOnStash.add(drawing);
     }
   }
 
   public remove(...drawings: Drawing[]) {
     for (const drawing of drawings) {
-      this.drawingsOnEdit.delete(drawing);
+      this.drawingsOnStash.delete(drawing);
     }
   }
 
   public has(drawing: Drawing) {
-    return this.drawingsOnEdit.has(drawing);
+    return this.drawingsOnStash.has(drawing);
   }
 
   public clear() {
-    this.drawingsOnEdit.clear();
+    this.drawingsOnStash.clear();
   }
 }

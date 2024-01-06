@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Injectable, Injector } from "@angular/core";
 
 import {
   ChangeDrawingCommand,
-  DrawingsOnEditService,
   DrawingsOnSelectionService,
+  DrawingsOnStashService,
   DrawingsService,
   HistoryService,
   PainterService,
@@ -27,13 +27,13 @@ export class TextEditorEditService {
     private historyService: HistoryService,
     private drawingsService: DrawingsService,
     private drawingsOnSelectionService: DrawingsOnSelectionService,
-    private drawingsOnEditService: DrawingsOnEditService,
+    private drawingsOnStashService: DrawingsOnStashService,
     private textEditorService: TextEditorService
   ) {}
 
   public edit(drawing: DrawingText) {
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnEditService.append(drawing);
+    this.drawingsOnStashService.append(drawing);
     this.painterService.paint();
 
     const scroll = this.screenService.Scroll;
@@ -90,7 +90,7 @@ export class TextEditorEditService {
       },
     };
 
-    this.drawingsOnEditService.remove(drawing);
+    this.drawingsOnStashService.remove(drawing);
     this.drawingsService.append(newDrawing);
 
     const args = { old: drawing, new: newDrawing };

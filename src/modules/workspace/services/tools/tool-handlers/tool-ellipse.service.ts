@@ -11,26 +11,26 @@ import {
   HistoryService,
   PainterService,
   ScreenService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
 import {
-  DrawingRectangle,
+  DrawingEllipse,
   Point,
+  ToolEllipse,
   ToolHandler,
-  ToolRectangle,
 } from "@workspace/interfaces";
 
 @Injectable()
-export class ToolRectangleService implements ToolHandler {
+export class ToolEllipseService implements ToolHandler {
   private isHandling = false;
 
-  private tool!: ToolRectangle;
+  private tool!: ToolEllipse;
 
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private drawing!: DrawingRectangle;
+  private drawing!: DrawingEllipse;
 
   private initialX = 0;
   private initialY = 0;
@@ -39,7 +39,7 @@ export class ToolRectangleService implements ToolHandler {
     private injector: Injector,
 
     private screenService: ScreenService,
-    private toolkitService: ToolkitService,
+    private toolsService: ToolsService,
     private painterService: PainterService,
     private historyService: HistoryService,
     private drawingsService: DrawingsService,
@@ -51,9 +51,9 @@ export class ToolRectangleService implements ToolHandler {
 
     this.drawingsOnSelectionService.removeSelection();
 
-    this.toolkitService.setExecutedTool("rectangle");
+    this.toolsService.setExecutedTool("ellipse");
 
-    this.tool = this.toolkitService.ExecutedTool! as ToolRectangle;
+    this.tool = this.toolsService.ExecutedTool! as ToolEllipse;
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -69,7 +69,7 @@ export class ToolRectangleService implements ToolHandler {
 
     this.drawing = {
       id: nanoid(),
-      type: "rectangle",
+      type: "ellipse",
       angel: 0,
       coordinates: {
         startX: x,
@@ -79,7 +79,6 @@ export class ToolRectangleService implements ToolHandler {
       },
       width: 0,
       height: 0,
-      roundness: this.tool.roundness,
       strokeColor: this.tool.strokeColor,
       strokeWidth: this.tool.strokeWidth,
     };
@@ -101,7 +100,7 @@ export class ToolRectangleService implements ToolHandler {
       this.historyService.add(command);
     }
 
-    this.toolkitService.setExecutedTool("");
+    this.toolsService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();

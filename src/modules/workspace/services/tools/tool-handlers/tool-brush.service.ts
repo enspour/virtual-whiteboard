@@ -11,35 +11,32 @@ import {
   HistoryService,
   PainterService,
   ScreenService,
-  ToolkitService,
+  ToolsService,
 } from "@workspace/services";
 
 import {
-  DrawingArrow,
+  DrawingBrush,
   Point,
-  ToolArrow,
+  ToolBrush,
   ToolHandler,
 } from "@workspace/interfaces";
 
 @Injectable()
-export class ToolArrowService implements ToolHandler {
+export class ToolBrushService implements ToolHandler {
   private isHandling = false;
 
-  private tool!: ToolArrow;
+  private tool!: ToolBrush;
 
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private drawing!: DrawingArrow;
-
-  private initialX = 0;
-  private initialY = 0;
+  private drawing!: DrawingBrush;
 
   constructor(
     private injector: Injector,
 
     private screenService: ScreenService,
-    private toolkitService: ToolkitService,
+    private toolsService: ToolsService,
     private painterService: PainterService,
     private historyService: HistoryService,
     private drawingsService: DrawingsService,
@@ -51,9 +48,9 @@ export class ToolArrowService implements ToolHandler {
 
     this.drawingsOnSelectionService.removeSelection();
 
-    this.toolkitService.setExecutedTool("arrow");
+    this.toolsService.setExecutedTool("brush");
 
-    this.tool = this.toolkitService.ExecutedTool! as ToolArrow;
+    this.tool = this.toolsService.ExecutedTool! as ToolBrush;
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
@@ -64,12 +61,9 @@ export class ToolArrowService implements ToolHandler {
     const x = e.clientX / scale - scroll.x;
     const y = e.clientY / scale - scroll.y;
 
-    this.initialX = x;
-    this.initialY = y;
-
     this.drawing = {
       id: nanoid(),
-      type: "arrow",
+      type: "brush",
       angel: 0,
       coordinates: {
         startX: x,
@@ -79,10 +73,7 @@ export class ToolArrowService implements ToolHandler {
       },
       width: 0,
       height: 0,
-      points: [
-        { x, y },
-        { x, y },
-      ],
+      points: [],
       strokeColor: this.tool.strokeColor,
       strokeWidth: this.tool.strokeWidth,
     };
@@ -104,7 +95,7 @@ export class ToolArrowService implements ToolHandler {
       this.historyService.add(command);
     }
 
-    this.toolkitService.setExecutedTool("");
+    this.toolsService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();
@@ -131,30 +122,20 @@ export class ToolArrowService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const { points, coordinates } = this.drawing;
+    this.drawing.points.push(point);
 
-    const length = points.length;
+    const { x, y } = point;
 
-    points[length - 1] = point;
+    const { coordinates } = this.drawing;
 
-    if (this.initialX < point.x) {
-      coordinates.startX = this.initialX;
-      coordinates.endX = point.x;
-    } else {
-      coordinates.startX = point.x;
-      coordinates.endX = this.initialX;
-    }
+    coordinates.startX = Math.min(coordinates.startX, x);
+    coordinates.startY = Math.min(coordinates.startY, y);
 
-    if (this.initialY < point.y) {
-      coordinates.startY = this.initialY;
-      coordinates.endY = point.y;
-    } else {
-      coordinates.startY = point.y;
-      coordinates.endY = this.initialY;
-    }
+    coordinates.endX = Math.max(coordinates.endX, x);
+    coordinates.endY = Math.max(coordinates.endY, y);
 
-    this.drawing.width = coordinates.endX - coordinates.startX;
-    this.drawing.height = coordinates.endY - coordinates.startY;
+    this.drawing.width = Math.abs(coordinates.endX - coordinates.startX);
+    this.drawing.height = Math.abs(coordinates.endY - coordinates.startY);
 
     this.drawingsService.append(this.drawing);
 

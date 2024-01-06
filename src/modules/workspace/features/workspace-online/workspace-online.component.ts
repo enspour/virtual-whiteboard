@@ -10,23 +10,23 @@ import { HeaderActionBarComponent } from "@workspace/components/ui/header-action
 import { HeaderToolkitComponent } from "@workspace/components/ui/header-toolkit/header-toolkit.component";
 
 import {
-  BoardPainterService,
   DestroyService,
-  DrawingsOnEditService,
   DrawingsOnScreenService,
   DrawingsOnSelectionService,
+  DrawingsOnStashService,
   DrawingsOnTrashService,
-  DrawingsPainterService,
   DrawingsService,
-  EventsService,
   HistoryRestoreService,
   HistoryService,
   LocalDrawingStorageService,
   LocalHistoryStorageService,
   LocalScreenStorageService,
+  PainterBoardService,
+  PainterDrawingsService,
+  PainterSelectionService,
   PainterService,
+  ScreenHandlerService,
   ScreenService,
-  SelectionPainterService,
   SelectionService,
   TextEditorCreateService,
   TextEditorEditService,
@@ -44,7 +44,10 @@ import {
   ToolTextCreateService,
   ToolTextEditService,
   ToolTextService,
-  ToolkitService,
+  ToolsHandlerService,
+  ToolsService,
+  WorkspaceEventsService,
+  WorkspaceKeyboardService,
   WorkspaceService,
 } from "@workspace/services";
 
@@ -77,34 +80,32 @@ import {
     DestroyService,
 
     WorkspaceService,
+    WorkspaceEventsService,
+    WorkspaceKeyboardService,
 
     ScreenService,
-    EventsService,
-
-    HistoryService,
-    HistoryRestoreService,
+    ScreenHandlerService,
 
     {
       provide: ScreenStorageToken,
       useClass: LocalScreenStorageService,
     },
 
+    HistoryService,
+    HistoryRestoreService,
+
     {
       provide: HistoryStorageToken,
       useClass: LocalHistoryStorageService,
     },
 
-    {
-      provide: DrawingStorageToken,
-      useClass: LocalDrawingStorageService,
-    },
-
     PainterService,
-    BoardPainterService,
-    DrawingsPainterService,
-    SelectionPainterService,
+    PainterBoardService,
+    PainterDrawingsService,
+    PainterSelectionService,
 
-    ToolkitService,
+    ToolsService,
+    ToolsHandlerService,
 
     ToolHandService,
     ToolSelectionService,
@@ -124,7 +125,12 @@ import {
     DrawingsOnScreenService,
     DrawingsOnSelectionService,
     DrawingsOnTrashService,
-    DrawingsOnEditService,
+    DrawingsOnStashService,
+
+    {
+      provide: DrawingStorageToken,
+      useClass: LocalDrawingStorageService,
+    },
 
     SelectionService,
 

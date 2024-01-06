@@ -9,7 +9,7 @@ import { Painter } from "@workspace/interfaces";
 import { PAINTER_BOARD_STEP } from "@workspace/constants";
 
 @Injectable()
-export class BoardPainterService implements Painter {
+export class PainterBoardService implements Painter {
   private context?: CanvasRenderingContext2D;
 
   constructor(
