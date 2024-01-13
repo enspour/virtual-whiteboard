@@ -36,6 +36,7 @@ export * from "./tools/tools/tool-selection.interface";
 export * from "./tools/tools/tool-selection-move.interface";
 export * from "./tools/tools/tool-selection-select.interface";
 export * from "./tools/tools/tool-selection-click.interface";
+export * from "./tools/tools/tool-selection-resize.interface";
 export * from "./tools/tools/tool-text.interface";
 export * from "./tools/tools/tool-text-create.interface";
 export * from "./tools/tools/tool-text-edit.interface";

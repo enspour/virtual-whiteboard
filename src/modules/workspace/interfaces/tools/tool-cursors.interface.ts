@@ -7,7 +7,11 @@ export type Cursor =
   | "grabbing"
   | "text"
   | "crosshair"
-  | "move";
+  | "move"
+  | "ew-resize"
+  | "ns-resize"
+  | "nesw-resize"
+  | "nwse-resize";
 
 export type CursorStatus =
   | SelectableTool["name"]

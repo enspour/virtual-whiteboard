@@ -50,6 +50,8 @@ import {
   WorkspaceKeyboardService,
   WorkspaceService,
 } from "@workspace/services";
+import { ToolSelectionResizeService } from "@workspace/services/tools/tool-handlers/tool-selection-resize.service";
+import { WorkspaceInjectorService } from "@workspace/services/workspace/workspace-injector.service";
 
 import {
   DrawingStorageToken,
@@ -80,8 +82,9 @@ import {
     DestroyService,
 
     WorkspaceService,
-    WorkspaceEventsService,
+    WorkspaceInjectorService,
     WorkspaceKeyboardService,
+    WorkspaceEventsService,
 
     ScreenService,
     ScreenHandlerService,
@@ -112,6 +115,7 @@ import {
     ToolSelectionSelectService,
     ToolSelectionMoveService,
     ToolSelectionClickService,
+    ToolSelectionResizeService,
     ToolBrushService,
     ToolRectangleService,
     ToolEllipseService,

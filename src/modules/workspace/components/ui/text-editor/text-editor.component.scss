@@ -1,8 +1,8 @@
 .text-editor {
   position: absolute;
+  min-width: 0.1rem;
+  display: inline-block;
   background-color: transparent;
   border: none;
   outline: none;
-  min-width: 0.1rem;
-  white-space: pre-wrap;
 }

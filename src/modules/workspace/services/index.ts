@@ -1,7 +1,8 @@
 export * from "./destroy.service";
-export * from "./workspace/workspace-events.service";
 export * from "./workspace/workspace.service";
+export * from "./workspace/workspace-injector.service";
 export * from "./workspace/workspace-keyboard.service";
+export * from "./workspace/workspace-events.service";
 export * from "./drawings/drawings-on-screen.service";
 export * from "./drawings/drawings-on-selection.service";
 export * from "./drawings/drawings-on-trash.service";
@@ -12,6 +13,7 @@ export * from "./history/commands/change-drawing.command";
 export * from "./history/commands/create-drawing.command";
 export * from "./history/commands/move-drawings.command";
 export * from "./history/commands/remove-drawings.command";
+export * from "./history/commands/resize-drawings.command";
 export * from "./history/history-restore.service";
 export * from "./history/history.service";
 export * from "./history/local-history-storage.service";

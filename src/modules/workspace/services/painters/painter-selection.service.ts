@@ -8,7 +8,14 @@ import {
   SelectionService,
 } from "@workspace/services";
 
+import { getResizerAnchorsByCoordinates } from "@workspace/utils";
+
 import { Drawing, DrawingArrow, Painter } from "@workspace/interfaces";
+
+import {
+  RESIZER_ANCHOR_HEIGHT,
+  RESIZER_ANCHOR_WIDTH,
+} from "@workspace/constants";
 
 @Injectable()
 export class PainterSelectionService implements Painter {
@@ -141,7 +148,7 @@ export class PainterSelectionService implements Painter {
       const x = (point.x + scroll.x) * scale;
       const y = (point.y + scroll.y) * scale;
 
-      this.paintAnchor(x, y);
+      this.paintResizerAnchor(x, y);
     }
   }
 
@@ -232,21 +239,16 @@ export class PainterSelectionService implements Painter {
     endX = (endX + scroll.x) * scale;
     endY = (endY + scroll.y) * scale;
 
-    const width = endX - startX;
-    const height = endY - startY;
+    const coordinates = { startX, startY, endX, endY };
 
-    this.paintAnchor(startX, startY);
-    this.paintAnchor(endX, startY);
-    this.paintAnchor(endX, endY);
-    this.paintAnchor(startX, endY);
+    const anchors = getResizerAnchorsByCoordinates(coordinates);
 
-    this.paintAnchor(startX + width / 2, startY);
-    this.paintAnchor(endX, startY + height / 2);
-    this.paintAnchor(startX + width / 2, endY);
-    this.paintAnchor(startX, startY + height / 2);
+    for (const { x, y } of anchors) {
+      this.paintResizerAnchor(x, y);
+    }
   }
 
-  private paintAnchor(x: number, y: number) {
+  private paintResizerAnchor(x: number, y: number) {
     if (!this.context) {
       return;
     }
@@ -256,8 +258,8 @@ export class PainterSelectionService implements Painter {
     const bg = properties["--theme-primary-board-bg"];
     const border = properties["--theme-primary-selection-border"];
 
-    const width = 8;
-    const height = 8;
+    const width = RESIZER_ANCHOR_WIDTH;
+    const height = RESIZER_ANCHOR_HEIGHT;
 
     this.context.beginPath();
 

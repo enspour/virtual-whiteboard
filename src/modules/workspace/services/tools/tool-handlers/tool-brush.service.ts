@@ -134,8 +134,8 @@ export class ToolBrushService implements ToolHandler {
     coordinates.endX = Math.max(coordinates.endX, x);
     coordinates.endY = Math.max(coordinates.endY, y);
 
-    this.drawing.width = Math.abs(coordinates.endX - coordinates.startX);
-    this.drawing.height = Math.abs(coordinates.endY - coordinates.startY);
+    this.drawing.width = coordinates.endX - coordinates.startX;
+    this.drawing.height = coordinates.endY - coordinates.startY;
 
     this.drawingsService.append(this.drawing);
 

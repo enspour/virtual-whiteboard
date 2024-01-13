@@ -147,6 +147,8 @@ export class TextEditorComponent implements OnInit, OnDestroy {
       text,
       width: rect.width,
       height: rect.height,
+      x: rect.x,
+      y: rect.y,
     });
   }
 }

@@ -12,9 +12,13 @@ import {
   ToolsService,
 } from "@workspace/services";
 
-import { updateDrawingCoordinates } from "@workspace/utils";
+import {
+  isSameCoordinates,
+  moveCoordinates,
+  resizeDrawings,
+} from "@workspace/utils";
 
-import { Point, ToolHandler } from "@workspace/interfaces";
+import { Coordinates, Point, ToolHandler } from "@workspace/interfaces";
 
 @Injectable()
 export class ToolSelectionMoveService implements ToolHandler {
@@ -23,9 +27,10 @@ export class ToolSelectionMoveService implements ToolHandler {
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private prevPoint!: Point;
+  private startCoordinates!: Coordinates;
+  private endCoordinates!: Coordinates;
 
-  private totalDiff!: Point;
+  private offset!: Point;
 
   constructor(
     private injector: Injector,
@@ -45,18 +50,18 @@ export class ToolSelectionMoveService implements ToolHandler {
     this.points$ = new Subject();
     this.destroy$ = new Subject();
 
+    const coordinates = this.drawingsOnSelectionService.Coordinates!;
+
+    this.startCoordinates = { ...coordinates };
+    this.endCoordinates = { ...coordinates };
+
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
 
     const x = e.clientX / scale - scroll.x;
     const y = e.clientY / scale - scroll.y;
 
-    this.prevPoint = { x, y };
-
-    this.totalDiff = {
-      x: 0,
-      y: 0,
-    };
+    this.offset = { x: x - coordinates.startX, y: y - coordinates.startY };
 
     this.points$
       .pipe(takeUntil(this.destroy$))
@@ -70,17 +75,21 @@ export class ToolSelectionMoveService implements ToolHandler {
 
     this.isHandling = false;
 
+    this.toolsService.setExecutedTool("");
+
     const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
 
-    const diff = this.totalDiff;
+    const startCoordinates = this.startCoordinates;
+    const endCoordinates = this.endCoordinates;
 
-    if (diff.x !== 0 || diff.y !== 0) {
-      const args = { drawings, diff };
+    if (!isSameCoordinates(startCoordinates, endCoordinates)) {
+      const args = { drawings, startCoordinates, endCoordinates };
       const command = new MoveDrawingsCommand(args, this.injector);
       this.historyService.add(command);
     }
 
-    this.toolsService.setExecutedTool("");
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   process(e: MouseEvent): void {
@@ -104,21 +113,19 @@ export class ToolSelectionMoveService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const diffX = point.x - this.prevPoint.x;
-    const diffY = point.y - this.prevPoint.y;
+    const start = {
+      x: point.x - this.offset.x,
+      y: point.y - this.offset.y,
+    };
 
-    this.totalDiff.x += diffX;
-    this.totalDiff.y += diffY;
+    this.endCoordinates = moveCoordinates(this.endCoordinates, start);
 
     const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+    const drawingsCoordinates = this.drawingsOnSelectionService.Coordinates!;
 
-    for (let i = 0; i < drawings.length; i++) {
-      updateDrawingCoordinates(drawings[i], diffX, diffY);
-    }
+    resizeDrawings(this.endCoordinates, drawings, drawingsCoordinates);
 
     this.drawingsOnSelectionService.updateCoordinates();
-
-    this.prevPoint = point;
 
     this.drawingsService.append(...drawings);
 

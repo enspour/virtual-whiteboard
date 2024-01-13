@@ -6,18 +6,19 @@ import {
   PainterService,
 } from "@workspace/services";
 
-import { updateDrawingCoordinates } from "@workspace/utils";
+import { resizeDrawings } from "@workspace/utils";
 
 import {
+  Coordinates,
   Drawing,
   HistoryCommand,
   HistoryCommandName,
-  Point,
 } from "@workspace/interfaces";
 
 export type MoveDrawingsCommandArgs = {
   drawings: Drawing[];
-  diff: Point;
+  startCoordinates: Coordinates;
+  endCoordinates: Coordinates;
 };
 
 export class MoveDrawingsCommand implements HistoryCommand {
@@ -37,11 +38,9 @@ export class MoveDrawingsCommand implements HistoryCommand {
   }
 
   public exec(): void {
-    const { drawings, diff } = this.args;
+    const { drawings, startCoordinates, endCoordinates } = this.args;
 
-    for (const drawing of drawings) {
-      updateDrawingCoordinates(drawing, diff.x, diff.y);
-    }
+    resizeDrawings(endCoordinates, drawings, startCoordinates);
 
     this.drawingsService.append(...drawings);
 
@@ -52,11 +51,9 @@ export class MoveDrawingsCommand implements HistoryCommand {
   }
 
   public undo(): void {
-    const { drawings, diff } = this.args;
+    const { drawings, startCoordinates, endCoordinates } = this.args;
 
-    for (const drawing of drawings) {
-      updateDrawingCoordinates(drawing, -diff.x, -diff.y);
-    }
+    resizeDrawings(startCoordinates, drawings, endCoordinates);
 
     this.drawingsService.append(...drawings);
 

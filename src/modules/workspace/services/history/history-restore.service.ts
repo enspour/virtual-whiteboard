@@ -5,6 +5,7 @@ import {
   CreateDrawingCommand,
   MoveDrawingsCommand,
   RemoveDrawingsCommand,
+  ResizeDrawingsCommand,
 } from "@workspace/services";
 
 import {
@@ -30,6 +31,8 @@ export class HistoryRestoreService {
       new RemoveDrawingsCommand(args, injector),
     "move-drawings-command": (args, injector) =>
       new MoveDrawingsCommand(args, injector),
+    "resize-drawings-command": (args, injector) =>
+      new ResizeDrawingsCommand(args, injector),
   };
 
   constructor(

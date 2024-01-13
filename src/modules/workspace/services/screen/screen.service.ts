@@ -123,7 +123,7 @@ export class ScreenService {
     const direction = 1;
     const scale = this.Scale;
 
-    const nextScale = scale + direction * SCREEN_SCALING_DELTA;
+    const nextScale = scale + direction * SCREEN_SCALING_DELTA * scale;
 
     return this.scaling(nextScale, direction, mousePosition);
   }
@@ -132,7 +132,7 @@ export class ScreenService {
     const direction = -1;
     const scale = this.Scale;
 
-    const nextScale = scale + direction * SCREEN_SCALING_DELTA;
+    const nextScale = scale + direction * SCREEN_SCALING_DELTA * scale;
 
     return this.scaling(nextScale, direction, mousePosition);
   }

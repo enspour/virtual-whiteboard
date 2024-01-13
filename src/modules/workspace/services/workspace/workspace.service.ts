@@ -6,12 +6,14 @@ import {
   PainterService,
   ScreenService,
   WorkspaceEventsService,
+  WorkspaceInjectorService,
   WorkspaceKeyboardService,
 } from "@workspace/services";
 
 @Injectable()
 export class WorkspaceService {
   constructor(
+    private workspaceInjectorService: WorkspaceInjectorService,
     private workspaceKeyboardService: WorkspaceKeyboardService,
     private workspaceEventsService: WorkspaceEventsService,
 

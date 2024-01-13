@@ -8,6 +8,7 @@ import {
   ToolSelection,
   ToolSelectionClick,
   ToolSelectionMove,
+  ToolSelectionResize,
   ToolSelectionSelect,
   ToolText,
   ToolTextCreate,
@@ -29,5 +30,6 @@ export type ExecutableTool =
   | ToolSelectionSelect
   | ToolSelectionMove
   | ToolSelectionClick
+  | ToolSelectionResize
   | ToolTextCreate
   | ToolTextEdit;

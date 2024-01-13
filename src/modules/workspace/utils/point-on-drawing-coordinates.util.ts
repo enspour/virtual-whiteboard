@@ -1,7 +1,6 @@
-import { Drawing, Point } from "@workspace/interfaces";
+import { isPointOnCoordinates, isPointOnDrawing } from "@workspace/utils";
 
-import { isPointOnCoordinates } from "./point-on-coordinates.util";
-import { isPointOnDrawing } from "./point-on-drawing.util";
+import { Drawing, Point } from "@workspace/interfaces";
 
 export const isPointOnDrawingCoordinates = (point: Point, drawing: Drawing) => {
   switch (drawing.type) {

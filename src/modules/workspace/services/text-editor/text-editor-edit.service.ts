@@ -11,11 +11,7 @@ import {
   TextEditorService,
 } from "@workspace/services";
 
-import {
-  DrawingText,
-  TextEditorChannelEventClosing,
-  TextEditorPosition,
-} from "@workspace/interfaces";
+import { DrawingText, TextEditorClosingEvent } from "@workspace/interfaces";
 
 @Injectable()
 export class TextEditorEditService {
@@ -56,7 +52,7 @@ export class TextEditorEditService {
 
     textEditor.channel$.subscribe((event) => {
       if (event.type === "closing") {
-        this.onTextEditorClosing(event, position, drawing);
+        this.onTextEditorClosing(event, drawing);
 
         textEditor.channel$.complete();
         textEditor.close();
@@ -65,37 +61,39 @@ export class TextEditorEditService {
   }
 
   private onTextEditorClosing(
-    event: TextEditorChannelEventClosing,
-    position: TextEditorPosition,
+    event: TextEditorClosingEvent,
     drawing: DrawingText
   ) {
     const { text, width, height } = event;
 
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
+    if (text !== drawing.text) {
+      const scroll = this.screenService.Scroll;
+      const scale = this.screenService.Scale;
 
-    const x = position.x / scale - scroll.x;
-    const y = position.y / scale - scroll.y;
+      const x = event.x / scale - scroll.x;
+      const y = event.y / scale - scroll.y;
 
-    const newDrawing = {
-      ...drawing,
-      text,
-      width,
-      height,
-      coordinates: {
-        startX: x,
-        endX: x + width / scale,
-        startY: y,
-        endY: y + height / scale,
-      },
-    };
+      const newDrawing = {
+        ...drawing,
+        text,
+        width,
+        height,
+        coordinates: {
+          startX: x,
+          endX: x + width / scale,
+          startY: y,
+          endY: y + height / scale,
+        },
+      };
+
+      this.drawingsService.append(newDrawing);
+
+      const args = { old: drawing, new: newDrawing };
+      const command = new ChangeDrawingCommand(args, this.injector);
+      this.historyService.add(command);
+    }
 
     this.drawingsOnStashService.remove(drawing);
-    this.drawingsService.append(newDrawing);
-
-    const args = { old: drawing, new: newDrawing };
-    const command = new ChangeDrawingCommand(args, this.injector);
-    this.historyService.add(command);
 
     this.painterService.paint();
   }

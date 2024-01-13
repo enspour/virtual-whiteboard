@@ -2,7 +2,8 @@ export type HistoryCommandName =
   | "create-drawing-command"
   | "change-drawing-command"
   | "remove-drawings-command"
-  | "move-drawings-command";
+  | "move-drawings-command"
+  | "resize-drawings-command";
 
 // eslint-disable-next-line
 export interface HistoryCommand<T = any> {

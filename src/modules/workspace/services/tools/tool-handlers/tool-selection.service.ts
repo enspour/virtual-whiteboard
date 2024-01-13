@@ -10,14 +10,20 @@ import {
 } from "@workspace/services";
 
 import {
+  findCoordinatesBorderByPoint,
   findDrawingByPoint,
-  isPointOnDrawingsSelection,
+  findResizerAnchorByPoint,
+  isPointOnSelection,
 } from "@workspace/utils";
 
 import { ToolHandler } from "@workspace/interfaces";
 
+import { ToolSelectionResizeService } from "./tool-selection-resize.service";
+
 @Injectable()
 export class ToolSelectionService implements ToolHandler {
+  private isHandling = false;
+
   private handler!: ToolHandler;
 
   constructor(
@@ -26,11 +32,25 @@ export class ToolSelectionService implements ToolHandler {
     private drawingsOnSelectionService: DrawingsOnSelectionService,
     private toolSelectionSelectService: ToolSelectionSelectService,
     private toolSelectionMoveService: ToolSelectionMoveService,
-    private toolSelectionClickService: ToolSelectionClickService
+    private toolSelectionClickService: ToolSelectionClickService,
+    private toolSelectionResizeService: ToolSelectionResizeService
   ) {}
 
   start(e: MouseEvent): void {
+    this.isHandling = true;
+
     this.toolSelectionClickService.start(e);
+
+    const drawingsOnSelection =
+      this.drawingsOnSelectionService.DrawingsOnSelection;
+
+    const coordinates = this.drawingsOnSelectionService.Coordinates;
+
+    if (!coordinates) {
+      this.handler = this.toolSelectionSelectService;
+      this.handler.start(e);
+      return;
+    }
 
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
@@ -40,12 +60,25 @@ export class ToolSelectionService implements ToolHandler {
 
     const point = { x, y };
 
-    const drawingsOnSelection =
-      this.drawingsOnSelectionService.DrawingsOnSelection;
+    const anchor = findResizerAnchorByPoint(point, coordinates);
 
-    const coordinates = this.drawingsOnSelectionService.Coordinates;
+    if (anchor) {
+      this.toolSelectionResizeService.setDirection(anchor.direction);
 
-    if (isPointOnDrawingsSelection(point, drawingsOnSelection, coordinates)) {
+      this.handler = this.toolSelectionResizeService;
+      return this.handler.start(e);
+    }
+
+    const border = findCoordinatesBorderByPoint(point, coordinates);
+
+    if (border) {
+      this.toolSelectionResizeService.setDirection(border.direction);
+
+      this.handler = this.toolSelectionResizeService;
+      return this.handler.start(e);
+    }
+
+    if (isPointOnSelection(point, drawingsOnSelection, coordinates)) {
       this.handler = this.toolSelectionMoveService;
       return this.handler.start(e);
     }
@@ -67,11 +100,21 @@ export class ToolSelectionService implements ToolHandler {
   }
 
   end(e: MouseEvent): void {
+    if (!this.isHandling) {
+      return;
+    }
+
+    this.isHandling = false;
+
     this.toolSelectionClickService.end(e);
     this.handler.end(e);
   }
 
   process(e: MouseEvent): void {
+    if (!this.isHandling) {
+      return;
+    }
+
     this.toolSelectionClickService.process(e);
     this.handler.process(e);
   }

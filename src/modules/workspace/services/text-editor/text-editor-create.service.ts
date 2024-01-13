@@ -14,7 +14,7 @@ import {
 
 import {
   DrawingText,
-  TextEditorChannelEventClosing,
+  TextEditorClosingEvent,
   TextEditorOptions,
   TextEditorPosition,
 } from "@workspace/interfaces";
@@ -42,7 +42,7 @@ export class TextEditorCreateService {
 
     textEditor.channel$.subscribe((event) => {
       if (event.type === "closing") {
-        this.onTextEditorClosing(event, position, options);
+        this.onTextEditorClosing(event, options);
 
         textEditor.channel$.complete();
         textEditor.close();
@@ -51,8 +51,7 @@ export class TextEditorCreateService {
   }
 
   private onTextEditorClosing(
-    event: TextEditorChannelEventClosing,
-    position: TextEditorPosition,
+    event: TextEditorClosingEvent,
     options: TextEditorOptions
   ) {
     const { text, width, height } = event;
@@ -61,8 +60,8 @@ export class TextEditorCreateService {
     const scale = this.screenService.Scale;
 
     if (text) {
-      const x = position.x / scale - scroll.x;
-      const y = position.y / scale - scroll.y;
+      const x = event.x / scale - scroll.x;
+      const y = event.y / scale - scroll.y;
 
       const drawing: DrawingText = {
         id: nanoid(),
