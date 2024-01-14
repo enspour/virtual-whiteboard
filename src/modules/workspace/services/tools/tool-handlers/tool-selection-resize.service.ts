@@ -142,7 +142,6 @@ export class ToolSelectionResizeService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    this.reflect();
     this.resize(point);
 
     const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
@@ -154,7 +153,7 @@ export class ToolSelectionResizeService implements ToolHandler {
     this.painterService.paint();
   }
 
-  private reflect() {
+  private resize(point: Point) {
     const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
     const drawingsCoordinates = this.drawingsOnSelectionService.Coordinates!;
 
@@ -175,9 +174,7 @@ export class ToolSelectionResizeService implements ToolHandler {
     }
 
     this.endReflection = reflection;
-  }
 
-  private resize(point: Point) {
     this.coordinates = resizeCoordinates(
       this.direction,
       this.coordinates,
@@ -186,9 +183,6 @@ export class ToolSelectionResizeService implements ToolHandler {
     );
 
     this.endCoordinates = validateCoordinates(this.coordinates);
-
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
-    const drawingsCoordinates = this.drawingsOnSelectionService.Coordinates!;
 
     resizeDrawings(this.endCoordinates, drawings, drawingsCoordinates);
   }

@@ -1,24 +1,15 @@
 import { Injectable } from "@angular/core";
 
 import {
-  DrawingsOnScreenService,
+  CursorOnElementService,
   DrawingsOnSelectionService,
-  ScreenService,
   ToolSelectionClickService,
   ToolSelectionMoveService,
+  ToolSelectionResizeService,
   ToolSelectionSelectService,
 } from "@workspace/services";
 
-import {
-  findCoordinatesBorderByPoint,
-  findDrawingByPoint,
-  findResizerAnchorByPoint,
-  isPointOnSelection,
-} from "@workspace/utils";
-
 import { ToolHandler } from "@workspace/interfaces";
-
-import { ToolSelectionResizeService } from "./tool-selection-resize.service";
 
 @Injectable()
 export class ToolSelectionService implements ToolHandler {
@@ -27,8 +18,7 @@ export class ToolSelectionService implements ToolHandler {
   private handler!: ToolHandler;
 
   constructor(
-    private screenService: ScreenService,
-    private drawingsOnScreenService: DrawingsOnScreenService,
+    private cursorOnElementService: CursorOnElementService,
     private drawingsOnSelectionService: DrawingsOnSelectionService,
     private toolSelectionSelectService: ToolSelectionSelectService,
     private toolSelectionMoveService: ToolSelectionMoveService,
@@ -41,62 +31,37 @@ export class ToolSelectionService implements ToolHandler {
 
     this.toolSelectionClickService.start(e);
 
-    const drawingsOnSelection =
-      this.drawingsOnSelectionService.DrawingsOnSelection;
+    const element = this.cursorOnElementService.Element;
 
-    const coordinates = this.drawingsOnSelectionService.Coordinates;
-
-    if (!coordinates) {
+    if (!element) {
       this.handler = this.toolSelectionSelectService;
-      this.handler.start(e);
-      return;
-    }
-
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
-
-    const x = e.clientX / scale - scroll.x;
-    const y = e.clientY / scale - scroll.y;
-
-    const point = { x, y };
-
-    const anchor = findResizerAnchorByPoint(point, coordinates);
-
-    if (anchor) {
-      this.toolSelectionResizeService.setDirection(anchor.direction);
-
-      this.handler = this.toolSelectionResizeService;
       return this.handler.start(e);
     }
 
-    const border = findCoordinatesBorderByPoint(point, coordinates);
-
-    if (border) {
-      this.toolSelectionResizeService.setDirection(border.direction);
-
-      this.handler = this.toolSelectionResizeService;
-      return this.handler.start(e);
+    switch (element.type) {
+      case "drawing":
+        this.drawingsOnSelectionService.removeSelection();
+        this.drawingsOnSelectionService.addToSelection(element.drawing);
+        this.handler = this.toolSelectionMoveService;
+        return this.handler.start(e);
+      case "selection":
+        this.handler = this.toolSelectionMoveService;
+        return this.handler.start(e);
+      case "selection-border":
+        this.toolSelectionResizeService.setDirection(element.border.direction);
+        this.handler = this.toolSelectionResizeService;
+        return this.handler.start(e);
+      case "resizer-anchor":
+        this.toolSelectionResizeService.setDirection(element.anchor.direction);
+        this.handler = this.toolSelectionResizeService;
+        return this.handler.start(e);
+      case "mover-anchor":
+        this.handler = this.toolSelectionMoveService;
+        return this.handler.start(e);
+      default:
+        this.handler = this.toolSelectionSelectService;
+        return this.handler.start(e);
     }
-
-    if (isPointOnSelection(point, drawingsOnSelection, coordinates)) {
-      this.handler = this.toolSelectionMoveService;
-      return this.handler.start(e);
-    }
-
-    const drawingsOnScreen = this.drawingsOnScreenService.DrawingsOnScreen;
-
-    const drawing = findDrawingByPoint(point, drawingsOnScreen);
-
-    if (drawing) {
-      this.drawingsOnSelectionService.removeSelection();
-      this.drawingsOnSelectionService.addToSelection(drawing);
-
-      this.handler = this.toolSelectionMoveService;
-      return this.handler.start(e);
-    }
-
-    this.handler = this.toolSelectionSelectService;
-    this.handler.start(e);
   }
 
   end(e: MouseEvent): void {

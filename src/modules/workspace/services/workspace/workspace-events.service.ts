@@ -3,6 +3,7 @@ import { Injectable, NgZone, inject } from "@angular/core";
 import { Observable, fromEvent, takeUntil, throttleTime } from "rxjs";
 
 import {
+  CursorOnElementHandlerService,
   DestroyService,
   ScreenHandlerService,
   ToolsHandlerService,
@@ -23,7 +24,8 @@ export class WorkspaceEventsService {
     private zone: NgZone,
     private toolsService: ToolsService,
     private toolsHandlerService: ToolsHandlerService,
-    private screenHandlerService: ScreenHandlerService
+    private screenHandlerService: ScreenHandlerService,
+    private cursorOnElementHandlerService: CursorOnElementHandlerService
   ) {}
 
   public setCanvas(canvas: HTMLCanvasElement) {
@@ -87,42 +89,54 @@ export class WorkspaceEventsService {
   }
 
   private onMouseDown(event: MouseEvent) {
-    switch (event.button) {
-      case 0:
-        return this.emitSelectedToolEvent("start", event);
-      case 1:
-        return this.emitHandToolEvent("start", event);
+    if (event.button === 0) {
+      this.handleSelectedToolEvent("start", event);
     }
+
+    if (event.button === 1) {
+      this.handleHandToolEvent("start", event);
+    }
+
+    this.cursorOnElementHandlerService.handle(event);
   }
 
   private onMouseUp(event: MouseEvent) {
-    switch (event.button) {
-      case 0:
-        return this.emitSelectedToolEvent("end", event);
-      case 1:
-        return this.emitHandToolEvent("end", event);
+    if (event.button === 0) {
+      this.handleSelectedToolEvent("end", event);
     }
+
+    if (event.button === 1) {
+      this.handleHandToolEvent("end", event);
+    }
+
+    this.cursorOnElementHandlerService.handle(event);
   }
 
   private onMouseLeave(event: MouseEvent) {
-    switch (event.buttons) {
-      case 1:
-        return this.emitSelectedToolEvent("end", event);
-      case 4:
-        return this.emitHandToolEvent("end", event);
+    if (event.buttons === 1) {
+      this.handleSelectedToolEvent("end", event);
     }
+
+    if (event.buttons === 4) {
+      this.handleHandToolEvent("end", event);
+    }
+
+    this.cursorOnElementHandlerService.handle(event);
   }
 
   private onMouseMove(event: MouseEvent) {
-    switch (event.buttons) {
-      case 1:
-        return this.emitSelectedToolEvent("process", event);
-      case 4:
-        return this.emitHandToolEvent("process", event);
+    if (event.buttons === 1) {
+      this.handleSelectedToolEvent("process", event);
     }
+
+    if (event.buttons === 4) {
+      this.handleHandToolEvent("process", event);
+    }
+
+    this.cursorOnElementHandlerService.handle(event);
   }
 
-  private emitSelectedToolEvent(
+  private handleSelectedToolEvent(
     type: ToolEventType,
     event: ToolEventNativeEvent
   ) {
@@ -130,7 +144,10 @@ export class WorkspaceEventsService {
     this.toolsHandlerService.handle({ tool: name, type, event });
   }
 
-  private emitHandToolEvent(type: ToolEventType, event: ToolEventNativeEvent) {
+  private handleHandToolEvent(
+    type: ToolEventType,
+    event: ToolEventNativeEvent
+  ) {
     this.toolsHandlerService.handle({ tool: "hand", type, event });
   }
 }

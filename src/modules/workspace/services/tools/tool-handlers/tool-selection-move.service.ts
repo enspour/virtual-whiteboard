@@ -61,7 +61,10 @@ export class ToolSelectionMoveService implements ToolHandler {
     const x = e.clientX / scale - scroll.x;
     const y = e.clientY / scale - scroll.y;
 
-    this.offset = { x: x - coordinates.startX, y: y - coordinates.startY };
+    this.offset = {
+      x: x - coordinates.startX,
+      y: y - coordinates.startY,
+    };
 
     this.points$
       .pipe(takeUntil(this.destroy$))

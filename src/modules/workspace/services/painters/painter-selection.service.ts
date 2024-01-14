@@ -13,6 +13,7 @@ import { getResizerAnchorsByCoordinates } from "@workspace/utils";
 import { Drawing, DrawingArrow, Painter } from "@workspace/interfaces";
 
 import {
+  MOVER_ANCHOR_RADIUS,
   RESIZER_ANCHOR_HEIGHT,
   RESIZER_ANCHOR_WIDTH,
 } from "@workspace/constants";
@@ -148,7 +149,7 @@ export class PainterSelectionService implements Painter {
       const x = (point.x + scroll.x) * scale;
       const y = (point.y + scroll.y) * scale;
 
-      this.paintResizerAnchor(x, y);
+      this.paintMoverAnchor(x, y);
     }
   }
 
@@ -268,6 +269,35 @@ export class PainterSelectionService implements Painter {
     this.context.strokeStyle = border;
 
     this.context.roundRect(x - width / 2, y - height / 2, width, height);
+
+    this.context.fill();
+    this.context.stroke();
+  }
+
+  private paintMoverAnchor(x: number, y: number) {
+    if (!this.context) {
+      return;
+    }
+
+    const properties = this.themeService.Properties;
+
+    const bg = properties["--theme-primary-board-bg"];
+    const border = properties["--theme-primary-selection-border"];
+
+    const radius = MOVER_ANCHOR_RADIUS;
+
+    this.context.beginPath();
+
+    this.context.lineWidth = 1;
+    this.context.fillStyle = bg;
+    this.context.strokeStyle = border;
+
+    const rotation = 0;
+
+    const startAngle = 0;
+    const endAngle = Math.PI * 2;
+
+    this.context.ellipse(x, y, radius, radius, rotation, startAngle, endAngle);
 
     this.context.fill();
     this.context.stroke();

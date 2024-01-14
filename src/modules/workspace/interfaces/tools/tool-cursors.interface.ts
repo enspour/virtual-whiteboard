@@ -1,20 +1,8 @@
-import { ExecutableTool, SelectableTool } from "..";
+import { Cursor } from "../cursors.interface";
+import { ExecutableTool, SelectableTool } from "./tool.interface";
 
-export type Cursor =
-  | "auto"
-  | "default"
-  | "grab"
-  | "grabbing"
-  | "text"
-  | "crosshair"
-  | "move"
-  | "ew-resize"
-  | "ns-resize"
-  | "nesw-resize"
-  | "nwse-resize";
-
-export type CursorStatus =
+export type ToolCursor =
   | SelectableTool["name"]
   | `executed--${ExecutableTool["name"]}`;
 
-export type ToolCursors = Record<CursorStatus, Cursor>;
+export type ToolCursors = Record<ToolCursor, Cursor>;

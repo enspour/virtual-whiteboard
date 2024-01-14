@@ -10,6 +10,9 @@ import { HeaderActionBarComponent } from "@workspace/components/ui/header-action
 import { HeaderToolkitComponent } from "@workspace/components/ui/header-toolkit/header-toolkit.component";
 
 import {
+  CursorOnElementHandlerService,
+  CursorOnElementService,
+  CursorService,
   DestroyService,
   DrawingsOnScreenService,
   DrawingsOnSelectionService,
@@ -39,6 +42,7 @@ import {
   ToolRectangleService,
   ToolSelectionClickService,
   ToolSelectionMoveService,
+  ToolSelectionResizeService,
   ToolSelectionSelectService,
   ToolSelectionService,
   ToolTextCreateService,
@@ -47,11 +51,10 @@ import {
   ToolsHandlerService,
   ToolsService,
   WorkspaceEventsService,
+  WorkspaceInjectorService,
   WorkspaceKeyboardService,
   WorkspaceService,
 } from "@workspace/services";
-import { ToolSelectionResizeService } from "@workspace/services/tools/tool-handlers/tool-selection-resize.service";
-import { WorkspaceInjectorService } from "@workspace/services/workspace/workspace-injector.service";
 
 import {
   DrawingStorageToken,
@@ -88,6 +91,10 @@ import {
 
     ScreenService,
     ScreenHandlerService,
+
+    CursorService,
+    CursorOnElementService,
+    CursorOnElementHandlerService,
 
     {
       provide: ScreenStorageToken,

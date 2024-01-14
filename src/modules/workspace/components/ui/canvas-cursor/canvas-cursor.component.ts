@@ -3,18 +3,14 @@ import {
   Component,
   Input,
   OnInit,
+  inject,
 } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { ToolsService } from "@workspace/services";
+import { Observable, takeUntil } from "rxjs";
 
-import {
-  CursorStatus,
-  ExecutableTool,
-  SelectableTool,
-} from "@workspace/interfaces";
+import { CursorService, DestroyService } from "@workspace/services";
 
-import { TOOL_CURSOR } from "@workspace/constants";
+import { Cursor } from "@workspace/interfaces";
 
 import { CanvasComponent } from "../canvas/canvas.component";
 
@@ -27,64 +23,23 @@ import { CanvasComponent } from "../canvas/canvas.component";
 export class CanvasCursorComponent implements OnInit {
   @Input({ required: true }) canvas!: CanvasComponent;
 
-  private selectedTool!: SelectableTool;
-  private executedTool!: ExecutableTool | null;
+  private destroy$: Observable<void> = inject(DestroyService);
 
-  private captured = false;
-
-  constructor(private toolsService: ToolsService) {
-    this.toolsService.selectedTool$
-      .pipe(takeUntilDestroyed())
-      .subscribe((tool) => this.onSelectedToolChange(tool));
-
-    this.toolsService.executedTool$
-      .pipe(takeUntilDestroyed())
-      .subscribe((tool) => this.onExecutedToolChange(tool));
-  }
+  constructor(private cursorService: CursorService) {}
 
   ngOnInit(): void {
-    this.setSelectedToolCursor();
+    this.cursorService.cursor$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cursor) => this.setCursor(cursor));
   }
 
-  private onSelectedToolChange(tool: SelectableTool) {
-    this.selectedTool = tool;
-    this.setSelectedToolCursor();
-  }
-
-  private onExecutedToolChange(tool: ExecutableTool | null) {
-    this.executedTool = tool;
-    this.setExecutedToolCursor();
-  }
-
-  private setExecutedToolCursor() {
-    if (this.executedTool) {
-      this.captureCursor(`executed--${this.executedTool.name}`);
-    } else {
-      this.releaseCursor();
-    }
-  }
-
-  private setSelectedToolCursor() {
-    this.setCursor(this.selectedTool.name);
-  }
-
-  private releaseCursor() {
-    this.captured = false;
-    this.setSelectedToolCursor();
-  }
-
-  private captureCursor(status: CursorStatus) {
-    this.setCursor(status);
-    this.captured = true;
-  }
-
-  private setCursor(status: CursorStatus) {
+  private setCursor(cursor: Cursor) {
     const canvas = this.canvas?.canvas?.nativeElement;
 
-    if (!canvas || this.captured) {
+    if (!canvas) {
       return;
     }
 
-    canvas.style.cursor = TOOL_CURSOR[status];
+    canvas.style.cursor = cursor;
   }
 }
