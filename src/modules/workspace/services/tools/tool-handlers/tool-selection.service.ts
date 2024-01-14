@@ -4,7 +4,8 @@ import {
   CursorOnElementService,
   DrawingsOnSelectionService,
   ToolSelectionClickService,
-  ToolSelectionMoveService,
+  ToolSelectionMoveCoordinatesService,
+  ToolSelectionMovePointsService,
   ToolSelectionResizeService,
   ToolSelectionSelectService,
 } from "@workspace/services";
@@ -21,7 +22,8 @@ export class ToolSelectionService implements ToolHandler {
     private cursorOnElementService: CursorOnElementService,
     private drawingsOnSelectionService: DrawingsOnSelectionService,
     private toolSelectionSelectService: ToolSelectionSelectService,
-    private toolSelectionMoveService: ToolSelectionMoveService,
+    private toolSelectionMoveCoordinatesService: ToolSelectionMoveCoordinatesService,
+    private toolSelectionMovePointsService: ToolSelectionMovePointsService,
     private toolSelectionClickService: ToolSelectionClickService,
     private toolSelectionResizeService: ToolSelectionResizeService
   ) {}
@@ -42,10 +44,10 @@ export class ToolSelectionService implements ToolHandler {
       case "drawing":
         this.drawingsOnSelectionService.removeSelection();
         this.drawingsOnSelectionService.addToSelection(element.drawing);
-        this.handler = this.toolSelectionMoveService;
+        this.handler = this.toolSelectionMoveCoordinatesService;
         return this.handler.start(e);
       case "selection":
-        this.handler = this.toolSelectionMoveService;
+        this.handler = this.toolSelectionMoveCoordinatesService;
         return this.handler.start(e);
       case "selection-border":
         this.toolSelectionResizeService.setDirection(element.border.direction);
@@ -56,7 +58,8 @@ export class ToolSelectionService implements ToolHandler {
         this.handler = this.toolSelectionResizeService;
         return this.handler.start(e);
       case "mover-anchor":
-        this.handler = this.toolSelectionMoveService;
+        this.toolSelectionMovePointsService.setPoint(element.anchor);
+        this.handler = this.toolSelectionMovePointsService;
         return this.handler.start(e);
       default:
         this.handler = this.toolSelectionSelectService;

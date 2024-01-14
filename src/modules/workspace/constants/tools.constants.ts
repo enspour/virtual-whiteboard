@@ -7,7 +7,7 @@ import {
 
 export const EXECUTABLE_TOOLS: ExecutableTool[] = [
   { name: "selection-select" },
-  { name: "selection-move" },
+  { name: "selection-move-coordinates" },
   { name: "selection-click" },
   { name: "selection-resize-ew" },
   { name: "selection-resize-we" },

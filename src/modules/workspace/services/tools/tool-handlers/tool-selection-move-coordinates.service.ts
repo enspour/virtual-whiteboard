@@ -2,43 +2,40 @@ import { Injectable, Injector } from "@angular/core";
 
 import { Subject, takeUntil } from "rxjs";
 
-import { nanoid } from "nanoid";
-
 import {
-  CreateDrawingCommand,
   DrawingsOnSelectionService,
   DrawingsService,
   HistoryService,
+  MoveDrawingsCoordinatesCommand,
   PainterService,
   ScreenService,
   ToolsService,
 } from "@workspace/services";
 
 import {
-  DrawingRectangle,
-  Point,
-  ToolHandler,
-  ToolRectangle,
-} from "@workspace/interfaces";
+  isSameCoordinates,
+  moveCoordinates,
+  moveDrawingsCoordinates,
+} from "@workspace/utils";
+
+import { Coordinates, Point, ToolHandler } from "@workspace/interfaces";
 
 @Injectable()
-export class ToolRectangleService implements ToolHandler {
+export class ToolSelectionMoveCoordinatesService implements ToolHandler {
   private isHandling = false;
-
-  private tool!: ToolRectangle;
 
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private drawing!: DrawingRectangle;
+  private startCoordinates!: Coordinates;
+  private endCoordinates!: Coordinates;
 
-  private initialX = 0;
-  private initialY = 0;
+  private offset!: Point;
 
   constructor(
     private injector: Injector,
-    private screenService: ScreenService,
     private toolsService: ToolsService,
+    private screenService: ScreenService,
     private painterService: PainterService,
     private historyService: HistoryService,
     private drawingsService: DrawingsService,
@@ -48,14 +45,15 @@ export class ToolRectangleService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
-    this.drawingsOnSelectionService.removeSelection();
-
-    this.toolsService.setExecutedTool("rectangle");
-
-    this.tool = this.toolsService.ExecutedTool! as ToolRectangle;
+    this.toolsService.setExecutedTool("selection-move-coordinates");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
+
+    const coordinates = this.drawingsOnSelectionService.Coordinates!;
+
+    this.startCoordinates = { ...coordinates };
+    this.endCoordinates = { ...coordinates };
 
     const scroll = this.screenService.Scroll;
     const scale = this.screenService.Scale;
@@ -63,24 +61,9 @@ export class ToolRectangleService implements ToolHandler {
     const x = e.clientX / scale - scroll.x;
     const y = e.clientY / scale - scroll.y;
 
-    this.initialX = x;
-    this.initialY = y;
-
-    this.drawing = {
-      id: nanoid(),
-      type: "rectangle",
-      angel: 0,
-      coordinates: {
-        startX: x,
-        endX: x,
-        startY: y,
-        endY: y,
-      },
-      width: 0,
-      height: 0,
-      roundness: this.tool.roundness,
-      strokeColor: this.tool.strokeColor,
-      strokeWidth: this.tool.strokeWidth,
+    this.offset = {
+      x: x - coordinates.startX,
+      y: y - coordinates.startY,
     };
 
     this.points$
@@ -95,12 +78,18 @@ export class ToolRectangleService implements ToolHandler {
 
     this.isHandling = false;
 
-    if (this.drawing.width || this.drawing.height) {
-      const command = new CreateDrawingCommand(this.drawing, this.injector);
+    this.toolsService.setExecutedTool("");
+
+    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+
+    const startCoordinates = this.startCoordinates;
+    const endCoordinates = this.endCoordinates;
+
+    if (!isSameCoordinates(startCoordinates, endCoordinates)) {
+      const args = { drawings, startCoordinates, endCoordinates };
+      const command = new MoveDrawingsCoordinatesCommand(args, this.injector);
       this.historyService.add(command);
     }
-
-    this.toolsService.setExecutedTool("");
 
     this.destroy$.next();
     this.destroy$.complete();
@@ -127,28 +116,21 @@ export class ToolRectangleService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const { coordinates } = this.drawing;
+    const start = {
+      x: point.x - this.offset.x,
+      y: point.y - this.offset.y,
+    };
 
-    if (this.initialX < point.x) {
-      coordinates.startX = this.initialX;
-      coordinates.endX = point.x;
-    } else {
-      coordinates.startX = point.x;
-      coordinates.endX = this.initialX;
-    }
+    this.endCoordinates = moveCoordinates(this.endCoordinates, start);
 
-    if (this.initialY < point.y) {
-      coordinates.startY = this.initialY;
-      coordinates.endY = point.y;
-    } else {
-      coordinates.startY = point.y;
-      coordinates.endY = this.initialY;
-    }
+    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+    const drawingsCoordinates = this.drawingsOnSelectionService.Coordinates!;
 
-    this.drawing.width = coordinates.endX - coordinates.startX;
-    this.drawing.height = coordinates.endY - coordinates.startY;
+    moveDrawingsCoordinates(this.endCoordinates, drawings, drawingsCoordinates);
 
-    this.drawingsService.append(this.drawing);
+    this.drawingsOnSelectionService.updateCoordinates();
+
+    this.drawingsService.append(...drawings);
 
     this.painterService.paint();
   }

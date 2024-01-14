@@ -19,11 +19,9 @@ export class WorkspaceKeyboardService {
 
   constructor(
     private injector: Injector,
-
     private appService: AppService,
     private historyService: HistoryService,
     private painterService: PainterService,
-
     private drawingsService: DrawingsService,
     private drawingsOnSelectionService: DrawingsOnSelectionService
   ) {

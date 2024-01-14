@@ -3,7 +3,8 @@ import { Inject, Injectable, Injector } from "@angular/core";
 import {
   ChangeDrawingCommand,
   CreateDrawingCommand,
-  MoveDrawingsCommand,
+  MoveDrawingsCoordinatesCommand,
+  MoveDrawingsPointsCommand,
   RemoveDrawingsCommand,
   ResizeDrawingsCommand,
 } from "@workspace/services";
@@ -29,10 +30,12 @@ export class HistoryRestoreService {
       new ChangeDrawingCommand(args, injector),
     "remove-drawings-command": (args, injector) =>
       new RemoveDrawingsCommand(args, injector),
-    "move-drawings-command": (args, injector) =>
-      new MoveDrawingsCommand(args, injector),
     "resize-drawings-command": (args, injector) =>
       new ResizeDrawingsCommand(args, injector),
+    "move-drawings-coordinates-command": (args, injector) =>
+      new MoveDrawingsCoordinatesCommand(args, injector),
+    "move-drawings-points-command": (args, injector) =>
+      new MoveDrawingsPointsCommand(args, injector),
   };
 
   constructor(

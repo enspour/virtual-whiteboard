@@ -10,3 +10,5 @@ export type Drawing =
   | DrawingEllipse
   | DrawingRectangle
   | DrawingText;
+
+export type PointDrawing = DrawingArrow | DrawingBrush;

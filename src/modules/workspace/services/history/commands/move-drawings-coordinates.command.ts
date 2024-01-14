@@ -6,7 +6,7 @@ import {
   PainterService,
 } from "@workspace/services";
 
-import { resizeDrawings } from "@workspace/utils";
+import { moveDrawingsCoordinates } from "@workspace/utils";
 
 import {
   Coordinates,
@@ -15,21 +15,21 @@ import {
   HistoryCommandName,
 } from "@workspace/interfaces";
 
-export type MoveDrawingsCommandArgs = {
+export type MoveDrawingsCoordinatesCommandArgs = {
   drawings: Drawing[];
   startCoordinates: Coordinates;
   endCoordinates: Coordinates;
 };
 
-export class MoveDrawingsCommand implements HistoryCommand {
-  public name: HistoryCommandName = "move-drawings-command";
+export class MoveDrawingsCoordinatesCommand implements HistoryCommand {
+  public name: HistoryCommandName = "move-drawings-coordinates-command";
 
   private painterService: PainterService;
   private drawingsService: DrawingsService;
   private drawingsOnSelectionService: DrawingsOnSelectionService;
 
   constructor(
-    public args: MoveDrawingsCommandArgs,
+    public args: MoveDrawingsCoordinatesCommandArgs,
     injector: Injector
   ) {
     this.painterService = injector.get(PainterService);
@@ -40,7 +40,7 @@ export class MoveDrawingsCommand implements HistoryCommand {
   public exec(): void {
     const { drawings, startCoordinates, endCoordinates } = this.args;
 
-    resizeDrawings(endCoordinates, drawings, startCoordinates);
+    moveDrawingsCoordinates(endCoordinates, drawings, startCoordinates);
 
     this.drawingsService.append(...drawings);
 
@@ -53,7 +53,7 @@ export class MoveDrawingsCommand implements HistoryCommand {
   public undo(): void {
     const { drawings, startCoordinates, endCoordinates } = this.args;
 
-    resizeDrawings(startCoordinates, drawings, endCoordinates);
+    moveDrawingsCoordinates(startCoordinates, drawings, endCoordinates);
 
     this.drawingsService.append(...drawings);
 

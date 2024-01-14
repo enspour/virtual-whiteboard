@@ -38,7 +38,7 @@ export class CursorService {
 
   constructor(
     private toolsService: ToolsService,
-    private screenElementService: CursorOnElementService
+    private cursorOnElementService: CursorOnElementService
   ) {
     this.toolsService.selectedTool$
       .pipe(takeUntil(this.destroy$))
@@ -48,7 +48,7 @@ export class CursorService {
       .pipe(takeUntil(this.destroy$))
       .subscribe((tool) => this.onExecutedToolChange(tool));
 
-    this.screenElementService.element$
+    this.cursorOnElementService.element$
       .pipe(takeUntil(this.destroy$))
       .subscribe((element) => this.onElementChange(element));
   }

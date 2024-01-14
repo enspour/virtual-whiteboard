@@ -34,7 +34,6 @@ export class ToolBrushService implements ToolHandler {
 
   constructor(
     private injector: Injector,
-
     private screenService: ScreenService,
     private toolsService: ToolsService,
     private painterService: PainterService,

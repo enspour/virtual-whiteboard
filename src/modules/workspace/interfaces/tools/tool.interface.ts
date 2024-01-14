@@ -7,7 +7,8 @@ import {
   ToolRectangle,
   ToolSelection,
   ToolSelectionClick,
-  ToolSelectionMove,
+  ToolSelectionMoveCoordinates,
+  ToolSelectionMovePoints,
   ToolSelectionResize,
   ToolSelectionSelect,
   ToolText,
@@ -28,7 +29,8 @@ export type SelectableTool =
 export type ExecutableTool =
   | SelectableTool
   | ToolSelectionSelect
-  | ToolSelectionMove
+  | ToolSelectionMoveCoordinates
+  | ToolSelectionMovePoints
   | ToolSelectionClick
   | ToolSelectionResize
   | ToolTextCreate

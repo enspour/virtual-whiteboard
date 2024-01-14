@@ -6,7 +6,7 @@ import { LS_SELECTED_TOOL, LS_TOOLS, LocalStorageService } from "@shared";
 
 import { ExecutableTool, SelectableTool } from "@workspace/interfaces";
 
-import { isSelectedTool } from "@workspace/guards";
+import { isSelectableTool } from "@workspace/guards";
 
 @Injectable()
 export class ToolsService {
@@ -24,7 +24,7 @@ export class ToolsService {
   constructor(private localStorageService: LocalStorageService) {
     this.tools = localStorageService.get(LS_TOOLS);
 
-    const toolkit = this.tools.filter(isSelectedTool);
+    const toolkit = this.tools.filter(isSelectableTool);
 
     this.toolkit = new BehaviorSubject(toolkit);
     this.toolkit$ = this.toolkit.asObservable();

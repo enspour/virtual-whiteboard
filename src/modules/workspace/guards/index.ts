@@ -1,1 +1,2 @@
-export * from "./selected-tool.guard";
+export * from "./tool-selectable.guard";
+export * from "./drawing-arrow.guard";

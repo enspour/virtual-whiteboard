@@ -9,15 +9,10 @@ export const isPointOnDrawingCoordinates = (point: Point, drawing: Drawing) => {
     case "ellipse":
     case "text": {
       const { coordinates } = drawing;
-
       return isPointOnCoordinates(point, coordinates);
     }
     case "arrow": {
-      if (isPointOnDrawing(point, drawing)) {
-        return true;
-      }
-
-      return false;
+      return isPointOnDrawing(point, drawing);
     }
   }
 };

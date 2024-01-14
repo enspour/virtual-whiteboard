@@ -37,7 +37,6 @@ export class ToolEllipseService implements ToolHandler {
 
   constructor(
     private injector: Injector,
-
     private screenService: ScreenService,
     private toolsService: ToolsService,
     private painterService: PainterService,

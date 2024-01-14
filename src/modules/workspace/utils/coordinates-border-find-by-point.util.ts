@@ -1,6 +1,6 @@
-import { Coordinates, Point, ResizeDirection } from "@workspace/interfaces";
+import { distance } from "@workspace/utils";
 
-import { distance } from "./point.util";
+import { Coordinates, Point, ResizeDirection } from "@workspace/interfaces";
 
 export const findCoordinatesBorderByPoint = (
   point: Point,

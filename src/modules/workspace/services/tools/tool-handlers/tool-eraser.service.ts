@@ -26,7 +26,6 @@ export class ToolEraserService implements ToolHandler {
 
   constructor(
     private injector: Injector,
-
     private toolsService: ToolsService,
     private screenService: ScreenService,
     private painterService: PainterService,

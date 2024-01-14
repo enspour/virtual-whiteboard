@@ -6,31 +6,29 @@ import {
   DrawingsOnSelectionService,
   DrawingsService,
   HistoryService,
-  MoveDrawingsCommand,
+  MoveDrawingsPointsCommand,
   PainterService,
   ScreenService,
   ToolsService,
 } from "@workspace/services";
 
-import {
-  isSameCoordinates,
-  moveCoordinates,
-  resizeDrawings,
-} from "@workspace/utils";
+import { isSamePoints, moveDrawingsPoints } from "@workspace/utils";
 
-import { Coordinates, Point, ToolHandler } from "@workspace/interfaces";
+import { DrawingArrow, Point, ToolHandler } from "@workspace/interfaces";
+
+import { isDrawingArrow } from "@workspace/guards";
 
 @Injectable()
-export class ToolSelectionMoveService implements ToolHandler {
+export class ToolSelectionMovePointsService implements ToolHandler {
   private isHandling = false;
 
   private points$!: Subject<Point>;
   private destroy$!: Subject<void>;
 
-  private startCoordinates!: Coordinates;
-  private endCoordinates!: Coordinates;
+  private drawings!: DrawingArrow[];
 
-  private offset!: Point;
+  private startPoint!: Point;
+  private endPoint!: Point;
 
   constructor(
     private injector: Injector,
@@ -45,26 +43,15 @@ export class ToolSelectionMoveService implements ToolHandler {
   start(e: MouseEvent): void {
     this.isHandling = true;
 
-    this.toolsService.setExecutedTool("selection-move");
+    this.toolsService.setExecutedTool("selection-move-points");
 
     this.points$ = new Subject();
     this.destroy$ = new Subject();
 
-    const coordinates = this.drawingsOnSelectionService.Coordinates!;
-
-    this.startCoordinates = { ...coordinates };
-    this.endCoordinates = { ...coordinates };
-
-    const scroll = this.screenService.Scroll;
-    const scale = this.screenService.Scale;
-
-    const x = e.clientX / scale - scroll.x;
-    const y = e.clientY / scale - scroll.y;
-
-    this.offset = {
-      x: x - coordinates.startX,
-      y: y - coordinates.startY,
-    };
+    this.drawings =
+      this.drawingsOnSelectionService.DrawingsOnSelection.filter(
+        isDrawingArrow
+      );
 
     this.points$
       .pipe(takeUntil(this.destroy$))
@@ -80,14 +67,13 @@ export class ToolSelectionMoveService implements ToolHandler {
 
     this.toolsService.setExecutedTool("");
 
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
+    const drawings = this.drawings;
+    const startPoint = this.startPoint;
+    const endPoint = this.endPoint;
 
-    const startCoordinates = this.startCoordinates;
-    const endCoordinates = this.endCoordinates;
-
-    if (!isSameCoordinates(startCoordinates, endCoordinates)) {
-      const args = { drawings, startCoordinates, endCoordinates };
-      const command = new MoveDrawingsCommand(args, this.injector);
+    if (!isSamePoints(startPoint, endPoint)) {
+      const args = { drawings, startPoint, endPoint };
+      const command = new MoveDrawingsPointsCommand(args, this.injector);
       this.historyService.add(command);
     }
 
@@ -103,6 +89,11 @@ export class ToolSelectionMoveService implements ToolHandler {
     this.nextPoint(e);
   }
 
+  public setPoint(point: Point) {
+    this.startPoint = { ...point };
+    this.endPoint = { ...point };
+  }
+
   private nextPoint(e: MouseEvent) {
     const scale = this.screenService.Scale;
     const scroll = this.screenService.Scroll;
@@ -116,21 +107,13 @@ export class ToolSelectionMoveService implements ToolHandler {
   }
 
   private handlePoint(point: Point) {
-    const start = {
-      x: point.x - this.offset.x,
-      y: point.y - this.offset.y,
-    };
+    moveDrawingsPoints(this.drawings, this.endPoint, point);
 
-    this.endCoordinates = moveCoordinates(this.endCoordinates, start);
-
-    const drawings = this.drawingsOnSelectionService.DrawingsOnSelection;
-    const drawingsCoordinates = this.drawingsOnSelectionService.Coordinates!;
-
-    resizeDrawings(this.endCoordinates, drawings, drawingsCoordinates);
+    this.endPoint = point;
 
     this.drawingsOnSelectionService.updateCoordinates();
 
-    this.drawingsService.append(...drawings);
+    this.drawingsService.append(...this.drawings);
 
     this.painterService.paint();
   }
