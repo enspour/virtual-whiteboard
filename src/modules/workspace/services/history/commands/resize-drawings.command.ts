@@ -4,6 +4,7 @@ import {
   DrawingsOnSelectionService,
   DrawingsService,
   PainterService,
+  ToolsService,
 } from "@workspace/services";
 
 import {
@@ -31,6 +32,7 @@ export type ResizeDrawingsCommandArgs = {
 export class ResizeDrawingsCommand implements HistoryCommand {
   public name: HistoryCommandName = "resize-drawings-command";
 
+  private toolsService: ToolsService;
   private painterService: PainterService;
   private drawingsService: DrawingsService;
   private drawingsOnSelectionService: DrawingsOnSelectionService;
@@ -39,19 +41,24 @@ export class ResizeDrawingsCommand implements HistoryCommand {
     public args: ResizeDrawingsCommandArgs,
     injector: Injector
   ) {
+    this.toolsService = injector.get(ToolsService);
     this.painterService = injector.get(PainterService);
     this.drawingsService = injector.get(DrawingsService);
     this.drawingsOnSelectionService = injector.get(DrawingsOnSelectionService);
   }
 
   public exec(): void {
-    const {
-      drawings,
-      startCoordinates,
-      endCoordinates,
-      startReflection,
-      endReflection,
-    } = this.args;
+    const { startCoordinates, endCoordinates } = this.args;
+    this.resize(startCoordinates, endCoordinates);
+  }
+
+  public undo(): void {
+    const { startCoordinates, endCoordinates } = this.args;
+    this.resize(endCoordinates, startCoordinates);
+  }
+
+  private resize(startCoordinates: Coordinates, endCoordinates: Coordinates) {
+    const { drawings, startReflection, endReflection } = this.args;
 
     if (
       startReflection.x !== endReflection.x &&
@@ -72,40 +79,10 @@ export class ResizeDrawingsCommand implements HistoryCommand {
     this.drawingsService.append(...drawings);
 
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(...drawings);
 
-    this.painterService.paint();
-  }
-
-  public undo(): void {
-    const {
-      drawings,
-      startCoordinates,
-      endCoordinates,
-      startReflection,
-      endReflection,
-    } = this.args;
-
-    if (
-      startReflection.x !== endReflection.x &&
-      (startReflection.x === 0 || endReflection.x === 0)
-    ) {
-      reflectDrawingsByX(drawings, endCoordinates);
+    if (this.toolsService.SelectedTool.name === "selection") {
+      this.drawingsOnSelectionService.addToSelection(...drawings);
     }
-
-    if (
-      startReflection.y !== endReflection.y &&
-      (startReflection.y === 0 || endReflection.y === 0)
-    ) {
-      reflectDrawingsByY(drawings, endCoordinates);
-    }
-
-    resizeDrawings(startCoordinates, drawings, endCoordinates);
-
-    this.drawingsService.append(...drawings);
-
-    this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(...drawings);
 
     this.painterService.paint();
   }

@@ -4,6 +4,7 @@ import {
   DrawingsOnSelectionService,
   DrawingsService,
   PainterService,
+  ToolsService,
 } from "@workspace/services";
 
 import {
@@ -20,6 +21,7 @@ export type ChangeDrawingCommandArgs = {
 export class ChangeDrawingCommand implements HistoryCommand {
   public name: HistoryCommandName = "change-drawing-command";
 
+  private toolsService: ToolsService;
   private painterService: PainterService;
   private drawingsService: DrawingsService;
   private drawingsOnSelectionService: DrawingsOnSelectionService;
@@ -28,6 +30,7 @@ export class ChangeDrawingCommand implements HistoryCommand {
     public args: ChangeDrawingCommandArgs,
     injector: Injector
   ) {
+    this.toolsService = injector.get(ToolsService);
     this.painterService = injector.get(PainterService);
     this.drawingsService = injector.get(DrawingsService);
     this.drawingsOnSelectionService = injector.get(DrawingsOnSelectionService);
@@ -37,7 +40,10 @@ export class ChangeDrawingCommand implements HistoryCommand {
     this.drawingsService.append(this.args.new);
 
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(this.args.new);
+
+    if (this.toolsService.SelectedTool.name === "selection") {
+      this.drawingsOnSelectionService.addToSelection(this.args.new);
+    }
 
     this.painterService.paint();
   }
@@ -46,7 +52,10 @@ export class ChangeDrawingCommand implements HistoryCommand {
     this.drawingsService.append(this.args.old);
 
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(this.args.old);
+
+    if (this.toolsService.SelectedTool.name === "selection") {
+      this.drawingsOnSelectionService.addToSelection(this.args.old);
+    }
 
     this.painterService.paint();
   }

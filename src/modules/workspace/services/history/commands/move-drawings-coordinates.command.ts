@@ -4,6 +4,7 @@ import {
   DrawingsOnSelectionService,
   DrawingsService,
   PainterService,
+  ToolsService,
 } from "@workspace/services";
 
 import { moveDrawingsCoordinates } from "@workspace/utils";
@@ -24,6 +25,7 @@ export type MoveDrawingsCoordinatesCommandArgs = {
 export class MoveDrawingsCoordinatesCommand implements HistoryCommand {
   public name: HistoryCommandName = "move-drawings-coordinates-command";
 
+  private toolsService: ToolsService;
   private painterService: PainterService;
   private drawingsService: DrawingsService;
   private drawingsOnSelectionService: DrawingsOnSelectionService;
@@ -32,6 +34,7 @@ export class MoveDrawingsCoordinatesCommand implements HistoryCommand {
     public args: MoveDrawingsCoordinatesCommandArgs,
     injector: Injector
   ) {
+    this.toolsService = injector.get(ToolsService);
     this.painterService = injector.get(PainterService);
     this.drawingsService = injector.get(DrawingsService);
     this.drawingsOnSelectionService = injector.get(DrawingsOnSelectionService);
@@ -45,7 +48,10 @@ export class MoveDrawingsCoordinatesCommand implements HistoryCommand {
     this.drawingsService.append(...drawings);
 
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(...drawings);
+
+    if (this.toolsService.SelectedTool.name === "selection") {
+      this.drawingsOnSelectionService.addToSelection(...drawings);
+    }
 
     this.painterService.paint();
   }
@@ -58,7 +64,10 @@ export class MoveDrawingsCoordinatesCommand implements HistoryCommand {
     this.drawingsService.append(...drawings);
 
     this.drawingsOnSelectionService.removeSelection();
-    this.drawingsOnSelectionService.addToSelection(...drawings);
+
+    if (this.toolsService.SelectedTool.name === "selection") {
+      this.drawingsOnSelectionService.addToSelection(...drawings);
+    }
 
     this.painterService.paint();
   }
